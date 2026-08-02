@@ -69,21 +69,25 @@ if not extracted_data:
             "exchange": "HKEX",
             "initiative": "Board Lot Optimization Framework Update",
             "category": "Trading Mechanics",
+            "eta": "Q4 2026",
             "impact": "Standardizes fragmented trading lots across major equities to optimize retail liquidity channels and streamline high-frequency transaction matching profiles."
         },
         {
             "exchange": "SGX",
             "initiative": "T+1 Settlement Cycle Integration Infrastructure",
             "category": "Settlement Mechanics",
+            "eta": "Oct 2026",
             "impact": "Accelerates daily transactional clearing windows across clearinghouses. Requires regional prime brokerages to realign overnight cross-border funding architectures."
         },
         {
             "exchange": "JPX",
             "initiative": "Next-Generation Trading System (Arrowhead 4.0)",
             "category": "Matching Engine",
+            "eta": "Jan 2027",
             "impact": "Reduces execution latency to sub-millisecond profiles, altering market maker quoting behaviors and institutional order routing strategies."
         }
     ]
+
 
 # Step 3: Save the file securely
 with open("data.json", "w") as f:
