@@ -1,0 +1,29 @@
+name: Daily Market Scrape
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs automatically every single day at midnight
+  workflow_dispatch: # Allows you to press a button to run it manually right now
+
+jobs:
+  run-tracker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Run Scraper Script
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python tracker.py
+      - name: Commit and Push Updated Data
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add data.json
+          git commit -m "Auto-update microstructure data" || exit 0
+          git push
