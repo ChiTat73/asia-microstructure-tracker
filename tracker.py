@@ -4,7 +4,6 @@ import urllib.request
 import re
 
 print("Initializing Microstructure Tracker Script...")
-
 extracted_data = []
 
 # Step 1: Fetch HKEX Regulatory Page with full headers and a strict 15-second timeout
@@ -21,11 +20,9 @@ try:
     
     print("Page downloaded successfully. Extracting keywords...")
     
-    # Quick regex search for any potential microstructure headings on the webpage
     keywords = ['tick', 'lot', 'settlement', 'trading hours', 'auction', 'margin', 'clearing', 'interface', 'framework']
     found_headlines = []
     
-    # Look for common text patterns in the HTML code
     titles = re.findall(r'title="([^"]+)"', html_content)
     for title in titles[:15]:
         if any(kw in title.lower() for kw in keywords):
@@ -52,7 +49,7 @@ try:
         
         with urllib.request.urlopen(openrouter_req, timeout=15) as resp:
             result = json.loads(resp.read().decode('utf-8'))
-            ai_content = result['choices']['message']['content']
+            ai_content = result['choices'][0]['message']['content']
             start = ai_content.find('[')
             end = ai_content.rfind(']') + 1
             extracted_data = json.loads(ai_content[start:end])
@@ -61,7 +58,7 @@ try:
 except Exception as e:
     print(f"Network processing encountered an error: {e}. Slipping into secure local backup mode...")
 
-# Step 2: Fallback Database Guarantee (Keeps the script moving and ensures Base44/v0 works!)
+# Step 2: Fallback Database Guarantee
 if not extracted_data:
     print("Deploying core microstructure operational updates...")
     extracted_data = [
@@ -101,8 +98,6 @@ if not extracted_data:
             "impact": "Reduces execution latency to sub-millisecond profiles, altering market maker quoting behaviors and institutional order routing strategies."
         }
     ]
-
-
 
 # Step 3: Save the file securely
 with open("data.json", "w") as f:
