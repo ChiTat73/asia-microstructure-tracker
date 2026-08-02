@@ -67,35 +67,35 @@ if not extracted_data:
             "initiative": "Board Lot Optimization Framework Update",
             "category": "Trading Mechanics",
             "eta": "Q4 2026",
-            "impact": "Standardizes fragmented trading lots across major equities to optimize retail liquidity channels and streamline high-frequency transaction matching profiles."
+            "impact": "• Technical Structural Change: Collapses fragmented, stock-specific board lot structures into a single standardized trading unit tier to simplify market order routing protocols.\n• Quantitative/HFT Microstructure Impact: Drastically alters order book queuing dynamics and fills cross-sectional depth gaps, forcing high-frequency market makers to recalibrate their statistical arbitrage quoting matrices.\n• Overall Liquidity Outlook: Amplifies order-book velocity by capturing retail order flow that was previously restricted by high capital entries, reducing implicit transaction spreads across blue-chip counters."
         },
         {
             "exchange": "SGX",
             "initiative": "T+1 Settlement Cycle Integration Infrastructure",
             "category": "Settlement Mechanics",
             "eta": "Oct 2026",
-            "impact": "Accelerates daily transactional clearing windows across clearinghouses. Requires regional prime brokerages to realign overnight cross-border funding architectures."
+            "impact": "• Technical Structural Change: Compresses the trade-to-settlement duration window by 24 hours, demanding completely real-time clearing configurations across the central clearing house.\n• Quantitative/HFT Microstructure Impact: Eliminates overnight asset-holding float opportunities, causing structural shifts in multi-asset collateral margin requirements and cross-border arbitrage funding loops.\n• Overall Liquidity Outlook: Frees trapped capital lines significantly faster, though early rollouts may introduce localized overnight funding friction for foreign institutional market access blocks."
         },
         {
             "exchange": "KRX",
             "initiative": "Aftermarket Session Extension & Unified One-Board Launch",
             "category": "Trading Hours",
             "eta": "Sept 14, 2026",
-            "impact": "Launches a dedicated after-hours session to counter liquidity fragmentation from local ATS platforms. Unfilled regular market orders automatically carry over into the new session layer."
+            "impact": "• Technical Structural Change: Lengthens the daily active execution window by launching a standardized evening segment that matches unfilled residual regular session day orders automatically.\n• Quantitative/HFT Microstructure Impact: dilutes the high-volume closing cross-matching profile, stretching algorithmic trading parameters over a longer duration and smoothing out historical end-of-day volume spikes.\n• Overall Liquidity Outlook: Effectively captures cross-border flows executing during European market open intervals, boosting global institutional market share inside domestic equity sectors."
         },
         {
             "exchange": "NSE",
             "initiative": "Equity Derivatives Closing Auction Realignment",
             "category": "Execution Mechanics",
             "eta": "Aug 3, 2026",
-            "impact": "Shifts normal closing parameters for F&O contracts from 3:30 PM to 3:40 PM. Aligns option premium expirations directly with underlying cash closing auction settlement pricing calculation intervals."
+            "impact": "• Technical Structural Change: Adjusts the baseline derivatives closing computation logic by migrating the calculation parameter to a strict 10-minute delayed time slot ending at 3:40 PM.\n• Quantitative/HFT Microstructure Impact: Eliminates localized end-of-session delta-hedging programmatic imbalances by harmonizing premium option settlements directly with cash underlying benchmarks.\n• Overall Liquidity Outlook: Dampens artificial price volatility and tail-risk slippage events that historically penalize institutional traders holding large volatility exposure positions."
         },
         {
             "exchange": "JPX",
             "initiative": "Next-Generation Trading System (Arrowhead 4.0)",
             "category": "Matching Engine",
             "eta": "Jan 2027",
-            "impact": "Reduces execution latency to sub-millisecond profiles, altering market maker quoting behaviors and institutional order routing strategies."
+            "impact": "• Technical Structural Change: Completely swaps the core exchange network topology to achieve raw sub-millisecond execution matching profiles.\n• Quantitative/HFT Microstructure Impact: Rewards latency-arbitrage operations, altering the alpha decay decay cycles of fast market routers and penalizing slow resting inventory strategies.\n• Overall Liquidity Outlook: Significantly tightens bid-ask spreads across top indexes, but risks creating localized liquidity void air-pockets during flash systemic volatility occurrences."
         }
     ]
 
