@@ -14,6 +14,20 @@
         "impact": "Accelerates daily transactional clearing windows across clearinghouses. Requires regional prime brokerages to realign overnight cross-border funding architectures."
     },
     {
+        "exchange": "KRX",
+        "initiative": "Aftermarket Session Extension & Unified One-Board Launch",
+        "category": "Trading Hours",
+        "eta": "Sept 14, 2026",
+        "impact": "Launches a dedicated after-hours session to counter liquidity fragmentation from local ATS platforms. Unfilled regular market orders automatically carry over into the new session layer."
+    },
+    {
+        "exchange": "NSE",
+        "initiative": "Equity Derivatives Closing Auction Realignment",
+        "category": "Execution Mechanics",
+        "eta": "Aug 3, 2026",
+        "impact": "Shifts normal closing parameters for F&O contracts from 3:30 PM to 3:40 PM. Aligns option premium expirations directly with underlying cash closing auction settlement pricing calculation intervals."
+    },
+    {
         "exchange": "JPX",
         "initiative": "Next-Generation Trading System (Arrowhead 4.0)",
         "category": "Matching Engine",
