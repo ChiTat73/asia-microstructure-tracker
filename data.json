@@ -1,25 +1,80 @@
 [
     {
-        "exchange": "HKEX",
-        "country": "HK",
-        "initiative": "Phase 1 Minimum Price Spread Reduction",
-        "category": "Trading Mechanics",
+        "exchange": "JPX",
+        "country": "JP",
+        "initiative": "TSE Trading Session Extension & Closing Auction",
+        "category": "Trading Hours",
         "severity_level": "High",
         "timeline_status": "Historical (Last 12 Months)",
-        "eta": "Implemented Mid-2025",
-        "last_updated": "Aug 03, 2026 14:39 HKT",
-        "impact": "\u2022 Technical Structural Change: Compressed minimum bid-ask spreads by 50% to 60% for shares trading within the HK$10\u2013HK$50 price bands.\n\u2022 Microstructure/HFT Impact: Significantly shifted order book queuing mechanics, increasing inside depth and driving smaller, high-frequency tick capture strategies.\n\u2022 Overall Liquidity Outlook: Drastically lowered round-trip institutional transaction friction and tightened bid-ask spreads across major listings."
+        "eta": "Implemented Nov 5, 2024",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Extended the afternoon cash equity trading session by 30 minutes, shifting market close to 15:30 JST.\n\u2022 Microstructure/HFT Impact: Concentrated institutional block crossing and passive fund rebalancing models explicitly into the newly introduced Closing Auction Session (CAS).\n\u2022 Overall Liquidity Outlook: Successfully increased total daily turnover velocity and significantly mitigated intraday price discovery spikes across Nikkei 225 constituents."
+    },
+    {
+        "exchange": "HKEX",
+        "country": "HK",
+        "initiative": "Severe Weather Trading (SWT) Framework",
+        "category": "Market Infrastructure",
+        "severity_level": "Critical",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented Sept 23, 2024",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Eliminated historical physical market closures during severe typhoons or black rainstorm events, moving operations fully remote.\n\u2022 Microstructure/HFT Impact: Ensured localization clearing risk gates and structural delta-hedging algorithms remained continuous during global macro risk events.\n\u2022 Overall Liquidity Outlook: Maintained price discovery integrity, preventing international capital locks or costly overnight margin loop hazards."
     },
     {
         "exchange": "SGX",
         "country": "SG",
-        "initiative": "Next-Gen Iris-ST Trading System Migration",
+        "initiative": "Next-Gen Iris-ST Core Trading Engine Migration",
         "category": "Market Infrastructure",
         "severity_level": "Critical",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented July 2026",
-        "last_updated": "Aug 03, 2026 14:39 HKT",
-        "impact": "\u2022 Technical Structural Change: Decommissioned the legacy OMnet API environment and migrated members to ITCH, OUCH, and FIX native market protocols.\n\u2022 Microstructure/HFT Impact: Standardized pre-trade risk validation gates directly at the exchange level and eliminated obsolete forced-order routing loops.\n\u2022 Overall Liquidity Outlook: Drastically increased system data throughput scaling, offering sub-millisecond execution matching channels for international quantitative market makers."
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Decommissioned legacy OMnet API configurations, completely migrating cleared members to ITCH, OUCH, and FIX native market protocols.\n\u2022 Microstructure/HFT Impact: Standardized customized pre-trade risk validation gates at the exchange layer and completely eliminated redundant forced-order routing paths.\n\u2022 Overall Liquidity Outlook: Massively escalated underlying data throughput scaling, creating predictable sub-millisecond execution lanes for low-latency quantitative teams."
+    },
+    {
+        "exchange": "TWSE",
+        "country": "TW",
+        "initiative": "Intraday Continuous Auction Interval Acceleration",
+        "category": "Trading Mechanics",
+        "severity_level": "Medium",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented Late 2025",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Compressed the matching engine calculation cycles for continuous electronic trading intervals to support hyper-frequency order matching.\n\u2022 Microstructure/HFT Impact: Altered the mathematical decay modeling requirements for automated order book sweep algorithms.\n\u2022 Overall Liquidity Outlook: Tightened localized bid-ask queues on major semiconductor components, increasing domestic quote frequency."
+    },
+    {
+        "exchange": "ASX",
+        "country": "AU",
+        "initiative": "CHESS Core Clearing Replacement Program (Phase 1)",
+        "category": "Settlement Mechanics",
+        "severity_level": "Critical",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Target Release: 2026 / 2027",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Replaces the decades-old legacy CHESS settlement architecture with an institutional-grade, high-throughput database network.\n\u2022 Microstructure/HFT Impact: Normalizes real-time position reporting, significantly reducing systemic overnight margin collateral requirements for clearing brokers.\n\u2022 Overall Liquidity Outlook: Modernizes risk distribution frameworks, clearing structural technical debt for cross-border institutional capital allocators."
+    },
+    {
+        "exchange": "KRX",
+        "country": "KR",
+        "initiative": "Next-Gen ATS Linkage & Night Session Rollout",
+        "category": "Trading Hours",
+        "severity_level": "High",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Target Mid-2026",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Launches an integrated evening trading window to catch residual active daytime cash orders via alternative matching networks.\n\u2022 Microstructure/HFT Impact: Disperses high-volume execution patterns across global macro desks, reducing traditional market-close volatility bumps.\n\u2022 Overall Liquidity Outlook: Routes international capital pools executing during European market hours seamlessly back into Korean primary equity blocks."
+    },
+    {
+        "exchange": "NSE",
+        "country": "IN",
+        "initiative": "Instantaneous T+0 Cross-Settlement Phase Extension",
+        "category": "Settlement Mechanics",
+        "severity_level": "High",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Rolling Phases Through 2026",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: transitions standard market clearing structures from T+1 settlement cycles down to immediate, real-time transaction processing rules.\n\u2022 Microstructure/HFT Impact: Demands near-instant currency optimization and trade reconciliation flows, changing working capital buffer strategies.\n\u2022 Overall Liquidity Outlook: Substantially scales retail and institutional equity turnover rates by completely eradicating settlement capital lockups."
     },
     {
         "exchange": "HKEX",
@@ -28,19 +83,8 @@
         "category": "Trading Mechanics",
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
-        "eta": "Phase 1 Launch: July 2, 2026",
-        "last_updated": "Aug 03, 2026 14:39 HKT",
-        "impact": "\u2022 Technical Structural Change: Restructures fragmented structures down to 8 choices, introducing price floors ($1,000) and ceilings ($50,000).\n\u2022 Microstructure/HFT Impact: Alters queue configurations, optimizing statistical depth modeling calculations for cross-sectional market depth profiles.\n\u2022 Overall Liquidity Outlook: Lowers capital entry thresholds for retail investors, improving overall equity velocity."
-    },
-    {
-        "exchange": "SGX",
-        "country": "SG",
-        "initiative": "High-Priced Equity Board Lot Size Compressions",
-        "category": "Trading Mechanics",
-        "severity_level": "Medium",
-        "timeline_status": "Upcoming Pipeline",
-        "eta": "Target Oct 5, 2026",
-        "last_updated": "Aug 03, 2026 14:39 HKT",
-        "impact": "\u2022 Technical Structural Change: Compresses standard lot parameters from 100 units down to 10 for tickers above $10, and down to 1 unit for shares above $100.\n\u2022 Microstructure/HFT Impact: Up to a 90% drop in upfront layout costs per contract block, changing market-making clearing risk tolerances.\n\u2022 Overall Liquidity Outlook: Broadens market access for younger demographics, mitigating thin retail order flow across blue chips."
+        "eta": "Phase 1 Launch: Target 2026",
+        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "impact": "\u2022 Technical Structural Change: Harmonizes messy stock board lots down into 8 predefined tiers, enforcing structural price ceilings and floors.\n\u2022 Microstructure/HFT Impact: Optimizes queue configurations, streamlining queue positional math calculations for order book market depth profiles.\n\u2022 Overall Liquidity Outlook: Significantly lowers retail entry barriers on premium priced equities, bolstering underlying volume velocity."
     }
 ]
