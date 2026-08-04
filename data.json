@@ -7,7 +7,7 @@
         "severity_level": "High",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Nov 5, 2024",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Extended the afternoon cash equity trading session by 30 minutes, shifting market close to 15:30 JST.\n\u2022 Microstructure/HFT Impact: Concentrated institutional block crossing and passive fund rebalancing models explicitly into the newly introduced Closing Auction Session (CAS).\n\u2022 Overall Liquidity Outlook: Successfully increased total daily turnover velocity and significantly mitigated intraday price discovery spikes across Nikkei 225 constituents."
     },
     {
@@ -18,7 +18,7 @@
         "severity_level": "Critical",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Sept 23, 2024",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Eliminated historical physical market closures during severe typhoons or black rainstorm events, moving operations fully remote.\n\u2022 Microstructure/HFT Impact: Ensured localization clearing risk gates and structural delta-hedging algorithms remained continuous during global macro risk events.\n\u2022 Overall Liquidity Outlook: Maintained price discovery integrity, preventing international capital locks or costly overnight margin loop hazards."
     },
     {
@@ -29,7 +29,7 @@
         "severity_level": "Critical",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented July 2026",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Decommissioned legacy OMnet API configurations, completely migrating cleared members to ITCH, OUCH, and FIX native market protocols.\n\u2022 Microstructure/HFT Impact: Standardized customized pre-trade risk validation gates at the exchange layer and completely eliminated redundant forced-order routing paths.\n\u2022 Overall Liquidity Outlook: Massively escalated underlying data throughput scaling, creating predictable sub-millisecond execution lanes for low-latency quantitative teams."
     },
     {
@@ -40,7 +40,7 @@
         "severity_level": "Medium",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Late 2025",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Compressed the matching engine calculation cycles for continuous electronic trading intervals to support hyper-frequency order matching.\n\u2022 Microstructure/HFT Impact: Altered the mathematical decay modeling requirements for automated order book sweep algorithms.\n\u2022 Overall Liquidity Outlook: Tightened localized bid-ask queues on major semiconductor components, increasing domestic quote frequency."
     },
     {
@@ -51,7 +51,7 @@
         "severity_level": "Critical",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Release: 2026 / 2027",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Replaces the decades-old legacy CHESS settlement architecture with an institutional-grade, high-throughput database network.\n\u2022 Microstructure/HFT Impact: Normalizes real-time position reporting, significantly reducing systemic overnight margin collateral requirements for clearing brokers.\n\u2022 Overall Liquidity Outlook: Modernizes risk distribution frameworks, clearing structural technical debt for cross-border institutional capital allocators."
     },
     {
@@ -62,7 +62,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Mid-2026",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Launches an integrated evening trading window to catch residual active daytime cash orders via alternative matching networks.\n\u2022 Microstructure/HFT Impact: Disperses high-volume execution patterns across global macro desks, reducing traditional market-close volatility bumps.\n\u2022 Overall Liquidity Outlook: Routes international capital pools executing during European market hours seamlessly back into Korean primary equity blocks."
     },
     {
@@ -73,7 +73,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Rolling Phases Through 2026",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: transitions standard market clearing structures from T+1 settlement cycles down to immediate, real-time transaction processing rules.\n\u2022 Microstructure/HFT Impact: Demands near-instant currency optimization and trade reconciliation flows, changing working capital buffer strategies.\n\u2022 Overall Liquidity Outlook: Substantially scales retail and institutional equity turnover rates by completely eradicating settlement capital lockups."
     },
     {
@@ -84,7 +84,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Phase 1 Launch: Target 2026",
-        "last_updated": "Aug 03, 2026 14:48 HKT",
+        "last_updated": "Aug 04, 2026 09:27 HKT",
         "impact": "\u2022 Technical Structural Change: Harmonizes messy stock board lots down into 8 predefined tiers, enforcing structural price ceilings and floors.\n\u2022 Microstructure/HFT Impact: Optimizes queue configurations, streamlining queue positional math calculations for order book market depth profiles.\n\u2022 Overall Liquidity Outlook: Significantly lowers retail entry barriers on premium priced equities, bolstering underlying volume velocity."
     }
 ]
