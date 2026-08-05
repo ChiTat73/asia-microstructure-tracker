@@ -7,339 +7,53 @@
     <style>
         :root {
             --bg-main: #0b0f17;
-            --bg-card: #111622;
             --text-primary: #f1f5f9;
             --text-muted: #64748b;
             --border-color: #1e293b;
             --accent-green: #10b981;
-            --accent-blue: #3b82f6;
         }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 40px 24px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .title-area h1 {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0 0 6px 0;
-            letter-spacing: -0.3px;
-        }
-
-        .title-area p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .controls-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .status-switch {
-            display: flex;
-            background-color: #151b26;
-            border: 1px solid var(--border-color);
-            padding: 2px;
-            border-radius: 6px;
-        }
-
-        .switch-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 14px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.15s ease;
-        }
-
-        .switch-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .switch-btn.active {
-            background-color: var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .search-box {
-            position: relative;
-        }
-
-        .search-box input {
-            background-color: #151b26;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 10px 16px 10px 36px;
-            border-radius: 6px;
-            font-size: 13px;
-            width: 240px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box input:focus {
-            border-color: #475569;
-        }
-
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            opacity: 0.4;
-        }
-
-        .ledger-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 14px;
-            background-color: transparent;
-        }
-
-        .ledger-table th {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .ledger-table tr {
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: background-color 0.15s ease;
-        }
-
-        .ledger-table tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        .ledger-table td {
-            padding: 20px 16px;
-            vertical-align: middle;
-            line-height: 1.4;
-        }
-
-        .col-exchange {
-            font-weight: 700;
-            width: 10%;
-            letter-spacing: 0.3px;
-        }
-
-        .col-initiative {
-            font-weight: 600;
-            width: 50%;
-        }
-
-        .col-eta {
-            font-weight: 700;
-            font-size: 13px;
-            white-space: pre-line;
-            width: 18%;
-        }
-
-        .col-category {
-            width: 18%;
-        }
-
-        .col-arrow {
-            width: 4%;
-            text-align: right;
-            color: var(--text-muted);
-            font-size: 16px;
-            opacity: 0.5;
-        }
-
-        .category-wrapper {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: rgba(16, 185, 129, 0.06);
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: var(--accent-green);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .category-wrapper.trading-hours { color: #10b981; background: rgba(16, 185, 129, 0.05); }
-        .category-wrapper.market-infrastructure { color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
-        .category-wrapper.trading-mechanics { color: #a3e635; background: rgba(163, 230, 53, 0.05); }
-        .category-wrapper.settlement-mechanics { color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: currentColor;
-            box-shadow: 0 0 8px currentColor;
-        }
-
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 0.2px;
-        }
-
-        .loading-text {
-            text-align: center;
-            padding: 60px;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .diagnostic-box {
-            background-color: #270505;
-            border: 1px dashed #ef4444;
-            color: #fca5a5;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 12px;
-            margin-top: 15px;
-            text-align: left;
-        }
+        body { font-family: system-ui, sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding: 40px 24px; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: #111622; border: 1px solid var(--border-color); padding: 30px; border-radius: 8px; margin-top: 20px; }
+        .btn { background: #151b26; border: 1px solid var(--border-color); color: white; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-top: 15px; }
+        .btn:hover { background: #1e293b; }
+        pre { text-align: left; background: #000; padding: 15px; border-radius: 4px; overflow-x: auto; color: #a3e635; font-size: 13px; }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="header-bar">
-            <div class="title-area">
-                <h1>Microstructure Initiative Ledger</h1>
-                <p>Click any row to inspect its market impact profile</p>
-            </div>
-            
-            <div class="controls-area">
-                <div class="status-switch">
-                    <button class="switch-btn active" onclick="filterByTimeline('all', this)">All</button>
-                    <button class="switch-btn" onclick="filterByTimeline('implemented', this)">Implemented</button>
-                    <button class="switch-btn" onclick="filterByTimeline('pipeline', this)">Pipeline</button>
-                </div>
-                
-                <div class="search-box">
-                    <input type="text" id="tableFilter" placeholder="Filter ledger content...">
-                </div>
-            </div>
+        <h1>Microstructure Ledger Diagnostics</h1>
+        <p style="color: var(--text-muted)">Testing data connectivity configuration...</p>
+        
+        <div class="card">
+            <h3>System Status:</h3>
+            <p id="test-status" style="font-weight: bold; color: #fbbf24;">Attempting to download data records...</p>
+            <button class="btn" onclick="location.reload()">Manual Reload</button>
         </div>
 
-        <table class="ledger-table">
-            <thead>
-                <tr>
-                    <th style="padding-left:16px;">Exchange</th>
-                    <th>Initiative Name</th>
-                    <th>ETA</th>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="ledger-body">
-                <tr>
-                    <td colspan="5" class="loading-text" id="status-message">Synchronizing secure terminal feeds...</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <footer>
-            Data streamed live from the Asia microstructure tracking source. For institutional use only.
-        </footer>
+        <div class="card" style="text-align: left;">
+            <h3>Raw Data Output Stream:</h3>
+            <pre id="raw-stream">Awaiting stream packets...</pre>
+        </div>
     </div>
 
     <script>
-        let fullDataset = [];
-        let currentTimelineFilter = 'all';
-
-        const targetUrl = 'data.json?v=' + new Date().getTime();
-
-        fetch(targetUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP network error! Status code: ${response.status} (${response.statusText})`);
-                }
-                return response.json();
+        // Directly targets data.json using root fallback paths
+        fetch('data.json')
+            .then(res => {
+                if(!res.ok) throw new Error("File found, but server block active. Code: " + res.status);
+                return res.json();
             })
             .then(data => {
-                if (!Array.isArray(data)) {
-                    throw new Error("Data structure mismatch: Your data.json file must be a JSON Array list starting with [ and ending with ].");
-                }
-                fullDataset = data;
-                applyCombinedFilters();
+                document.getElementById('test-status').textContent = "✅ Success! File loaded correctly.";
+                document.getElementById('test-status').style.color = "#10b981";
+                document.getElementById('raw-stream').textContent = JSON.stringify(data, null, 2);
             })
-            .catch(error => {
-                const bodyContainer = document.getElementById('ledger-body');
-                bodyContainer.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="loading-text" style="color:#ef4444; padding-bottom: 5px;">
-                            ⚠️ Data Synchronization Failure
-                            <div class="diagnostic-box">
-                                <strong>Diagnostic Report:</strong><br>
-                                ${error.message}<br><br>
-                                <strong>Troubleshooting Action:</strong> Ensure your 'data.json' file exists in this repository, is named exactly in lowercase, and has valid JSON syntax.
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                console.error('System diagnostics log:', error);
+            .catch(err => {
+                document.getElementById('test-status').textContent = "❌ Failed to read data.json";
+                document.getElementById('test-status').style.color = "#ef4444";
+                document.getElementById('raw-stream').textContent = err.message + "\n\nTip: Go to your main GitHub screen and verify that a file named exactly 'data.json' exists in your files list.";
             });
-
-        function applyCombinedFilters() {
-            const searchQuery = document.getElementById('tableFilter').value.toLowerCase();
-            
-            const filteredData = fullDataset.filter(item => {
-                const etaText = (item.eta || '').toLowerCase();
-                const statusText = (item.timeline_status || '').toLowerCase();
-                
-                const isImplemented = statusText.includes('historical') || etaText.includes('implemented');
-                if (currentTimelineFilter === 'implemented' && !isImplemented) return false;
-                if (currentTimelineFilter === 'pipeline' && isImplemented) return false;
-                
-                return (item.exchange || '').toLowerCase().includes(searchQuery) ||(item.category || '').toLowerCase().includes(searchQuery) ||(item.initiative || '').toLowerCase().includes(searchQuery);});renderTable(filteredData);
-        }
-function filterByTimeline(filterType, element) {currentTimelineFilter = filterType;document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));element.classList.add('active');applyCombinedFilters();}
-        
-        function renderTable(dataset) {const tbody = document.getElementById('ledger-body');tbody.innerHTML = 
-            
-if(dataset.length === 0) {
-    if (fullDataset.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="loading-text" style="color: #64748b;">📡 Database Empty: No data rows found inside your data.json file yet. Run your scraper script to populate it!</td></tr>`;
-    } else {
-        tbody.innerHTML = `<tr><td colspan="5" class="loading-text">No active initiatives match your search filter criteria.</td></tr>`;
-    }
-    return;
-}
-
-                                       dataset.forEach(item => {const tr = document.createElement('tr');tr.onclick = () => {alert([IMPACT REPORT - ${item.exchange || 'ALERT'}]\n\nInitiative:\n${item.initiative || 'N/A'}\n\nDetailed Market Impact:\n${item.impact || 'No operational impact logged.'}\n\nStatus Context:\nTimeline Status: ${item.timeline_status || 'N/A'}\nSeverity Rating: ${item.severity_level || 'N/A'});
-                                                                                                                                                                                                                };
-const categoryClean = (item.category || '').toLowerCase().replace(/\s+/g, '-');tr.innerHTML = <td class="col-exchange">${item.exchange || 'N/A'}</td> <td class="col-initiative">${item.initiative || 'Untitled System Update'}</td> <td class="col-eta">${item.eta || 'Rolling Phase'}</td> <td class="col-category"> <div class="category-wrapper ${categoryClean}"> <div class="status-dot"></div> <span>${item.category || 'General'}</span> </div> </td> <td class="col-arrow">›</td>;tbody.appendChild(tr);});}document.getElementById('tableFilter').addEventListener('input', applyCombinedFilters);
+    </script>
+</body>
+</html>
