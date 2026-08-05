@@ -1,326 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asia Microstructure Matrix</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background-color: #ffffff;
-            color: #24292e;
-            padding: 40px 24px;
-            margin: 0;
-            line-height: 1.5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        h1 {
-            color: #0366d6;
-            margin: 0 0 8px 0;
-            font-size: 26px;
-        }
-        .subtitle {
-            color: #586069;
-            margin: 0;
-            font-size: 14px;
-        }
-        .agent-status-panel {
-            background-color: #f6f8fa;
-            border: 1px solid #e1e4e8;
-            padding: 12px 18px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #24292e;
-        }
-        .agent-status-panel strong {
-            color: #0366d6;
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #eaecef;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section-title.pipeline { color: #d97706; border-bottom-color: #fef3c7; }
-        .section-title.implemented { color: #059669; border-bottom-color: #d1fae5; }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        th {
-            border: 1px solid #e1e4e8;
-            text-align: left;
-            padding: 12px 16px;
-            font-size: 14px;
-            background-color: #f6f8fa;
-            font-weight: 600;
-            color: #24292e;
-        }
-        td {
-            border: 1px solid #e1e4e8;
-            text-align: left;
-            padding: 14px 16px;
-            font-size: 14px;
-        }
-        .clickable-row {
-            cursor: pointer;
-            transition: background-color 0.15s ease;
-        }
-        .clickable-row:hover {
-            background-color: #f1f8ff !important;
-        }
-        .clickable-row:nth-child(4n+1) {
-            background-color: #ffffff;
-        }
-        .clickable-row:nth-child(4n+3) {
-            background-color: #f9f9f9;
-        }
-        .drilldown-row {
-            background-color: #fafbfc !important;
-            display: none;
-        }
-        .drilldown-row.active {
-            display: table-row;
-        }
-        .drilldown-panel {
-            padding: 18px 24px;
-            color: #444d56;
-            font-size: 13.5px;
-            border-left: 4px solid #0366d6;
-        }
-        .drilldown-grid {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 12px 16px;
-        }
-        .field-label {
-            font-weight: 600;
-            color: #586069;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-            align-self: start;
-            padding-top: 2px;
-        }
-        .field-value {
-            color: #24292e;
-            line-height: 1.6;
-        }
-        .td-mkt {
-            font-weight: 700;
-            color: #0366d6;
-            width: 10%;
-        }
-        .td-initiative {
-            width: 50%;
-        }
-        .td-eta {
-            font-weight: 500;
-            width: 15%;
-        }
-        .td-category {
-            width: 20%;
-        }
-        .td-toggle {
-            width: 5%;
-            text-align: center;
-            color: #a3aab1;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .status-msg {
-            text-align: center;
-            font-weight: 500;
-            color: #6a737d;
-            padding: 30px;
-            background-color: #f6f8fa;
-            border: 1px dashed #e1e4e8;
-            border-radius: 6px;
-        }
-        .severity-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-        .severity-badge.critical { background-color: #fee2e2; color: #991b1b; }
-        .severity-badge.high { background-color: #ffedd5; color: #9a3412; }
-        .severity-badge.medium { background-color: #fef9c3; color: #854d0e; }
-        .severity-badge.low { background-color: #d1fae5; color: #065f46; }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="header-area">
-            <div>
-                <h1>Asia Microstructure Ledger</h1>
-                <p class="subtitle">Automated structural change logging repository.</p>
-            </div>
-            <div class="agent-status-panel">
-                🤖 Agent Status: <span style="color: #22c55e; font-weight: bold;">● ONLINE</span><br>
-                📅 Last Sync Check: <strong id="agent-timestamp">Fetching schedule...</strong>
-            </div>
-        </div>
-
-        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE (Click rows to expand)</div>
-        <div id="pipeline-container">
-            <table id="pipeline-table" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>MKT</th>
-                        <th>Structure Initiative / Regulatory Description</th>
-                        <th>Effective Date / ETA</th>
-                        <th>Market Segment</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="pipeline-body"></tbody>
-            </table>
-            <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
-        </div>
-
-        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL (Click rows to expand)</div>
-        <div id="implemented-container">
-            <table id="implemented-table" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>MKT</th>
-                        <th>Structure Initiative / Regulatory Description</th>
-                        <th>Effective Date / ETA</th>
-                        <th>Market Segment</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="implemented-body"></tbody>
-            </table>
-            <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
-        </div>
-    </div>
-    <script>
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                const pipelineBody = document.getElementById('pipeline-body');
-                const implementedBody = document.getElementById('implemented-body');
-                
-                let pipelineCount = 0;
-                let implementedCount = 0;
-                let globalTimestamp = "N/A";
-
-                data.forEach((item, index) => {
-                    const ex = item.exchange || item.EXCHANGE || 'N/A';
-                    const init = item.initiative || item.INITIATIVE || 'N/A';
-                    const eta = item.eta || item.ETA || 'N/A';
-                    const cat = item.category || item.CATEGORY || 'N/A';
-                    const impact = item.impact || item.IMPACT || 'No detailed analysis provided.';
-                    const severity = (item.severity_level || item.SEVERITY_LEVEL || 'Normal');
-                    const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
-                    const etaText = eta.toLowerCase();
-
-                    if(item.last_updated || item.LAST_UPDATED) {
-                        globalTimestamp = item.last_updated || item.LAST_UPDATED;
-                    }
-
-                    const uniqueId = `drill-${index}`;
-                    const severityClass = severity.toLowerCase();
-
-                    const masterRowHtml = `
-                        <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
-                            <td class="td-mkt">${ex}</td>
-                            <td class="td-initiative">${init}</td>
-                            <td class="td-eta">${eta}</td>
-                            <td class="td-category">${cat}</td>
-                            <td class="td-toggle" id="arrow-${uniqueId}">▾</td>
-                        </tr>
-                    `;
-
-                    const drilldownRowHtml = `
-                        <tr class="drilldown-row" id="${uniqueId}">
-                            <td colspan="5">
-                                <div class="drilldown-panel">
-                                    <div class="drilldown-grid">
-                                        <div class="field-label">Risk Severity:</div>
-                                        <div class="field-value">
-                                            <span class="severity-badge ${severityClass}">${severity}</span>
-                                        </div>
-                                        
-                                        <div class="field-label">Detailed Impact:</div>
-                                        <div class="field-value">${impact}</div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-
-                    const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
-
-                    if (isImplemented) {
-                        implementedBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
-                        implementedCount++;
-                    } else {
-                        pipelineBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
-                        pipelineCount++;
-                    }
-                });
-
-                document.getElementById('agent-timestamp').textContent = globalTimestamp;
-
-                if (pipelineCount > 0) {
-                    document.getElementById('pipeline-loading').style.display = 'none';
-                    document.getElementById('pipeline-table').style.display = 'table';
-                } else {
-                    document.getElementById('pipeline-loading').textContent = "No initiatives currently listed in the pipeline.";
-                }
-
-                if (implementedCount > 0) {
-                    document.getElementById('implemented-loading').style.display = 'none';
-                    document.getElementById('implemented-table').style.display = 'table';
-                } else {
-                    document.getElementById('implemented-loading').textContent = "No historical implemented records logged.";
-                }
-            })
-            .catch(error => {
-                const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
-                document.getElementById('pipeline-loading').textContent = errMsg;
-                document.getElementById('pipeline-loading').style.color = '#dc2626';
-            });
-
-        function toggleDrilldown(rowId, masterElement) {
-            const targetedPanel = document.getElementById(rowId);
-            const arrowIndicator = document.getElementById(`arrow-${rowId}`);
-            
-            if (targetedPanel.classList.contains('active')) {
-                targetedPanel.classList.remove('active');
-                arrowIndicator.textContent = '▾';
-                masterElement.style.backgroundColor = '';
-            } else {
-                targetedPanel.classList.add('active');
-                arrowIndicator.textContent = '▴';
-                masterElement.style.backgroundColor = '#f1f8ff';
-            }
-        }
-    </script>
-</body>
-</html>
+[
+    {
+        "exchange": "JPX",
+        "country": "JP",
+        "initiative": "TSE Trading Session Extension & Closing Auction",
+        "category": "Trading Hours",
+        "severity_level": "High",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented Nov 5, 2024",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Extended the afternoon cash equity trading session by 30 minutes, shifting market close to 15:30 JST.\n\u2022 Microstructure/HFT Impact: Concentrated institutional block crossing and passive fund rebalancing models explicitly into the newly introduced Closing Auction Session (CAS).\n\u2022 Overall Liquidity Outlook: Successfully increased total daily turnover velocity and significantly mitigated intraday price discovery spikes across Nikkei 225 constituents."
+    },
+    {
+        "exchange": "HKEX",
+        "country": "HK",
+        "initiative": "Severe Weather Trading (SWT) Framework",
+        "category": "Market Infrastructure",
+        "severity_level": "Critical",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented Sept 23, 2024",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Eliminated historical physical market closures during severe typhoons or black rainstorm events, moving operations fully remote.\n\u2022 Microstructure/HFT Impact: Ensured localization clearing risk gates and structural delta-hedging algorithms remained continuous during global macro risk events.\n\u2022 Overall Liquidity Outlook: Maintained price discovery integrity, preventing international capital locks or costly overnight margin loop hazards."
+    },
+    {
+        "exchange": "SGX",
+        "country": "SG",
+        "initiative": "Next-Gen Iris-ST Core Trading Engine Migration",
+        "category": "Market Infrastructure",
+        "severity_level": "Critical",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented July 2026",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Decommissioned legacy OMnet API configurations, completely migrating cleared members to ITCH, OUCH, and FIX native market protocols.\n\u2022 Microstructure/HFT Impact: Standardized customized pre-trade risk validation gates at the exchange layer and completely eliminated redundant forced-order routing paths.\n\u2022 Overall Liquidity Outlook: Massively escalated underlying data throughput scaling, creating predictable sub-millisecond execution lanes for low-latency quantitative teams."
+    },
+    {
+        "exchange": "TWSE",
+        "country": "TW",
+        "initiative": "Intraday Continuous Auction Interval Acceleration",
+        "category": "Trading Mechanics",
+        "severity_level": "Medium",
+        "timeline_status": "Historical (Last 12 Months)",
+        "eta": "Implemented Late 2025",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Compressed the matching engine calculation cycles for continuous electronic trading intervals to support hyper-frequency order matching.\n\u2022 Microstructure/HFT Impact: Altered the mathematical decay modeling requirements for automated order book sweep algorithms.\n\u2022 Overall Liquidity Outlook: Tightened localized bid-ask queues on major semiconductor components, increasing domestic quote frequency."
+    },
+    {
+        "exchange": "ASX",
+        "country": "AU",
+        "initiative": "CHESS Core Clearing Replacement Program (Phase 1)",
+        "category": "Settlement Mechanics",
+        "severity_level": "Critical",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Target Release: 2026 / 2027",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Replaces the decades-old legacy CHESS settlement architecture with an institutional-grade, high-throughput database network.\n\u2022 Microstructure/HFT Impact: Normalizes real-time position reporting, significantly reducing systemic overnight margin collateral requirements for clearing brokers.\n\u2022 Overall Liquidity Outlook: Modernizes risk distribution frameworks, clearing structural technical debt for cross-border institutional capital allocators."
+    },
+    {
+        "exchange": "KRX",
+        "country": "KR",
+        "initiative": "Next-Gen ATS Linkage & Night Session Rollout",
+        "category": "Trading Hours",
+        "severity_level": "High",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Target Mid-2026",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Launches an integrated evening trading window to catch residual active daytime cash orders via alternative matching networks.\n\u2022 Microstructure/HFT Impact: Disperses high-volume execution patterns across global macro desks, reducing traditional market-close volatility bumps.\n\u2022 Overall Liquidity Outlook: Routes international capital pools executing during European market hours seamlessly back into Korean primary equity blocks."
+    },
+    {
+        "exchange": "NSE",
+        "country": "IN",
+        "initiative": "Instantaneous T+0 Cross-Settlement Phase Extension",
+        "category": "Settlement Mechanics",
+        "severity_level": "High",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Rolling Phases Through 2026",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: transitions standard market clearing structures from T+1 settlement cycles down to immediate, real-time transaction processing rules.\n\u2022 Microstructure/HFT Impact: Demands near-instant currency optimization and trade reconciliation flows, changing working capital buffer strategies.\n\u2022 Overall Liquidity Outlook: Substantially scales retail and institutional equity turnover rates by completely eradicating settlement capital lockups."
+    },
+    {
+        "exchange": "HKEX",
+        "country": "HK",
+        "initiative": "Standardized Board Lot Optimization Framework",
+        "category": "Trading Mechanics",
+        "severity_level": "High",
+        "timeline_status": "Upcoming Pipeline",
+        "eta": "Phase 1 Launch: Target 2026",
+        "last_updated": "Aug 05, 2026 15:47 HKT",
+        "impact": "\u2022 Technical Structural Change: Harmonizes messy stock board lots down into 8 predefined tiers, enforcing structural price ceilings and floors.\n\u2022 Microstructure/HFT Impact: Optimizes queue configurations, streamlining queue positional math calculations for order book market depth profiles.\n\u2022 Overall Liquidity Outlook: Significantly lowers retail entry barriers on premium priced equities, bolstering underlying volume velocity."
+    }
+]
