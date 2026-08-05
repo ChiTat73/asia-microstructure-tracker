@@ -90,7 +90,6 @@
             font-size: 12px;
             opacity: 0.5;
         }
-
         .section-title {
             font-size: 15px;
             font-weight: 600;
@@ -218,6 +217,29 @@
             padding-top: 2px;
         }
         .field-value { color: #e2e8f0; line-height: 1.6; white-space: normal !important; }
+        
+        .source-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #1e293b;
+            color: #3b82f6;
+            border: 1px solid #334155;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 5px;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        .source-link-btn:hover {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
         
         .impact-list { margin: 0; padding-left: 0; list-style-type: none; }
         .impact-list li { margin-bottom: 8px; position: relative; padding-left: 20px; }
@@ -356,17 +378,35 @@
 
         const developedMarkets = ['jpx', 'asx', 'hkex', 'sgx', 'twse', 'krx', 'nzx'];
 
+        const exchangeDomainMap = {
+            'jpx': 'jpx.co.jp', 'asx': 'asx.com.au', 'hkex': 'hkex.com.hk', 'sgx': 'sgx.com',
+            'twse': 'twse.com.tw', 'krx': 'krx.co.kr', 'nzx': 'nzx.com', 'sse': 'sse.com.cn',
+            'szse': 'szse.cn', 'nse': 'nseindia.com', 'bursa': 'bursamalaysia.com',
+            'set': 'set.or.th', 'idx': 'idx.co.id', 'pse': 'pse.com.ph', 'vse': 'vse.vn'
+        };
+
         let rawPipelineDataset = [];
         let rawImplementedDataset = [];
         
         let activeSortKeys = { pipeline: null, implemented: null };
         let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
 
-        // Parse corporate text strings into accurate temporal countdown markers
+        function generateOfficialSourceUrl(exchange, initiativeTitle) {
+            const cleanEx = (exchange || '').trim().toLowerCase();
+            const targetDomain = exchangeDomainMap[cleanEx] || '';
+            let searchString = `"${initiativeTitle}"`;
+            if (targetDomain) {
+                searchString = `site:${targetDomain} ${searchString}`;
+            } else {
+                searchString = `${exchange} Exchange ${searchString} circular consultation`;
+            }
+            return `https://google.com{encodeURIComponent(searchString)}`;
+        }
+
         function calculateCountdown(etaText) {
             if (!etaText) return { text: '', html: '' };
             const clean = etaText.toLowerCase();
-            const now = new Date("2026-08-05"); // Standard layout reference time anchor
+            const now = new Date("2026-08-05");
             
             let targetDate = null;
 
@@ -409,7 +449,6 @@
         }
 
         let viewedInitiatives = JSON.parse(localStorage.getItem('microstructure_viewed_logs') || '[]');
-        // Fetch Database Engine
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
@@ -432,6 +471,7 @@
                     const initiativeSignature = `${ex}-${init}-${eta}`.replace(/\s+/g, '_');
                     const isNewEntry = !viewedInitiatives.includes(initiativeSignature);
                     const countdownData = calculateCountdown(eta);
+                    const generatedLink = generateOfficialSourceUrl(ex, init);
 
                     const normalizedItem = {
                         exchange: ex,
@@ -444,7 +484,8 @@
                         formattedImpact: formatImpact(impactText),
                         signature: initiativeSignature,
                         isNew: isNewEntry,
-                        countdownHtml: countdownData.html
+                        countdownHtml: countdownData.html,
+                        sourceUrl: generatedLink
                     };
 
                     const isImplemented = timelineStatus.includes('historical') || eta.toLowerCase().includes('implemented') || countdownData.text.includes('Passed');
@@ -525,14 +566,13 @@
                 const classBadge = item.isDeveloped 
                     ? '<span class="class-badge developed">Developed Mkt</span>' 
                     : '<span class="class-badge emerging">Emerging Mkt</span>';
-                const newBadgeHtml = item.isNew ? '<span class="new-entry-badge">NEW</span>' : '';
 
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr class="${item.isNew ? 'clickable-row is-new-row' : 'clickable-row'}" onclick="handleRowInteraction('${uniqueId}', '${item.signature}', this)">
                         <td class="td-mkt">${item.exchange}</td>
                         <td class="td-country">${item.countryFull}</td>
                         <td class="td-classification">${classBadge}</td>
-                        <td class="td-initiative">${item.initiative}${newBadgeHtml}</td>
+                        <td class="td-initiative">${item.initiative}${item.isNew ? '<span class="new-entry-badge">NEW</span>' : ''}</td>
                         <td class="td-eta">${item.eta} ${item.countdownHtml}</td>
                         <td class="td-category">${item.category}</td>
                         <td class="td-toggle" id="arrow-${uniqueId}">▼</td>
@@ -545,6 +585,12 @@
                                     <div class="field-value"><span class="severity-badge ${item.severity.toLowerCase()}">${item.severity}</span></div>
                                     <div class="field-label">Detailed Impact:</div>
                                     <div class="field-value">${item.formattedImpact}</div>
+                                    <div class="field-label">Official Feeds:</div>
+                                    <div class="field-value">
+                                        <a href="${item.sourceUrl}" target="_blank" class="source-link-btn" onclick="event.stopPropagation();">
+                                            🔍 Locate Official Source Document
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -555,7 +601,7 @@
 
         function handleRowInteraction(rowId, signature, masterElement) {
             const targetedPanel = document.getElementById(rowId);
-            const arrowIndicator = document.getElementById(`arrow-${rowId}`);
+            const arrowIndicator = document.getElementById('arrow-' + rowId);
             if (targetedPanel.classList.contains('active')) {
                 targetedPanel.classList.remove('active');
                 arrowIndicator.textContent = '▼';
