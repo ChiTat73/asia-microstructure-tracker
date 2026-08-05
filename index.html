@@ -457,8 +457,10 @@
 
         let viewedInitiatives = JSON.parse(localStorage.getItem('microstructure_viewed_logs') || '[]');
 
-    
-               fetch('data.json')
+
+
+
+                fetch('data.json')
             .then(response => response.json())
             .then(data => {
                 let globalTimestamp = "N/A";
@@ -596,10 +598,10 @@
                                     <div class="field-value">${item.formattedImpact}</div>
                                     <div class="field-label">Official Feeds:</div>
                                     <div class="field-value">
-                                        <!-- Fixed precise capitalization value reference path -->
-                                        <a href="${item.sourceUrl}" target="_blank" class="source-link-btn" onclick="event.stopPropagation();">
+                                        <!-- Fixed: Uses window.open wrapper to natively bypass the browser's link blocking logic -->
+                                        <button class="source-link-btn" onclick="event.stopPropagation(); window.open('${item.sourceUrl}', '_blank');">
                                             🔍 Locate Official Source Document
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -634,3 +636,6 @@
     </script>
 </body>
 </html>
+
+    
+      
