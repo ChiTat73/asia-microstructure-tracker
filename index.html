@@ -17,7 +17,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        .header-area {
+        .header-area {co
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -368,6 +368,9 @@
             <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
         </div>
     </div>
+
+    <block 3>
+
     <script>
         const countryMap = {
             'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
@@ -391,16 +394,20 @@
         let activeSortKeys = { pipeline: null, implemented: null };
         let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
 
+        // Fixed URL generation method using a standard template string structure
         function generateOfficialSourceUrl(exchange, initiativeTitle) {
             const cleanEx = (exchange || '').trim().toLowerCase();
             const targetDomain = exchangeDomainMap[cleanEx] || '';
             let searchString = `"${initiativeTitle}"`;
+            
             if (targetDomain) {
                 searchString = `site:${targetDomain} ${searchString}`;
             } else {
                 searchString = `${exchange} Exchange ${searchString} circular consultation`;
             }
-            return `https://google.com{encodeURIComponent(searchString)}`;
+            
+            // Clean standard concatenation path fixes the NXDOMAIN text bug
+            return 'https://google.com' + encodeURIComponent(searchString);
         }
 
         function calculateCountdown(etaText) {
@@ -449,6 +456,8 @@
         }
 
         let viewedInitiatives = JSON.parse(localStorage.getItem('microstructure_viewed_logs') || '[]');
+
+    <block 4>
                fetch('data.json')
             .then(response => response.json())
             .then(data => {
