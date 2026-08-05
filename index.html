@@ -13,233 +13,62 @@
             margin: 0;
             line-height: 1.5;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header-area {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 24px;
         }
-        .header-area {co
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-            border-bottom: 1px solid #1e293b;
-            padding-bottom: 24px;
-        }
-        h1 {
-            color: #3b82f6;
-            margin: 0 0 8px 0;
-            font-size: 26px;
-            font-weight: 700;
-        }
-        .subtitle {
-            color: #94a3b8;
-            margin: 0;
-            font-size: 14px;
-        }
-        .agent-status-panel {
-            background-color: #0f172a;
-            border: 1px solid #1e293b;
-            padding: 12px 18px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #e2e8f0;
-        }
-        .agent-status-panel strong {
-            color: #3b82f6;
-        }
+        h1 { color: #3b82f6; margin: 0 0 8px 0; font-size: 26px; font-weight: 700; }
+        .subtitle { color: #94a3b8; margin: 0; font-size: 14px; }
+        .agent-status-panel { background-color: #0f172a; border: 1px solid #1e293b; padding: 12px 18px; border-radius: 6px; font-size: 13px; color: #e2e8f0; }
         
         .controls-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0f172a;
-            border: 1px solid #1e293b;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 30px;
-            gap: 16px;
-            flex-wrap: wrap;
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: #0f172a; border: 1px solid #1e293b; padding: 12px 16px; border-radius: 6px; margin-bottom: 30px; gap: 16px; flex-wrap: wrap;
         }
-        .search-wrapper {
-            position: relative;
-            flex-grow: 1;
-            max-width: 400px;
-        }
+        .search-wrapper { position: relative; flex-grow: 1; max-width: 400px; }
         .search-wrapper input {
-            width: 100%;
-            background-color: #000000;
-            border: 1px solid #1e293b;
-            color: #ffffff;
-            padding: 8px 12px 8px 34px;
-            border-radius: 4px;
-            font-size: 13px;
-            outline: none;
-            box-sizing: border-box;
+            width: 100%; background-color: #000000; border: 1px solid #1e293b; color: #ffffff; padding: 8px 12px 8px 34px; border-radius: 4px; font-size: 13px; outline: none; box-sizing: border-box;
         }
-        .search-wrapper input:focus {
-            border-color: #3b82f6;
-        }
-        .search-wrapper::before {
-            content: "🔍";
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            opacity: 0.5;
-        }
+        .search-wrapper::before { content: "🔍"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.5; }
+
         .section-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 40px;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #1e293b;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            letter-spacing: 0.5px;
+            font-size: 15px; font-weight: 600; margin-top: 40px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1e293b;
+            display: flex; align-items: center; justify-content: space-between; letter-spacing: 0.5px;
         }
         .section-title.pipeline { color: #f59e0b; border-bottom-color: #451a03; }
         .section-title.implemented { color: #10b981; border-bottom-color: #064e3b; }
-        
-        .row-counter {
-            font-size: 11px;
-            background-color: #1e293b;
-            color: #94a3b8;
-            padding: 2px 8px;
-            border-radius: 10px;
-        }
+        .row-counter { font-size: 11px; background-color: #1e293b; color: #94a3b8; padding: 2px 8px; border-radius: 10px; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-            background-color: #000000;
-            table-layout: fixed;
-        }
-        th.sortable {
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.15s;
-        }
-        th.sortable:hover {
-            background-color: #1e293b;
-            color: #ffffff;
-        }
-        th {
-            border: 1px solid #1e293b;
-            text-align: left;
-            padding: 12px 16px;
-            font-size: 12px;
-            background-color: #0f172a;
-            font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .sort-icon {
-            display: inline-block;
-            margin-left: 6px;
-            font-size: 10px;
-            color: #475569;
-        }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; background-color: #000000; table-layout: fixed; }
+        th.sortable { cursor: pointer; user-select: none; transition: background-color 0.15s; }
+        th.sortable:hover { background-color: #1e293b; color: #ffffff; }
+        th { border: 1px solid #1e293b; text-align: left; padding: 12px 16px; font-size: 12px; background-color: #0f172a; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sort-icon { display: inline-block; margin-left: 6px; font-size: 10px; color: #475569; }
         
-        td {
-            border: 1px solid #1e293b;
-            text-align: left;
-            padding: 14px 16px;
-            font-size: 13.5px;
-            color: #e2e8f0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .clickable-row {
-            cursor: pointer;
-            transition: background-color 0.15s ease;
-        }
-        .clickable-row:hover {
-            background-color: #0f172a !important;
-        }
-        .clickable-row:hover td {
-            color: #ffffff !important;
-        }
+        td { border: 1px solid #1e293b; text-align: left; padding: 14px 16px; font-size: 13.5px; color: #e2e8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .clickable-row { cursor: pointer; transition: background-color 0.15s ease; }
+        .clickable-row:hover { background-color: #0f172a !important; }
+        .clickable-row:hover td { color: #ffffff !important; }
         .clickable-row:nth-child(4n+1) { background-color: #000000; }
         .clickable-row:nth-child(4n+3) { background-color: #05070a; }
         
-        .clickable-row.is-new-row {
-            border-left: 3px solid #00f0ff;
-            animation: pulseGlow 2s infinite ease-in-out;
-        }
-        @keyframes pulseGlow {
-            0% { background-color: rgba(0, 240, 255, 0.02); }
-            50% { background-color: rgba(0, 240, 255, 0.07); }
-            100% { background-color: rgba(0, 240, 255, 0.02); }
-        }
-        .new-entry-badge {
-            background-color: #00f0ff;
-            color: #000000;
-            font-size: 10px;
-            font-weight: 900;
-            padding: 1px 5px;
-            border-radius: 3px;
-            margin-left: 8px;
-            display: inline-block;
-            vertical-align: middle;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-        }
+        .clickable-row.is-new-row { border-left: 3px solid #00f0ff; animation: pulseGlow 2s infinite ease-in-out; }
+        @keyframes pulseGlow { 0% { background-color: rgba(0, 240, 255, 0.02); } 50% { background-color: rgba(0, 240, 255, 0.07); } 100% { background-color: rgba(0, 240, 255, 0.02); } }
+        .new-entry-badge { background-color: #00f0ff; color: #000000; font-size: 10px; font-weight: 900; padding: 1px 5px; border-radius: 3px; margin-left: 8px; display: inline-block; vertical-align: middle; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6); }
 
         .drilldown-row { background-color: #020617 !important; display: none; }
         .drilldown-row.active { display: table-row; }
-        .drilldown-panel {
-            padding: 20px 24px;
-            color: #cbd5e1;
-            font-size: 13.5px;
-            border-left: 4px solid #3b82f6;
-            background-color: #090d16;
-        }
-        .drilldown-grid {
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 14px 16px;
-        }
-        .field-label {
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-            align-self: start;
-            padding-top: 2px;
-        }
+        .drilldown-panel { padding: 20px 24px; color: #cbd5e1; font-size: 13.5px; border-left: 4px solid #3b82f6; background-color: #090d16; }
+        .drilldown-grid { display: grid; grid-template-columns: 140px 1fr; gap: 14px 16px; }
+        .field-label { font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; align-self: start; padding-top: 2px; }
         .field-value { color: #e2e8f0; line-height: 1.6; white-space: normal !important; }
         
         .source-link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #1e293b;
-            color: #3b82f6;
-            border: 1px solid #334155;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-top: 5px;
-            transition: all 0.15s ease-in-out;
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px; background-color: #1e293b; color: #3b82f6; border: 1px solid #334155;
+            padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; text-decoration: none; margin-top: 5px; transition: all 0.1s ease; cursor: pointer;
         }
-        .source-link-btn:hover {
-            background-color: #2563eb;
-            color: #ffffff;
-            border-color: #3b82f6;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-        }
+        .source-link-btn:hover { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
         
         .impact-list { margin: 0; padding-left: 0; list-style-type: none; }
         .impact-list li { margin-bottom: 8px; position: relative; padding-left: 20px; }
@@ -253,52 +82,26 @@
         .td-category { width: 10%; color: #94a3b8; }
         .td-toggle { width: 2%; text-align: center; color: #475569; font-weight: bold; font-size: 14px; }
         
-        .countdown-ticker {
-            font-size: 11px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 6px;
-            display: inline-block;
-        }
+        .countdown-ticker { font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-left: 6px; display: inline-block; }
         .countdown-ticker.upcoming { background-color: #451a03; color: #f59e0b; border: 1px solid #78350f; }
         .countdown-ticker.passed { background-color: #064e3b; color: #10b981; border: 1px solid #065f46; }
 
-        .status-msg {
-            text-align: center;
-            font-weight: 500;
-            color: #64748b;
-            padding: 30px;
-            background-color: #0f172a;
-            border: 1px dashed #1e293b;
-            border-radius: 6px;
-        }
-        .severity-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
+        .status-msg { text-align: center; font-weight: 500; color: #64748b; padding: 30px; background-color: #0f172a; border: 1px dashed #1e293b; border-radius: 6px; }
+        .severity-badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; text-transform: uppercase; }
         .severity-badge.critical { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
         .severity-badge.high { background-color: #7c2d12; color: #ffedd5; border: 1px solid #ea580c; }
         .severity-badge.medium { background-color: #713f12; color: #fef9c3; border: 1px solid #ca8a04; }
         .severity-badge.low { background-color: #064e3b; color: #d1fae5; border: 1px solid #16a34a; }
         
-        .class-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+        .class-badge { display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
         .class-badge.developed { background-color: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
         .class-badge.emerging { background-color: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
     </style>
 </head>
+
+
+
+
 <body>
 
     <div class="container">
@@ -372,9 +175,12 @@
 
 
 
-    
 
-       <script>
+
+
+
+
+    <script>
         const countryMap = {
             'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
             'tw': 'Taiwan', 'kr': 'South Korea', 'nz': 'New Zealand', 'cn': 'Mainland China',
@@ -383,41 +189,13 @@
         };
 
         const developedMarkets = ['jpx', 'asx', 'hkex', 'sgx', 'twse', 'krx', 'nzx'];
-
-        const exchangeDomainMap = {
-            'jpx': 'jpx.co.jp', 'asx': 'asx.com.au', 'hkex': 'hkex.com.hk', 'sgx': 'sgx.com',
-            'twse': 'twse.com.tw', 'krx': 'krx.co.kr', 'nzx': 'nzx.com', 'sse': 'sse.com.cn',
-            'szse': 'szse.cn', 'nse': 'nseindia.com', 'bursa': 'bursamalaysia.com',
-            'set': 'set.or.th', 'idx': 'idx.co.id', 'pse': 'pse.com.ph', 'vse': 'vse.vn'
-        };
-
-        let rawPipelineDataset = [];
-        let rawImplementedDataset = [];
-        
+        let rawPipelineDataset = []; let rawImplementedDataset = [];
         let activeSortKeys = { pipeline: null, implemented: null };
         let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
 
-        // Brand new clean query generator bypasses browser injection blocks completely
-        function generateOfficialSourceUrl(exchange, initiativeTitle) {
-            const cleanEx = (exchange || '').trim().toLowerCase();
-            const targetDomain = exchangeDomainMap[cleanEx] || '';
-            
-            // Replaces unsafe quotation marks with flat alphanumeric keywords that browsers love
-            let plainQuery = `${exchange} Exchange ${initiativeTitle} circular microstructure`;
-            if (targetDomain) {
-                plainQuery = `site:${targetDomain} ${initiativeTitle}`;
-            }
-            
-            // Clean standard text mapping prevents the browser security engine from tripping
-            return 'https://google.com' + plainQuery.split(' ').join('+');
-        }
-
         function calculateCountdown(etaText) {
             if (!etaText) return { text: '', html: '' };
-            const clean = etaText.toLowerCase();
-            const now = new Date("2026-08-05");
-            
-            let targetDate = null;
+            const clean = etaText.toLowerCase(); const now = new Date("2026-08-05"); let targetDate = null;
 
             if (clean.includes('nov 5, 2024')) targetDate = new Date("2024-11-05");
             else if (clean.includes('sept 23, 2024')) targetDate = new Date("2024-09-23");
@@ -433,26 +211,16 @@
             else if (clean.includes('2026 / 2027')) targetDate = new Date("2027-01-01");
 
             if (!targetDate) return { text: '', html: '' };
-
-            const diffTime = targetDate - now;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays < 0) {
-                return { text: `[Passed]`, html: `<span class="countdown-ticker passed">✓ Implemented</span>` };
-            } else {
-                return { text: `[${diffDays} Days To Go]`, html: `<span class="countdown-ticker upcoming">⏳ ${diffDays} Days To Go</span>` };
-            }
+            const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+            return diffDays < 0 ? { text: `[Passed]`, html: `<span class="countdown-ticker passed">✓ Implemented</span>` } : { text: `[${diffDays} Days To Go]`, html: `<span class="countdown-ticker upcoming">⏳ ${diffDays} Days To Go</span>` };
         }
 
         function formatImpact(impactText) {
             if (!impactText) return 'No metrics logged.';
-            const lines = impactText.split('\n');
             let listItems = '';
-            lines.forEach(line => {
+            impactText.split('\n').forEach(line => {
                 let cleanLine = line.replace(/^[•\s\-]+/, '').trim();
-                if (cleanLine) {
-                    listItems += `<li>${cleanLine}</li>`;
-                }
+                if (cleanLine) listItems += `<li>${cleanLine}</li>`;
             });
             return listItems ? `<ul class="impact-list">${listItems}</ul>` : 'No metrics parsed.';
         }
@@ -464,183 +232,113 @@
 
 
 
-        
 
 
-                fetch('data.json')
+
+
+
+
+        fetch('data.json')
             .then(response => response.json())
             .then(data => {
                 let globalTimestamp = "N/A";
-
                 data.forEach((item) => {
-                    const ex = item.exchange || item.EXCHANGE || 'N/A';
-                    const countryCode = item.country || item.COUNTRY || '';
-                    const init = item.initiative || item.INITIATIVE || 'N/A';
-                    const eta = item.eta || item.ETA || 'N/A';
-                    const cat = item.category || item.CATEGORY || 'N/A';
-                    const impactText = item.impact || item.IMPACT || '';
+                    const ex = item.exchange || item.EXCHANGE || 'N/A'; const countryCode = item.country || item.COUNTRY || '';
+                    const init = item.initiative || item.INITIATIVE || 'N/A'; const eta = item.eta || item.ETA || 'N/A';
+                    const cat = item.category || item.CATEGORY || 'N/A'; const impactText = item.impact || item.IMPACT || '';
                     const severity = (item.severity_level || item.SEVERITY_LEVEL || 'Normal');
                     const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
+                    const directSourceUrl = item.source_url || item.SOURCE_URL || 'https://google.com';
 
-                    if(item.last_updated || item.LAST_UPDATED) {
-                        globalTimestamp = item.last_updated || item.LAST_UPDATED;
-                    }
+                    if(item.last_updated || item.LAST_UPDATED) globalTimestamp = item.last_updated || item.LAST_UPDATED;
 
                     const initiativeSignature = `${ex}-${init}-${eta}`.replace(/\s+/g, '_');
-                    const isNewEntry = !viewedInitiatives.includes(initiativeSignature);
                     const countdownData = calculateCountdown(eta);
-                    const generatedLink = generateOfficialSourceUrl(ex, init);
 
                     const normalizedItem = {
-                        exchange: ex,
-                        countryFull: countryMap[countryCode.trim().toLowerCase()] || countryCode || 'Global',
-                        isDeveloped: developedMarkets.includes(ex.trim().toLowerCase()) ? 1 : 0,
-                        initiative: init,
-                        eta: eta,
-                        category: cat,
-                        severity: severity,
-                        formattedImpact: formatImpact(impactText),
-                        signature: initiativeSignature,
-                        isNew: isNewEntry,
-                        countdownHtml: countdownData.html,
-                        sourceUrl: generatedLink
+                        exchange: ex, countryFull: countryMap[countryCode.trim().toLowerCase()] || countryCode || 'Global',
+                        isDeveloped: developedMarkets.includes(ex.trim().toLowerCase()) ? 1 : 0, initiative: init,
+                        eta: eta, category: cat, severity: severity, formattedImpact: formatImpact(impactText),
+                        signature: initiativeSignature, isNew: !viewedInitiatives.includes(initiativeSignature),
+                        countdownHtml: countdownData.html, sourceUrl: directSourceUrl
                     };
 
                     const isImplemented = timelineStatus.includes('historical') || eta.toLowerCase().includes('implemented') || countdownData.text.includes('Passed');
-                    if (isImplemented) {
-                        rawImplementedDataset.push(normalizedItem);
-                    } else {
-                        rawPipelineDataset.push(normalizedItem);
-                    }
+                    if (isImplemented) rawImplementedDataset.push(normalizedItem); else rawPipelineDataset.push(normalizedItem);
                 });
-
-                document.getElementById('agent-timestamp').textContent = globalTimestamp;
-                applyFilters();
+                document.getElementById('agent-timestamp').textContent = globalTimestamp; applyFilters();
             })
-            .catch(error => {
-                document.getElementById('pipeline-loading').textContent = `❌ Synchronize Failure: ${error.message}`;
-            });
+            .catch(error => { document.getElementById('pipeline-loading').textContent = `❌ Sync Error: ${error.message}`; });
 
         function applyFilters() {
             const query = document.getElementById('masterSearch').value.toLowerCase().trim();
-            const filterArray = (arr) => arr.filter(item => {
-                return item.exchange.toLowerCase().includes(query) ||
-                       item.countryFull.toLowerCase().includes(query) ||
-                       item.initiative.toLowerCase().includes(query) ||
-                       item.category.toLowerCase().includes(query);
-            });
-            renderTableSection('pipeline', filterArray(rawPipelineDataset));
-            renderTableSection('implemented', filterArray(rawImplementedDataset));
+            const filterArray = (arr) => arr.filter(item => item.exchange.toLowerCase().includes(query) || item.countryFull.toLowerCase().includes(query) || item.initiative.toLowerCase().includes(query) || item.category.toLowerCase().includes(query));
+            renderTableSection('pipeline', filterArray(rawPipelineDataset)); renderTableSection('implemented', filterArray(rawImplementedDataset));
         }
 
         function sortTable(section, key, thElement) {
             const targetData = section === 'pipeline' ? rawPipelineDataset : rawImplementedDataset;
-            if (activeSortKeys[section] === key) {
-                activeSortDirs[section] = activeSortDirs[section] === 'asc' ? 'desc' : 'asc';
-            } else {
-                activeSortKeys[section] = key;
-                activeSortDirs[section] = 'asc';
-            }
-            const thContainer = thElement.parentNode;
-            thContainer.querySelectorAll('th').forEach(th => {
-                th.className = th.className.replace('sort-asc', '').replace('sort-desc', '').trim();
-                const icon = th.querySelector('.sort-icon');
-                if (icon) icon.textContent = '▼▲';
-            });
-            thElement.classList.add(activeSortDirs[section] === 'asc' ? 'sort-asc' : 'sort-desc');
-            thElement.querySelector('.sort-icon').textContent = activeSortDirs[section] === 'asc' ? '▲' : '▼';
-            targetData.sort((a, b) => {
-                let valA = a[key]; let valB = b[key];
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
-                if (valA < valB) return activeSortDirs[section] === 'asc' ? -1 : 1;
-                if (valA > valB) return activeSortDirs[section] === 'asc' ? 1 : -1;
-                return 0;
-            });
+            if (activeSortKeys[section] === key) activeSortDirs[section] = activeSortDirs[section] === 'asc' ? 'desc' : 'asc'; else { activeSortKeys[section] = key; activeSortDirs[section] = 'asc'; }
+            thElement.parentNode.querySelectorAll('th').forEach(th => { th.className = th.className.replace('sort-asc', '').replace('sort-desc', '').trim(); const icon = th.querySelector('.sort-icon'); if (icon) icon.textContent = '▼▲'; });
+            thElement.classList.add(activeSortDirs[section] === 'asc' ? 'sort-asc' : 'sort-desc'); thElement.querySelector('.sort-icon').textContent = activeSortDirs[section] === 'asc' ? '▲' : '▼';
+            targetData.sort((a, b) => { let valA = a[key]; let valB = b[key]; if (typeof valA === 'string') valA = valA.toLowerCase(); if (typeof valB === 'string') valB = valB.toLowerCase(); if (valA < valB) return activeSortDirs[section] === 'asc' ? -1 : 1; if (valA > valB) return activeSortDirs[section] === 'asc' ? 1 : -1; return 0; });
             applyFilters();
         }
 
         function renderTableSection(section, dataset) {
-            const tbody = document.getElementById(`${section}-body`);
-            const loadingMsg = document.getElementById(`${section}-loading`);
-            const targetTable = document.getElementById(`${section}-table`);
-            const counterBadge = document.getElementById(`${section}-count`);
-
-            tbody.innerHTML = '';
-            counterBadge.textContent = `${dataset.length} Entries`;
-
-            if (dataset.length === 0) {
-                loadingMsg.style.display = 'block';
-                loadingMsg.textContent = `No data matches specified filtering criteria.`;
-                targetTable.style.display = 'none';
-                return;
-            }
-
-            loadingMsg.style.display = 'none';
-            targetTable.style.display = 'table';
+            const tbody = document.getElementById(`${section}-body`); const loadingMsg = document.getElementById(`${section}-loading`);
+            const targetTable = document.getElementById(`${section}-table`); const counterBadge = document.getElementById(`${section}-count`);
+            tbody.innerHTML = ''; counterBadge.textContent = `${dataset.length} Entries`;
+            if (dataset.length === 0) { loadingMsg.style.display = 'block'; loadingMsg.textContent = `No matches found.`; targetTable.style.display = 'none'; return; }
+            loadingMsg.style.display = 'none'; targetTable.style.display = 'table';
 
             dataset.forEach(item => {
                 const uniqueId = `drill-${section}-${item.signature}`;
-                const classBadge = item.isDeveloped 
-                    ? '<span class="class-badge developed">Developed Mkt</span>' 
-                    : '<span class="class-badge emerging">Emerging Mkt</span>';
-
+                const classBadge = item.isDeveloped ? '<span class="class-badge developed">Developed Mkt</span>' : '<span class="class-badge emerging">Emerging Mkt</span>';
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr class="${item.isNew ? 'clickable-row is-new-row' : 'clickable-row'}" onclick="handleRowInteraction('${uniqueId}', '${item.signature}', this)">
-                        <td class="td-mkt">${item.exchange}</td>
-                        <td class="td-country">${item.countryFull}</td>
-                        <td class="td-classification">${classBadge}</td>
-                        <td class="td-initiative">${item.initiative}${item.isNew ? '<span class="new-entry-badge">NEW</span>' : ''}</td>
-                        <td class="td-eta">${item.eta} ${item.countdownHtml}</td>
-                        <td class="td-category">${item.category}</td>
-                        <td class="td-toggle" id="arrow-${uniqueId}">▼</td>
+                        <td class="td-mkt">${item.exchange}</td><td class="td-country">${item.countryFull}</td><td class="td-classification">${classBadge}</td>
+                        <td class="td-initiative">${item.initiative}${item.isNew ? '<span class="new-entry-badge">NEW</span>' : ''}</td><td class="td-eta">${item.eta} ${item.countdownHtml}</td>
+                        <td class="td-category">${item.category}</td><td class="td-toggle" id="arrow-${uniqueId}">▼</td>
                     </tr>
-                    <tr class="drilldown-row" id="${uniqueId}">
-                        <td colspan="7">
-                            <div class="drilldown-panel">
-                                <div class="drilldown-grid">
-                                    <div class="field-label">Risk Severity:</div>
-                                    <div class="field-value"><span class="severity-badge ${item.severity.toLowerCase()}">${item.severity}</span></div>
-                                    <div class="field-label">Detailed Impact:</div>
-                                    <div class="field-value">${item.formattedImpact}</div>
-                                    <div class="field-label">Official Feeds:</div>
-                                    <div class="field-value">
-                                        <!-- Fixed: Opens a perfectly flat string query without complex characters to prevent any tracking blocks -->
-                                        <button class="source-link-btn" onclick="event.stopPropagation(); window.open('${item.sourceUrl}', '_blank');">
-                                            🔍 Locate Official Source Document
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    <tr class="drilldown-row" id="${uniqueId}"><td colspan="7"><div class="drilldown-panel"><div class="drilldown-grid">
+                        <div class="field-label">Risk Severity:</div><div class="field-value"><span class="severity-badge ${item.severity.toLowerCase()}">${item.severity}</span></div>
+                        <div class="field-label">Detailed Impact:</div><div class="field-value">${item.formattedImpact}</div>
+                        <div class="field-label">Official Feeds:</div><div class="field-value">
+                            <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="source-link-btn" onclick="event.stopPropagation();">
+                                🔍 Locate Official Source Document
+                            </a>
+                        </div>
+                    </div></div></td></tr>
                 `);
             });
         }
 
         function handleRowInteraction(rowId, signature, masterElement) {
-            const targetedPanel = document.getElementById(rowId);
-            const arrowIndicator = document.getElementById('arrow-' + rowId);
-            if (targetedPanel.classList.contains('active')) {
-                targetedPanel.classList.remove('active');
-                arrowIndicator.textContent = '▼';
-                masterElement.style.backgroundColor = '';
-            } else {
-                targetedPanel.classList.add('active');
-                arrowIndicator.textContent = '▲';
-                masterElement.style.backgroundColor = '#0f172a';
+            const targetedPanel = document.getElementById(rowId); const arrowIndicator = document.getElementById('arrow-' + rowId);
+            if (targetedPanel.classList.contains('active')) { targetedPanel.classList.remove('active'); arrowIndicator.textContent = '▼'; masterElement.style.backgroundColor = ''; } else {
+                targetedPanel.classList.add('active'); arrowIndicator.textContent = '▲'; masterElement.style.backgroundColor = '#0f172a';
                 if (!viewedInitiatives.includes(signature)) {
-                    viewedInitiatives.push(signature);
-                    localStorage.setItem('microstructure_viewed_logs', JSON.stringify(viewedInitiatives));
-                    masterElement.classList.remove('is-new-row');
-                    const badge = masterElement.querySelector('.new-entry-badge');
-                    if(badge) badge.remove();
-                    let itemMatch = rawPipelineDataset.find(x => x.signature === signature) || rawImplementedDataset.find(x => x.signature === signature);
-                    if(itemMatch) itemMatch.isNew = false;
+                    viewedInitiatives.push(signature); localStorage.setItem('microstructure_viewed_logs', JSON.stringify(viewedInitiatives));
+                    masterElement.classList.remove('is-new-row'); const badge = masterElement.querySelector('.new-entry-badge'); if(badge) badge.remove();
+                    let itemMatch = rawPipelineDataset.find(x => x.signature === signature) || rawImplementedDataset.find(x => x.signature === signature); if(itemMatch) itemMatch.isNew = false;
                 }
             }
         }
     </script>
 </body>
 </html>
-   
+
+
+
+
+        
+
+
+
+
+
+
+
+
+    
