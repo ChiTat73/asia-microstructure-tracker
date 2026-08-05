@@ -133,6 +133,24 @@
             color: #e2e8f0;
             line-height: 1.6;
         }
+        /* Dynamic formatted inner lists styling */
+        .impact-list {
+            margin: 0;
+            padding-left: 0;
+            list-style-type: none;
+        }
+        .impact-list li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+        .impact-list li::before {
+            content: "➔";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-size: 12px;
+        }
         .td-mkt {
             font-weight: 700;
             color: #3b82f6;
@@ -236,6 +254,20 @@
         </div>
     </div>
     <script>
+        // Clean formatter function to turn text loops into crisp lists
+        function formatImpact(impactText) {
+            if (!impactText) return 'No metrics logged.';
+            const lines = impactText.split('\n');
+            let listItems = '';
+            lines.forEach(line => {
+                let cleanLine = line.replace(/^[•\s\-]+/, '').trim();
+                if (cleanLine) {
+                    listItems += `<li>${cleanLine}</li>`;
+                }
+            });
+            return listItems ? `<ul class="impact-list">${listItems}</ul>` : 'No metrics parsed.';
+        }
+
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
@@ -252,7 +284,7 @@
                     const init = item.initiative || item.INITIATIVE || 'N/A';
                     const eta = item.eta || item.ETA || 'N/A';
                     const cat = item.category || item.CATEGORY || 'N/A';
-                    const impact = item.impact || item.IMPACT || 'No detailed analysis provided.';
+                    const impactText = item.impact || item.IMPACT || '';
                     const severity = (item.severity_level || item.SEVERITY_LEVEL || 'Normal');
                     const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
                     const etaText = eta.toLowerCase();
@@ -263,6 +295,7 @@
 
                     const uniqueId = `drill-${index}`;
                     const severityClass = severity.toLowerCase();
+                    const formattedImpactHtml = formatImpact(impactText);
 
                     const masterRowHtml = `
                         <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
@@ -286,13 +319,14 @@
                                         </div>
                                         
                                         <div class="field-label">Detailed Impact:</div>
-                                        <div class="field-value">${impact}</div>
+                                        <div class="field-value">${formattedImpactHtml}</div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                     `;
 
+                    // Parse conditional parameters against your python strings
                     const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
 
                     if (isImplemented) {
