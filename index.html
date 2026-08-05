@@ -3,102 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Microstructure Table</title>
+    <title>Asia Microstructure Matrix</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             background-color: #ffffff;
-            color: #333333;
-            padding: 30px;
+            color: #24292e;
+            padding: 40px 24px;
+            margin: 0;
+            line-height: 1.5;
         }
-        h2 {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
             color: #0366d6;
-            margin-bottom: 20px;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 26px;
         }
+        .subtitle {
+            color: #586069;
+            margin-top: 0;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #eaecef;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title.pipeline { color: #d97706; border-bottom-color: #fef3c7; }
+        .section-title.implemented { color: #059669; border-bottom-color: #d1fae5; }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         th, td {
-            border: 1px solid #dddddd;
+            border: 1px solid #e1e4e8;
             text-align: left;
-            padding: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
         }
         th {
             background-color: #f6f8fa;
-            font-weight: bold;
+            font-weight: 600;
+            color: #24292e;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        .loading {
+        .td-mkt {
+            font-weight: 700;
+            color: #0366d6;
+            width: 10%;
+        }
+        .td-initiative {
+            width: 45%;
+        }
+        .td-eta {
+            font-weight: 500;
+            width: 15%;
+        }
+        .td-category {
+            width: 30%;
+        }
+        .status-msg {
             text-align: center;
-            font-weight: bold;
-            color: #666666;
+            font-weight: 500;
+            color: #6a737d;
             padding: 30px;
+            background-color: #f6f8fa;
+            border: 1px dashed #e1e4e8;
+            border-radius: 6px;
         }
     </style>
 </head>
 <body>
 
-    <h2>Asia Microstructure Data Table</h2>
+    <div class="container">
+        <h1>Asia Microstructure Ledger</h1>
+        <p class="subtitle">Automated structural change logging repository.</p>
 
-    <table id="data-table">
-        <thead>
-            <tr>
-                <th>Exchange</th>
-                <th>Initiative</th>
-                <th>ETA</th>
-                <th>Category</th>
-                <th>Impact</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            <tr>
-                <td colspan="5" class="loading">Loading data from data.json...</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- Section 1: Upcoming Pipeline Changes -->
+        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE</div>
+        <div id="pipeline-container">
+            <table id="pipeline-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>MKT</th>
+                        <th>Structure Initiative / Regulatory Description</th>
+                        <th>Effective Date / ETA</th>
+                        <th>Market Segment</th>
+                    </tr>
+                </thead>
+                <tbody id="pipeline-body"></tbody>
+            </table>
+            <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
+        </div>
+
+        <!-- Section 2: Completed Implemented Changes -->
+        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL</div>
+        <div id="implemented-container">
+            <table id="implemented-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>MKT</th>
+                        <th>Structure Initiative / Regulatory Description</th>
+                        <th>Effective Date / ETA</th>
+                        <th>Market Segment</th>
+                    </tr>
+                </thead>
+                <tbody id="implemented-body"></tbody>
+            </table>
+            <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
+        </div>
+    </div>
 
     <script>
-        // Directly fetch the local raw JSON data array
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
-                const tbody = document.getElementById('table-body');
-                tbody.innerHTML = ''; // Clear out the loading message
+                const pipelineBody = document.getElementById('pipeline-body');
+                const implementedBody = document.getElementById('implemented-body');
+                
+                let pipelineCount = 0;
+                let implementedCount = 0;
 
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="loading">Database is empty.</td></tr>';
-                    return;
+                data.forEach(item => {
+                    // Safe property checks handling formatting variants
+                    const ex = item.exchange || item.EXCHANGE || 'N/A';
+                    const init = item.initiative || item.INITIATIVE || 'N/A';
+                    const eta = item.eta || item.ETA || 'N/A';
+                    const cat = item.category || item.CATEGORY || 'N/A';
+                    const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
+                    const etaText = eta.toLowerCase();
+
+                    // Generate a standard table row template
+                    const rowHtml = `
+                        <tr>
+                            <td class="td-mkt">${ex}</td>
+                            <td class="td-initiative">${init}</td>
+                            <td class="td-eta">${eta}</td>
+                            <td class="td-category">${cat}</td>
+                        </tr>
+                    `;
+
+                    // Sort dynamically based on your tracker's output text fields
+                    const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
+
+                    if (isImplemented) {
+                        implementedBody.insertAdjacentHTML('beforeend', rowHtml);
+                        implementedCount++;
+                    } else {
+                        pipelineBody.insertAdjacentHTML('beforeend', rowHtml);
+                        pipelineCount++;
+                    }
+                });
+
+                // Control views based on sort results
+                if (pipelineCount > 0) {
+                    document.getElementById('pipeline-loading').style.display = 'none';
+                    document.getElementById('pipeline-table').style.display = 'table';
+                } else {
+                    document.getElementById('pipeline-loading').textContent = "No initiatives currently listed in the pipeline.";
                 }
 
-                // Loop through your python scraper keys securely
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    
-                    // Fallback to capital letters if your script changes properties
-                    const exchange = item.exchange || item.EXCHANGE || 'N/A';
-                    const initiative = item.initiative || item.INITIATIVE || 'N/A';
-                    const eta = item.eta || item.ETA || 'N/A';
-                    const category = item.category || item.CATEGORY || 'N/A';
-                    const impact = item.impact || item.IMPACT || 'N/A';
-
-                    row.innerHTML = `
-                        <td><strong>${exchange}</strong></td>
-                        <td>${initiative}</td>
-                        <td>${eta}</td>
-                        <td>${category}</td>
-                        <td>${impact}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                if (implementedCount > 0) {
+                    document.getElementById('implemented-loading').style.display = 'none';
+                    document.getElementById('implemented-table').style.display = 'table';
+                } else {
+                    document.getElementById('implemented-loading').textContent = "No historical implemented records logged.";
+                }
             })
             .catch(error => {
-                document.getElementById('table-body').innerHTML = `
-                    <tr><td colspan="5" class="loading" style="color: red;">❌ Failed to load file data.json. Error: ${error.message}</td></tr>
-                `;
+                const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
+                document.getElementById('pipeline-loading').textContent = errMsg;
+                document.getElementById('pipeline-loading').style.color = '#dc2626';
+                document.getElementById('implemented-loading').textContent = errMsg;
+                document.getElementById('implemented-loading').style.color = '#dc2626';
             });
     </script>
 
