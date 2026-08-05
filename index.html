@@ -133,7 +133,6 @@
             color: #e2e8f0;
             line-height: 1.6;
         }
-        /* Dynamic formatted inner lists styling */
         .impact-list {
             margin: 0;
             padding-left: 0;
@@ -157,20 +156,24 @@
             width: 10%;
         }
         .td-country {
-            color: #94a3b8;
-            width: 12%;
+            color: #ffffff;
+            width: 15%;
+            font-weight: 500;
+        }
+        .td-classification {
+            width: 15%;
         }
         .td-initiative {
-            width: 43%;
+            width: 33%;
             color: #ffffff;
         }
         .td-eta {
             font-weight: 500;
-            width: 15%;
+            width: 12%;
             color: #cbd5e1;
         }
         .td-category {
-            width: 15%;
+            width: 10%;
             color: #94a3b8;
         }
         .td-toggle {
@@ -201,6 +204,27 @@
         .severity-badge.high { background-color: #7c2d12; color: #ffedd5; border: 1px solid #ea580c; }
         .severity-badge.medium { background-color: #713f12; color: #fef9c3; border: 1px solid #ca8a04; }
         .severity-badge.low { background-color: #064e3b; color: #d1fae5; border: 1px solid #16a34a; }
+        
+        /* Market Classification Badges */
+        .class-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .class-badge.developed {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .class-badge.emerging {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -224,6 +248,7 @@
                     <tr>
                         <th>MKT</th>
                         <th>Country</th>
+                        <th>Classification</th>
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
@@ -242,6 +267,7 @@
                     <tr>
                         <th>MKT</th>
                         <th>Country</th>
+                        <th>Classification</th>
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
@@ -254,7 +280,31 @@
         </div>
     </div>
     <script>
-        // Clean formatter function to turn text loops into crisp lists
+        // Institutional Mapping Dictionaries for Casing Fault-Tolerance
+        const countryMap = {
+            'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
+            'tw': 'Taiwan', 'kr': 'South Korea', 'nz': 'New Zealand', 'cn': 'Mainland China',
+            'in': 'India', 'my': 'Malaysia', 'th': 'Thailand', 'id': 'Indonesia',
+            'ph': 'Philippines', 'vn': 'Vietnam'
+        };
+
+        const developedMarkets = ['jpx', 'asx', 'hkex', 'sgx', 'twse', 'krx', 'nzx'];
+
+        function getCountryFull(code) {
+            if (!code) return 'Global';
+            const clean = code.trim().toLowerCase();
+            return countryMap[clean] || code;
+        }
+
+        function getClassificationBadge(exchange) {
+            if (!exchange) return '<span class="class-badge emerging">Emerging</span>';
+            const cleanEx = exchange.trim().toLowerCase();
+            if (developedMarkets.includes(cleanEx)) {
+                return '<span class="class-badge developed">Developed Mkt</span>';
+            }
+            return '<span class="class-badge emerging">Emerging Mkt</span>';
+        }
+
         function formatImpact(impactText) {
             if (!impactText) return 'No metrics logged.';
             const lines = impactText.split('\n');
@@ -280,7 +330,7 @@
 
                 data.forEach((item, index) => {
                     const ex = item.exchange || item.EXCHANGE || 'N/A';
-                    const country = item.country || item.COUNTRY || 'N/A';
+                    const countryCode = item.country || item.COUNTRY || '';
                     const init = item.initiative || item.INITIATIVE || 'N/A';
                     const eta = item.eta || item.ETA || 'N/A';
                     const cat = item.category || item.CATEGORY || 'N/A';
@@ -296,11 +346,15 @@
                     const uniqueId = `drill-${index}`;
                     const severityClass = severity.toLowerCase();
                     const formattedImpactHtml = formatImpact(impactText);
+                    
+                    const countryFull = getCountryFull(countryCode);
+                    const classificationBadge = getClassificationBadge(ex);
 
                     const masterRowHtml = `
                         <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
                             <td class="td-mkt">${ex}</td>
-                            <td class="td-country">${country}</td>
+                            <td class="td-country">${countryFull}</td>
+                            <td class="td-classification">${classificationBadge}</td>
                             <td class="td-initiative">${init}</td>
                             <td class="td-eta">${eta}</td>
                             <td class="td-category">${cat}</td>
@@ -310,7 +364,7 @@
 
                     const drilldownRowHtml = `
                         <tr class="drilldown-row" id="${uniqueId}">
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="drilldown-panel">
                                     <div class="drilldown-grid">
                                         <div class="field-label">Risk Severity:</div>
@@ -326,7 +380,6 @@
                         </tr>
                     `;
 
-                    // Parse conditional parameters against your python strings
                     const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
 
                     if (isImplemented) {
@@ -360,6 +413,7 @@
                 document.getElementById('pipeline-loading').style.color = '#ef4444';
             });
 
+        // Toggle panel logic
         function toggleDrilldown(rowId, masterElement) {
             const targetedPanel = document.getElementById(rowId);
             const arrowIndicator = document.getElementById(`arrow-${rowId}`);
