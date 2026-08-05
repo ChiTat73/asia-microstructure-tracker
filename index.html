@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asia Microstructure Tracker</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 40px; background: #f4f7f6; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #0366d6; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        pre { background: #f6f8fa; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; border: 1px solid #e1e4e8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Asia Microstructure Tracker Data</h1>
+        <p>This dashboard pulls live data from your repository's automated tracker.</p>
+        
+        <h3>Latest Raw Tracker Output:</h3>
+        <!-- This area will display your data.json automatically -->
+        <pre id="data-display">Loading tracker data...</pre>
+    </div>
+
+    <script>
+        // Automatically fetches the fresh data.json from your GitHub repository
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data-display').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('data-display').textContent = "Error loading data.json file.";
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>
