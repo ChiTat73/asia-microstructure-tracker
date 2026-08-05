@@ -282,7 +282,7 @@
         let fullDataset = [];
         let currentTimelineFilter = 'all';
 
-        // Fetch dataset elements from JSON stream log
+        // Fetch dataset elements from JSON stream log with cache-busting path
         fetch('./data.json?v=' + new Date().getTime())
             .then(response => response.json())
             .then(data => {
@@ -320,4 +320,3 @@
             renderTable(filteredData);
         }
 
-        // Segmented Toggle Trigger
