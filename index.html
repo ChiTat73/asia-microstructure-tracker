@@ -51,6 +51,44 @@
             margin: 0;
         }
 
+        /* Controls Area (Switch + Search) */
+        .controls-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Terminal-style Segmented Switch */
+        .status-switch {
+            display: flex;
+            background-color: #151b26;
+            border: 1px solid var(--border-color);
+            padding: 2px;
+            border-radius: 6px;
+        }
+
+        .switch-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .switch-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .switch-btn.active {
+            background-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
         /* Search Filter Box */
         .search-box {
             position: relative;
@@ -63,7 +101,7 @@
             padding: 10px 16px 10px 36px;
             border-radius: 6px;
             font-size: 13px;
-            width: 260px;
+            width: 240px;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -201,8 +239,19 @@
                 <h1>Microstructure Initiative Ledger</h1>
                 <p>Click any row to inspect its market impact profile</p>
             </div>
-            <div class="search-box">
-                <input type="text" id="tableFilter" placeholder="Filter by exchange or category...">
+            
+            <div class="controls-area">
+                <!-- Status Segmented Switch -->
+                <div class="status-switch">
+                    <button class="switch-btn active" onclick="filterByTimeline('all', this)">All</button>
+                    <button class="switch-btn" onclick="filterByTimeline('implemented', this)">Implemented</button>
+                    <button class="switch-btn" onclick="filterByTimeline('pipeline', this)">Pipeline</button>
+                </div>
+                
+                <!-- Search Box -->
+                <div class="search-box">
+                    <input type="text" id="tableFilter" placeholder="Filter ledger content...">
+                </div>
             </div>
         </div>
 
@@ -231,13 +280,14 @@
 
     <script>
         let fullDataset = [];
+        let currentTimelineFilter = 'all';
 
-        // Fetch direct code elements from JSON log stream
+        // Fetch dataset elements from JSON stream log
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
                 fullDataset = data;
-                renderTable(fullDataset);
+                applyCombinedFilters();
             })
             .catch(error => {
                 document.getElementById('ledger-body').innerHTML = `
@@ -246,53 +296,28 @@
                 console.error('Error parsing dataset stream:', error);
             });
 
-        // Dynamic Table Render Loop Engine
-        function renderTable(dataset) {
-            const tbody = document.getElementById('ledger-body');
-            tbody.innerHTML = '';
-
-            if(dataset.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="loading-text">No active initiatives match your criteria.</td></tr>`;
-                return;
-            }
-
-            dataset.forEach(item => {
-                const tr = document.createElement('tr');
+        // Combined Filter Processing Core Engine
+        function applyCombinedFilters() {
+            const searchQuery = document.getElementById('tableFilter').value.toLowerCase();
+            
+            const filteredData = fullDataset.filter(item => {
+                // 1. Evaluate Segmented Switch Condition
+                const etaText = (item.eta || '').toLowerCase();
+                const statusText = (item.timeline_status || '').toLowerCase();
                 
-                // Clicking a row displays full clean alert context natively 
-                tr.onclick = () => {
-                    alert(`[IMPACT REPORT - ${item.exchange || 'ALERT'}]\n\nInitiative:\n${item.initiative || 'N/A'}\n\nDetailed Market Impact:\n${item.impact || 'No operational impact logged.'}\n\nStatus Context:\nTimeline Status: ${item.timeline_status || 'N/A'}\nSeverity Rating: ${item.severity_level || 'N/A'}`);
-                };
+                // Matches items explicitly marked historical or containing "implemented" in the ETA line
+                const isImplemented = statusText.includes('historical') || etaText.includes('implemented');
+                
+                if (currentTimelineFilter === 'implemented' && !isImplemented) return false;
+                if (currentTimelineFilter === 'pipeline' && isImplemented) return false;
 
-                // Standardize category tracking for CSS layout matches
-                const categoryClean = (item.category || '').toLowerCase().replace(/\s+/g, '-');
-
-                tr.innerHTML = `
-                    <td class="col-exchange">${item.exchange || 'N/A'}</td>
-                    <td class="col-initiative">${item.initiative || 'Untitled System Update'}</td>
-                    <td class="col-eta">${item.eta || 'Rolling Phase'}</td>
-                    <td class="col-category">
-                        <div class="category-wrapper ${categoryClean}">
-                            <div class="status-dot"></div>
-                            <span>${item.category || 'General'}</span>
-                        </div>
-                    </td>
-                    <td class="col-arrow">›</td>
-                `;
-                tbody.appendChild(tr);
+                // 2. Evaluate Search Text Box Condition
+                return (item.exchange || '').toLowerCase().includes(searchQuery) || 
+                       (item.category || '').toLowerCase().includes(searchQuery) ||
+                       (item.initiative || '').toLowerCase().includes(searchQuery);
             });
+
+            renderTable(filteredData);
         }
 
-        // Live Real-Time Search Filter Functionality
-        document.getElementById('tableFilter').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            const filtered = fullDataset.filter(item => {
-                return (item.exchange || '').toLowerCase().includes(query) || 
-                       (item.category || '').toLowerCase().includes(query) ||
-                       (item.initiative || '').toLowerCase().includes(query);
-            });
-            renderTable(filtered);
-        });
-    </script>
-</body>
-</html>
+        // Segmented Toggle Trigger
