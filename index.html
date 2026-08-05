@@ -70,6 +70,16 @@
             margin-bottom: 40px;
             background-color: #000000;
         }
+        /* Clickable and Sortable Interactive Headers */
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.15s;
+        }
+        th.sortable:hover {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
         th {
             border: 1px solid #1e293b;
             text-align: left;
@@ -81,6 +91,15 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .sort-icon {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 10px;
+            color: #475569;
+        }
+        th.sort-asc .sort-icon { color: #3b82f6; content: "▲"; }
+        th.sort-desc .sort-icon { color: #3b82f6; content: "▼"; }
+        
         td {
             border: 1px solid #1e293b;
             text-align: left;
@@ -205,7 +224,6 @@
         .severity-badge.medium { background-color: #713f12; color: #fef9c3; border: 1px solid #ca8a04; }
         .severity-badge.low { background-color: #064e3b; color: #d1fae5; border: 1px solid #16a34a; }
         
-        /* Market Classification Badges */
         .class-badge {
             display: inline-block;
             padding: 3px 10px;
@@ -241,17 +259,17 @@
             </div>
         </div>
 
-        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE (Click rows to expand)</div>
+        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE (Click headers to sort)</div>
         <div id="pipeline-container">
             <table id="pipeline-table" style="display: none;">
                 <thead>
                     <tr>
-                        <th>MKT</th>
-                        <th>Country</th>
-                        <th>Classification</th>
-                        <th>Structure Initiative / Regulatory Description</th>
-                        <th>Effective Date / ETA</th>
-                        <th>Market Segment</th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'exchange', this)">MKT<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'countryFull', this)">Country<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'isDeveloped', this)">Classification<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'initiative', this)">Structure Initiative / Regulatory Description<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'eta', this)">Effective Date / ETA<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('pipeline', 'category', this)">Market Segment<span class="sort-icon">▼▲</span></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -260,27 +278,19 @@
             <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
         </div>
 
-        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL (Click rows to expand)</div>
+        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL (Click headers to sort)</div>
         <div id="implemented-container">
             <table id="implemented-table" style="display: none;">
                 <thead>
                     <tr>
-                        <th>MKT</th>
-                        <th>Country</th>
-                        <th>Classification</th>
-                        <th>Structure Initiative / Regulatory Description</th>
-                        <th>Effective Date / ETA</th>
-                        <th>Market Segment</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="implemented-body"></tbody>
-            </table>
-            <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
-        </div>
-    </div>
+                        <th class="sortable" onclick="sortTable('implemented', 'exchange', this)">MKT<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('implemented', 'countryFull', this)">Country<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('implemented', 'isDeveloped', this)">Classification<span class="sort-icon">▼▲</span></th>
+### 📋 Block 2: Copy and paste this second
+Paste this block directly **underneath** Block 1 inside your text editor box:
+
+```html
     <script>
-        // Institutional Mapping Dictionaries for Casing Fault-Tolerance
         const countryMap = {
             'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
             'tw': 'Taiwan', 'kr': 'South Korea', 'nz': 'New Zealand', 'cn': 'Mainland China',
@@ -290,20 +300,12 @@
 
         const developedMarkets = ['jpx', 'asx', 'hkex', 'sgx', 'twse', 'krx', 'nzx'];
 
-        function getCountryFull(code) {
-            if (!code) return 'Global';
-            const clean = code.trim().toLowerCase();
-            return countryMap[clean] || code;
-        }
-
-        function getClassificationBadge(exchange) {
-            if (!exchange) return '<span class="class-badge emerging">Emerging</span>';
-            const cleanEx = exchange.trim().toLowerCase();
-            if (developedMarkets.includes(cleanEx)) {
-                return '<span class="class-badge developed">Developed Mkt</span>';
-            }
-            return '<span class="class-badge emerging">Emerging Mkt</span>';
-        }
+        let pipelineData = [];
+        let implementedData = [];
+        
+        // Sorting Trackers
+        let activeSortKeys = { pipeline: null, implemented: null };
+        let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
 
         function formatImpact(impactText) {
             if (!impactText) return 'No metrics logged.';
@@ -321,14 +323,10 @@
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
-                const pipelineBody = document.getElementById('pipeline-body');
-                const implementedBody = document.getElementById('implemented-body');
-                
-                let pipelineCount = 0;
-                let implementedCount = 0;
                 let globalTimestamp = "N/A";
 
                 data.forEach((item, index) => {
+                    // Normalize parameters natively into unified objects
                     const ex = item.exchange || item.EXCHANGE || 'N/A';
                     const countryCode = item.country || item.COUNTRY || '';
                     const init = item.initiative || item.INITIATIVE || 'N/A';
@@ -343,77 +341,140 @@
                         globalTimestamp = item.last_updated || item.LAST_UPDATED;
                     }
 
-                    const uniqueId = `drill-${index}`;
-                    const severityClass = severity.toLowerCase();
-                    const formattedImpactHtml = formatImpact(impactText);
-                    
-                    const countryFull = getCountryFull(countryCode);
-                    const classificationBadge = getClassificationBadge(ex);
-
-                    const masterRowHtml = `
-                        <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
-                            <td class="td-mkt">${ex}</td>
-                            <td class="td-country">${countryFull}</td>
-                            <td class="td-classification">${classificationBadge}</td>
-                            <td class="td-initiative">${init}</td>
-                            <td class="td-eta">${eta}</td>
-                            <td class="td-category">${cat}</td>
-                            <td class="td-toggle" id="arrow-${uniqueId}">▾</td>
-                        </tr>
-                    `;
-
-                    const drilldownRowHtml = `
-                        <tr class="drilldown-row" id="${uniqueId}">
-                            <td colspan="7">
-                                <div class="drilldown-panel">
-                                    <div class="drilldown-grid">
-                                        <div class="field-label">Risk Severity:</div>
-                                        <div class="field-value">
-                                            <span class="severity-badge ${severityClass}">${severity}</span>
-                                        </div>
-                                        
-                                        <div class="field-label">Detailed Impact:</div>
-                                        <div class="field-value">${formattedImpactHtml}</div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                    const normalizedItem = {
+                        exchange: ex,
+                        countryFull: countryMap[countryCode.trim().toLowerCase()] || countryCode || 'Global',
+                        isDeveloped: developedMarkets.includes(ex.trim().toLowerCase()) ? 1 : 0,
+                        initiative: init,
+                        eta: eta,
+                        category: cat,
+                        severity: severity,
+                        formattedImpact: formatImpact(impactText),
+                        originalIndex: index
+                    };
 
                     const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
-
                     if (isImplemented) {
-                        implementedBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
-                        implementedCount++;
+                        implementedData.push(normalizedItem);
                     } else {
-                        pipelineBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
-                        pipelineCount++;
+                        pipelineData.push(normalizedItem);
                     }
                 });
 
                 document.getElementById('agent-timestamp').textContent = globalTimestamp;
-
-                if (pipelineCount > 0) {
-                    document.getElementById('pipeline-loading').style.display = 'none';
-                    document.getElementById('pipeline-table').style.display = 'table';
-                } else {
-                    document.getElementById('pipeline-loading').textContent = "No initiatives currently listed in the pipeline.";
-                }
-
-                if (implementedCount > 0) {
-                    document.getElementById('implemented-loading').style.display = 'none';
-                    document.getElementById('implemented-table').style.display = 'table';
-                } else {
-                    document.getElementById('implemented-loading').textContent = "No historical implemented records logged.";
-                }
+                
+                renderTableSection('pipeline');
+                renderTableSection('implemented');
             })
             .catch(error => {
                 const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
                 document.getElementById('pipeline-loading').textContent = errMsg;
-                document.getElementById('pipeline-loading').style.color = '#ef4444';
             });
 
-        // Toggle panel logic
+        // Universal Sorting Algorithm Engine
+        function sortTable(section, key, thElement) {
+            const targetData = section === 'pipeline' ? pipelineData : implementedData;
+            
+            // Toggle direction if clicking same header, otherwise default to ascending
+            if (activeSortKeys[section] === key) {
+                activeSortDirs[section] = activeSortDirs[section] === 'asc' ? 'desc' : 'asc';
+            } else {
+                activeSortKeys[section] = key;
+                activeSortDirs[section] = 'asc';
+            }
+
+            // Visual UI configuration clean updates
+            const thContainer = thElement.parentNode;
+            thContainer.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                const icon = th.querySelector('.sort-icon');
+                if (icon) icon.textContent = '▼▲';
+            });
+
+            if (activeSortDirs[section] === 'asc') {
+                thElement.classList.add('sort-asc');
+                thElement.querySelector('.sort-icon').textContent = '▲';
+            } else {
+                thElement.classList.add('sort-desc');
+                thElement.querySelector('.sort-icon').textContent = '▼';
+            }
+
+            // Alpha-numeric string comparison mechanics loop
+            targetData.sort((a, b) => {
+                let valA = a[key];
+                let valB = b[key];
+                
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+
+                if (valA < valB) return activeSortDirs[section] === 'asc' ? -1 : 1;
+                if (valA > valB) return activeSortDirs[section] === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTableSection(section);
+        }
+
+        function renderTableSection(section) {
+            const dataList = section === 'pipeline' ? pipelineData : implementedData;
+            const tbody = document.getElementById(`${section}-body`);
+            const loadingMsg = document.getElementById(`${section}-loading`);
+            const targetTable = document.getElementById(`${section}-table`);
+
+            tbody.innerHTML = '';
+
+            if (dataList.length === 0) {
+                loadingMsg.style.display = 'block';
+                loadingMsg.textContent = `No active initiatives mapped inside this grid matrix.`;
+                targetTable.style.display = 'none';
+                return;
+            }
+
+            loadingMsg.style.display = 'none';
+            targetTable.style.display = 'table';
+
+            dataList.forEach(item => {
+                const uniqueId = `drill-${section}-${item.originalIndex}`;
+                const severityClass = item.severity.toLowerCase();
+                
+                const classBadge = item.isDeveloped 
+                    ? '<span class="class-badge developed">Developed Mkt</span>' 
+                    : '<span class="class-badge emerging">Emerging Mkt</span>';
+
+                const masterRowHtml = `
+                    <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
+                        <td class="td-mkt">${item.exchange}</td>
+                        <td class="td-country">${item.countryFull}</td>
+                        <td class="td-classification">${classBadge}</td>
+                        <td class="td-initiative">${item.initiative}</td>
+                        <td class="td-eta">${item.eta}</td>
+                        <td class="td-category">${item.category}</td>
+                        <td class="td-toggle" id="arrow-${uniqueId}">▾</td>
+                    </tr>
+                `;
+
+                const drilldownRowHtml = `
+                    <tr class="drilldown-row" id="${uniqueId}">
+                        <td colspan="7">
+                            <div class="drilldown-panel">
+                                <div class="drilldown-grid">
+                                    <div class="field-label">Risk Severity:</div>
+                                    <div class="field-value">
+                                        <span class="severity-badge ${severityClass}">${item.severity}</span>
+                                    </div>
+                                    
+                                    <div class="field-label">Detailed Impact:</div>
+                                    <div class="field-value">${item.formattedImpact}</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                tbody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
+            });
+        }
+
         function toggleDrilldown(rowId, masterElement) {
             const targetedPanel = document.getElementById(rowId);
             const arrowIndicator = document.getElementById(`arrow-${rowId}`);
