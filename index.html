@@ -1,291 +1,294 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microstructure Initiative Ledger</title>
+    <title>BBG Professional Terminal - Microstructure Ledger</title>
     <style>
+        /* Bloomberg Terminal Color Palette Matrix */
         :root {
-            --bg-main: #0b0f17;
-            --bg-card: #111622;
-            --text-primary: #f1f5f9;
-            --text-muted: #64748b;
-            --border-color: #1e293b;
-            --accent-green: #10b981;
-            --accent-blue: #3b82f6;
+            --bbg-bg: #000000;
+            --bbg-text: #ffffff;
+            --bbg-amber: #ff9900;
+            --bbg-green: #00ff00;
+            --bbg-red: #ff0000;
+            --bbg-blue: #00bcff;
+            --bbg-header-bg: #1c1c1c;
+            --bbg-border: #333333;
+            --bbg-font: "Courier New", Courier, Monaco, monospace;
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
+            background-color: var(--bbg-bg);
+            color: var(--bbg-text);
+            font-family: var(--bbg-font);
+            font-size: 13px;
             margin: 0;
-            padding: 40px 24px;
+            padding: 15px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Top Command Line & Header Banner */
+        .bbg-header {
+            border: 1px solid var(--bbg-border);
+            margin-bottom: 15px;
         }
 
-        .header-bar {
+        .bbg-command-line {
+            background-color: #0c1017;
+            padding: 8px 12px;
+            font-weight: bold;
+            color: var(--bbg-amber);
+            border-bottom: 1px solid var(--bbg-border);
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
         }
 
-        .title-area h1 {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0 0 6px 0;
-            letter-spacing: -0.3px;
+        .bbg-banner-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            background-color: var(--bbg-header-bg);
+            padding: 8px 12px;
+            font-size: 12px;
         }
 
-        .title-area p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin: 0;
+        .bbg-title {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 15px;
         }
 
-        .controls-area {
+        /* Input Controls Area */
+        .bbg-toolbar {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
+            background-color: #111;
+            padding: 8px;
+            border: 1px solid var(--bbg-border);
+            margin-bottom: 12px;
         }
 
-        .status-switch {
+        /* Bloomberg Style Segmented Buttons */
+        .bbg-switch {
             display: flex;
-            background-color: #151b26;
-            border: 1px solid var(--border-color);
-            padding: 2px;
-            border-radius: 6px;
+            gap: 2px;
         }
 
-        .switch-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 14px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.15s ease;
-        }
-
-        .switch-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .switch-btn.active {
-            background-color: var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .search-box {
-            position: relative;
-        }
-
-        .search-box input {
-            background-color: #151b26;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 10px 16px 10px 36px;
-            border-radius: 6px;
-            font-size: 13px;
-            width: 240px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box input:focus {
-            border-color: #475569;
-        }
-
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            opacity: 0.4;
-        }
-
-        .ledger-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 14px;
-            background-color: transparent;
-        }
-
-        .ledger-table th {
-            color: var(--text-muted);
+        .bbg-btn {
+            background-color: #222;
+            border: 1px solid #444;
+            color: var(--bbg-blue);
+            font-family: var(--bbg-font);
             font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .ledger-table tr {
-            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            padding: 5px 12px;
             cursor: pointer;
-            transition: background-color 0.15s ease;
+            text-transform: uppercase;
         }
 
-        .ledger-table tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.02);
+        .bbg-btn:hover {
+            background-color: #333;
+            color: #fff;
         }
 
-        .ledger-table td {
-            padding: 20px 16px;
-            vertical-align: middle;
-            line-height: 1.4;
+        .bbg-btn.active {
+            background-color: var(--bbg-blue);
+            color: #000000;
+            border-color: var(--bbg-blue);
         }
 
-        .col-exchange {
-            font-weight: 700;
-            width: 10%;
-            letter-spacing: 0.3px;
-        }
-
-        .col-initiative {
-            font-weight: 600;
-            width: 50%;
-        }
-
-        .col-eta {
-            font-weight: 700;
-            font-size: 13px;
-            white-space: pre-line;
-            width: 18%;
-        }
-
-        .col-category {
-            width: 18%;
-        }
-
-        .col-arrow {
-            width: 4%;
-            text-align: right;
-            color: var(--text-muted);
-            font-size: 16px;
-            opacity: 0.5;
-        }
-
-        .category-wrapper {
-            display: inline-flex;
+        /* Command Line Input Search Filter */
+        .bbg-search {
+            display: flex;
             align-items: center;
             gap: 8px;
-            background-color: rgba(16, 185, 129, 0.06);
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: var(--accent-green);
+        }
+
+        .bbg-search input {
+            background-color: #000;
+            border: 1px solid #555;
+            color: var(--bbg-amber);
+            font-family: var(--bbg-font);
+            font-size: 13px;
+            padding: 4px 8px;
+            width: 220px;
+            outline: none;
+        }
+
+        .bbg-search input:focus {
+            border-color: var(--bbg-amber);
+        }
+
+        /* Terminal Raw Data Grid Matrix Table */
+        .bbg-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--bbg-border);
+        }
+
+        .bbg-table th {
+            background-color: #22252a;
+            color: var(--bbg-blue);
             font-size: 12px;
-            font-weight: 600;
+            font-weight: bold;
+            text-align: left;
+            padding: 6px 10px;
+            border: 1px solid var(--bbg-border);
+            text-transform: uppercase;
         }
 
-        .category-wrapper.trading-hours { color: #10b981; background: rgba(16, 185, 129, 0.05); }
-        .category-wrapper.market-infrastructure { color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
-        .category-wrapper.trading-mechanics { color: #a3e635; background: rgba(163, 230, 53, 0.05); }
-        .category-wrapper.settlement-mechanics { color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: currentColor;
-            box-shadow: 0 0 8px currentColor;
+        .bbg-table tr {
+            border-bottom: 1px solid var(--bbg-border);
         }
 
-        footer {
-            margin-top: 40px;
+        .bbg-table tbody tr:nth-child(even) {
+            background-color: #05070a;
+        }
+
+        .bbg-table tbody tr:hover {
+            background-color: #1a2233 !important;
+            cursor: pointer;
+        }
+
+        .bbg-table td {
+            padding: 8px 10px;
+            border-right: 1px solid var(--bbg-border);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Data Matrix Field Highlighters */
+        .td-exchange {
+            color: var(--bbg-amber);
+            font-weight: bold;
+            width: 10%;
+        }
+
+        .td-initiative {
+            color: #ffffff;
+            width: 50%;
+            white-space: normal !important;
+        }
+
+        .td-eta {
+            color: var(--bbg-green);
+            font-weight: bold;
+            width: 20%;
+        }
+
+        .td-category {
+            color: #00ffcc;
+            width: 20%;
+        }
+
+        /* System Messages Panel */
+        .bbg-status-msg {
             text-align: center;
+            padding: 40px;
+            color: var(--bbg-amber);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Footer Status Tick Bar */
+        .bbg-footer-ticker {
+            margin-top: 15px;
+            background-color: #1c1c1c;
+            border: 1px solid var(--bbg-border);
+            padding: 6px 12px;
             font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 0.2px;
-        }
-
-        .loading-text {
-            text-align: center;
-            padding: 60px;
-            color: var(--text-muted);
-            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-bar">
-            <div class="title-area">
-                <h1>Microstructure Initiative Ledger</h1>
-                <p>Click any row to inspect its market impact profile</p>
-            </div>
-            
-            <div class="controls-area">
-                <div class="status-switch">
-                    <button class="switch-btn active" onclick="filterByTimeline('all', this)">All</button>
-                    <button class="switch-btn" onclick="filterByTimeline('implemented', this)">Implemented</button>
-                    <button class="switch-btn" onclick="filterByTimeline('pipeline', this)">Pipeline</button>
-                </div>
-                
-                <div class="search-box">
-                    <input type="text" id="tableFilter" placeholder="Filter ledger content...">
-                </div>
-            </div>
+    <!-- Bloomberg Screen Banner Context Header -->
+    <div class="bbg-header">
+        <div class="bbg-command-line">
+            <span>ASIA MICROSTRUCTURE LEDGER <span style="color:#fff;">&lt;GO&gt;</span></span>
+            <span id="terminal-clock" style="color:var(--bbg-blue);">LOGGED ON</span>
         </div>
+        <div class="bbg-banner-grid">
+            <div><span class="bbg-title">MSLI ASIA PACIFIC REGULATORY TRACKER</span></div>
+            <div>STATION: <span style="color:var(--bbg-amber);">CHI-TAT-73</span></div>
+            <div>FEED: <span style="color:var(--bbg-green);">ONLINE</span></div>
+        </div>
+    </div>
 
-        <table class="ledger-table">
-            <thead>
-                <tr>
-                    <th style="padding-left:16px;">Exchange</th>
-                    <th>Initiative Name</th>
-                    <th>ETA</th>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="ledger-body">
-                <tr>
-                    <td colspan="5" class="loading-text">Synchronizing secure terminal feeds...</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Data Filter Command Actions Row -->
+    <div class="bbg-toolbar">
+        <div class="bbg-switch">
+            <button class="bbg-btn active" onclick="filterTimeline('all', this)">1) ALL</button>
+            <button class="bbg-btn" onclick="filterTimeline('implemented', this)">2) HISTORICAL</button>
+            <button class="bbg-btn" onclick="filterTimeline('pipeline', this)">3) PIPELINE</button>
+        </div>
+        
+        <div class="bbg-search">
+            <span style="color:var(--bbg-blue); font-size:11px; font-weight:bold;">SEARCH CRITERIA:</span>
+            <input type="text" id="bbgFilter" placeholder="Type exchange / keyword..." autocomplete="off">
+        </div>
+    </div>
 
-        <footer>
-            Data streamed live from the Asia microstructure tracking source. For institutional use only.
-        </footer>
+    <!-- Main Output Matrix Grid Table -->
+    <table class="bbg-table">
+        <thead>
+            <tr>
+                <th>MKT</th>
+                <th>STRUCTURE INITIATIVE / REGULATORY DESCRIPTION</th>
+                <th>EFFECTIVE DATE / ETA</th>
+                <th>MARKET SEGMENT</th>
+            </tr>
+        </thead>
+        <tbody id="terminal-body">
+            <tr>
+                <td colspan="4" class="bbg-status-msg">PROCESSING ASIA TERMINAL REALTIME DATA FEEDS...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Footer System Diagnostics Segment -->
+    <div class="bbg-footer-ticker">
+        <span>BLOOMBERG PROFESSIONAL SERVICE</span>
+        <span style="color:var(--bbg-amber);">PRESS ROW TO INSPECT EXPANDED IMPACT PROFILE</span>
+        <span id="feed-sync-time">REFRESH STATUS: REALTIME</span>
     </div>
 
     <script>
         let fullDataset = [];
         let currentTimelineFilter = 'all';
 
+        // Keep system clock current to real terminal parameters
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('terminal-clock').textContent = now.toUTCString().replace('GMT', 'UTC');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Stream raw JSON array records straight to matrix rows
         fetch('data.json?v=' + new Date().getTime())
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 fullDataset = data;
-                applyCombinedFilters();
+                applyTerminalFilters();
+                document.getElementById('feed-sync-time').textContent = "SYNCED: " + data.length + " SECURITIES RECORDS";
             })
-            .catch(error => {
-                document.getElementById('ledger-body').innerHTML = `
-                    <tr><td colspan="5" class="loading-text" style="color:#ef4444;">⚠️ Network Error: Stream synchronization broken.</td></tr>
+            .catch(err => {
+                document.getElementById('terminal-body').innerHTML = `
+                    <tr><td colspan="4" class="bbg-status-msg" style="color:var(--bbg-red);">ERROR: UNABLE TO ESTABLISH DATA FEED LINK CONNECTIVITY</td></tr>
                 `;
-                console.error('Error parsing dataset stream:', error);
+                console.error(err);
             });
 
-        function applyCombinedFilters() {
-            const searchQuery = document.getElementById('tableFilter').value.toLowerCase();
+        function applyTerminalFilters() {
+            const searchQuery = document.getElementById('bbgFilter').value.toLowerCase();
             
-            const filteredData = fullDataset.filter(item => {
+            const filtered = fullDataset.filter(item => {
                 const etaText = (item.eta || '').toLowerCase();
                 const statusText = (item.timeline_status || '').toLowerCase();
                 
@@ -299,27 +302,9 @@
                        (item.initiative || '').toLowerCase().includes(searchQuery);
             });
 
-            renderTable(filteredData);
+            renderTerminalGrid(filtered);
         }
 
-        function filterByTimeline(filterType, element) {
-            currentTimelineFilter = filterType;
-            document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            applyCombinedFilters();
-        }
-
-        function renderTable(dataset) {
-            const tbody = document.getElementById('ledger-body');
-            tbody.innerHTML = '';
-
-            if(dataset.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="loading-text">No active initiatives match your criteria.</td></tr>`;
-                return;
-            }
-
-            dataset.forEach(item => {
-                const tr = document.createElement('tr');
-                
-                tr.onclick = () => {
-alert([IMPACT REPORT - ${item.exchange || 'ALERT'}]\n\nInitiative:\n${item.initiative || 'N/A'}\n\nDetailed Market Impact:\n${item.impact || 'No operational impact logged.'}\n\nStatus Context:\nTimeline Status: ${item.timeline_status || 'N/A'}\nSeverity Rating: ${item.severity_level || 'N/A'});};const categoryClean = (item.category || '').toLowerCase().replace(/\s+/g, '-');tr.innerHTML = <td class="col-exchange">${item.exchange || 'N/A'}</td> <td class="col-initiative">${item.initiative || 'Untitled System Update'}</td> <td class="col-eta">${item.eta || 'Rolling Phase'}</td> <td class="col-category"> <div class="category-wrapper ${categoryClean}"> <div class="status-dot"></div> <span>${item.category || 'General'}</span> </div> </td> <td class="col-arrow">›</td>;tbody.appendChild(tr);});}document.getElementById('tableFilter').addEventListener('input', applyCombinedFilters);
+        function filterTimeline(type, btnElement) {
+            currentTimelineFilter = type;
+            document.querySelectorAll('.bbg-btn').forEach(btn => btn.classList.remove('active'));
