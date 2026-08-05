@@ -17,17 +17,34 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
         h1 {
             color: #0366d6;
-            margin-top: 0;
-            margin-bottom: 8px;
+            margin: 0 0 8px 0;
             font-size: 26px;
         }
         .subtitle {
             color: #586069;
-            margin-top: 0;
-            margin-bottom: 40px;
+            margin: 0;
             font-size: 14px;
+        }
+        .agent-status-panel {
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            padding: 12px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #24292e;
+        }
+        .agent-status-panel strong {
+            color: #0366d6;
         }
         .section-title {
             font-size: 18px;
@@ -49,19 +66,64 @@
             margin-bottom: 40px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        th, td {
+        th {
             border: 1px solid #e1e4e8;
             text-align: left;
             padding: 12px 16px;
             font-size: 14px;
-        }
-        th {
             background-color: #f6f8fa;
             font-weight: 600;
             color: #24292e;
         }
-        tr:nth-child(even) {
+        td {
+            border: 1px solid #e1e4e8;
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 14px;
+        }
+        .clickable-row {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .clickable-row:hover {
+            background-color: #f1f8ff !important;
+        }
+        .clickable-row:nth-child(4n+1) {
+            background-color: #ffffff;
+        }
+        .clickable-row:nth-child(4n+3) {
             background-color: #f9f9f9;
+        }
+        .drilldown-row {
+            background-color: #fafbfc !important;
+            display: none;
+        }
+        .drilldown-row.active {
+            display: table-row;
+        }
+        .drilldown-panel {
+            padding: 18px 24px;
+            color: #444d56;
+            font-size: 13.5px;
+            border-left: 4px solid #0366d6;
+        }
+        .drilldown-grid {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 12px 16px;
+        }
+        .field-label {
+            font-weight: 600;
+            color: #586069;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            align-self: start;
+            padding-top: 2px;
+        }
+        .field-value {
+            color: #24292e;
+            line-height: 1.6;
         }
         .td-mkt {
             font-weight: 700;
@@ -69,14 +131,21 @@
             width: 10%;
         }
         .td-initiative {
-            width: 45%;
+            width: 50%;
         }
         .td-eta {
             font-weight: 500;
             width: 15%;
         }
         .td-category {
-            width: 30%;
+            width: 20%;
+        }
+        .td-toggle {
+            width: 5%;
+            text-align: center;
+            color: #a3aab1;
+            font-weight: bold;
+            font-size: 16px;
         }
         .status-msg {
             text-align: center;
@@ -87,16 +156,35 @@
             border: 1px dashed #e1e4e8;
             border-radius: 6px;
         }
+        .severity-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .severity-badge.critical { background-color: #fee2e2; color: #991b1b; }
+        .severity-badge.high { background-color: #ffedd5; color: #9a3412; }
+        .severity-badge.medium { background-color: #fef9c3; color: #854d0e; }
+        .severity-badge.low { background-color: #d1fae5; color: #065f46; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Asia Microstructure Ledger</h1>
-        <p class="subtitle">Automated structural change logging repository.</p>
+        <div class="header-area">
+            <div>
+                <h1>Asia Microstructure Ledger</h1>
+                <p class="subtitle">Automated structural change logging repository.</p>
+            </div>
+            <div class="agent-status-panel">
+                🤖 Agent Status: <span style="color: #22c55e; font-weight: bold;">● ONLINE</span><br>
+                📅 Last Sync Check: <strong id="agent-timestamp">Fetching schedule...</strong>
+            </div>
+        </div>
 
-        <!-- Section 1: Upcoming Pipeline Changes -->
-        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE</div>
+        <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE (Click rows to expand)</div>
         <div id="pipeline-container">
             <table id="pipeline-table" style="display: none;">
                 <thead>
@@ -105,6 +193,7 @@
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="pipeline-body"></tbody>
@@ -112,8 +201,7 @@
             <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
         </div>
 
-        <!-- Section 2: Completed Implemented Changes -->
-        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL</div>
+        <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL (Click rows to expand)</div>
         <div id="implemented-container">
             <table id="implemented-table" style="display: none;">
                 <thead>
@@ -122,6 +210,7 @@
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="implemented-body"></tbody>
@@ -129,7 +218,6 @@
             <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
         </div>
     </div>
-
     <script>
         fetch('data.json')
             .then(response => response.json())
@@ -139,39 +227,66 @@
                 
                 let pipelineCount = 0;
                 let implementedCount = 0;
+                let globalTimestamp = "N/A";
 
-                data.forEach(item => {
-                    // Safe property checks handling formatting variants
+                data.forEach((item, index) => {
                     const ex = item.exchange || item.EXCHANGE || 'N/A';
                     const init = item.initiative || item.INITIATIVE || 'N/A';
                     const eta = item.eta || item.ETA || 'N/A';
                     const cat = item.category || item.CATEGORY || 'N/A';
+                    const impact = item.impact || item.IMPACT || 'No detailed analysis provided.';
+                    const severity = (item.severity_level || item.SEVERITY_LEVEL || 'Normal');
                     const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
                     const etaText = eta.toLowerCase();
 
-                    // Generate a standard table row template
-                    const rowHtml = `
-                        <tr>
+                    if(item.last_updated || item.LAST_UPDATED) {
+                        globalTimestamp = item.last_updated || item.LAST_UPDATED;
+                    }
+
+                    const uniqueId = `drill-${index}`;
+                    const severityClass = severity.toLowerCase();
+
+                    const masterRowHtml = `
+                        <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
                             <td class="td-mkt">${ex}</td>
                             <td class="td-initiative">${init}</td>
                             <td class="td-eta">${eta}</td>
                             <td class="td-category">${cat}</td>
+                            <td class="td-toggle" id="arrow-${uniqueId}">▾</td>
                         </tr>
                     `;
 
-                    // Sort dynamically based on your tracker's output text fields
+                    const drilldownRowHtml = `
+                        <tr class="drilldown-row" id="${uniqueId}">
+                            <td colspan="5">
+                                <div class="drilldown-panel">
+                                    <div class="drilldown-grid">
+                                        <div class="field-label">Risk Severity:</div>
+                                        <div class="field-value">
+                                            <span class="severity-badge ${severityClass}">${severity}</span>
+                                        </div>
+                                        
+                                        <div class="field-label">Detailed Impact:</div>
+                                        <div class="field-value">${impact}</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+
                     const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
 
                     if (isImplemented) {
-                        implementedBody.insertAdjacentHTML('beforeend', rowHtml);
+                        implementedBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
                         implementedCount++;
                     } else {
-                        pipelineBody.insertAdjacentHTML('beforeend', rowHtml);
+                        pipelineBody.insertAdjacentHTML('beforeend', masterRowHtml + drilldownRowHtml);
                         pipelineCount++;
                     }
                 });
 
-                // Control views based on sort results
+                document.getElementById('agent-timestamp').textContent = globalTimestamp;
+
                 if (pipelineCount > 0) {
                     document.getElementById('pipeline-loading').style.display = 'none';
                     document.getElementById('pipeline-table').style.display = 'table';
@@ -190,10 +305,22 @@
                 const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
                 document.getElementById('pipeline-loading').textContent = errMsg;
                 document.getElementById('pipeline-loading').style.color = '#dc2626';
-                document.getElementById('implemented-loading').textContent = errMsg;
-                document.getElementById('implemented-loading').style.color = '#dc2626';
             });
-    </script>
 
+        function toggleDrilldown(rowId, masterElement) {
+            const targetedPanel = document.getElementById(rowId);
+            const arrowIndicator = document.getElementById(`arrow-${rowId}`);
+            
+            if (targetedPanel.classList.contains('active')) {
+                targetedPanel.classList.remove('active');
+                arrowIndicator.textContent = '▾';
+                masterElement.style.backgroundColor = '';
+            } else {
+                targetedPanel.classList.add('active');
+                arrowIndicator.textContent = '▴';
+                masterElement.style.backgroundColor = '#f1f8ff';
+            }
+        }
+    </script>
 </body>
 </html>
