@@ -5,31 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asia Microstructure Tracker</title>
     <style>
-        body { font-family: system-ui, sans-serif; margin: 40px; background: #f4f7f6; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #0366d6; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        pre { background: #f6f8fa; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px; border: 1px solid #e1e4e8; }
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --border: #e2e8f0;
+        }
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 40px 20px; background: var(--bg-color); color: var(--text-main); }
+        .container { max-width: 1100px; margin: 0 auto; }
+        header { margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        h1 { margin: 0 0 8px 0; font-size: 28px; color: var(--text-main); font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        h1::before { content: "📊"; }
+        .subtitle { margin: 0; color: var(--text-muted); font-size: 16px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+        .exchange-badge { font-weight: 700; font-size: 18px; color: var(--primary); background: #eff6ff; padding: 4px 10px; border-radius: 6px; }
+        .country-flag { font-size: 14px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; }
+        .initiative { font-size: 16px; font-weight: 600; line-height: 1.4; margin: 0 0 12px 0; }
+        .meta-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .category { font-size: 12px; background: #f8fafc; border: 1px solid var(--border); padding: 4px 8px; border-radius: 20px; color: var(--text-muted); font-weight: 500; }
+        .severity { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .severity.critical { background: #fee2e2; color: #dc2626; }
+        .severity.high { background: #ffedd5; color: #ea580c; }
+        .severity.medium { background: #fef9c3; color: #ca8a04; }
+        .severity.low { background: #f0fdf4; color: #16a34a; }
+        .impact-box { background: #f8fafc; border-radius: 8px; padding: 12px; font-size: 13px; color: #334155; line-height: 1.5; border-left: 3px solid var(--border); margin-top: auto; }
+        .card-footer { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 16px; padding-top: 12px; }
+        .loading { font-size: 18px; color: var(--text-muted); text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Asia Microstructure Tracker Data</h1>
-        <p>This dashboard pulls live data from your repository's automated tracker.</p>
+        <header>
+            <h1>Asia Microstructure Tracker Dashboard</h1>
+            <p class="subtitle">Live regulatory and operational infrastructure updates fetched instantly from system logs.</p>
+        </header>
         
-        <h3>Latest Raw Tracker Output:</h3>
-        <!-- This area will display your data.json automatically -->
-        <pre id="data-display">Loading tracker data...</pre>
+        <div id="loading-state" class="loading">Parsing automated tracker database...</div>
+        <div class="grid" id="dashboard-grid"></div>
     </div>
 
     <script>
-        // Automatically fetches the fresh data.json from your GitHub repository
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('data-display').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('loading-state').style.display = 'none';
+                const grid = document.getElementById('dashboard-grid');
+                
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    
+                    const severityClass = (item.severity_level || '').toLowerCase();
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="card-header">
+                                <span class="exchange-badge">${item.exchange || 'N/A'}</span>
+                                <span class="country-flag">📍 ${item.country || 'Global'}</span>
+                            </div>
+                            <h3 class="initiative">${item.initiative || 'Untitled Update'}</h3>
+                            <div class="meta-row">
+                                <span class="category">📁 ${item.category || 'General'}</span>
+                                <span class="severity ${severityClass}">${item.severity_level || 'Normal'}</span>
+                            </div>
+                        </div>
+                        <div class="impact-box">
+                            <strong>Impact Analysis:</strong> ${item.impact || 'No detailed analysis provided.'}
+                        </div>
+                        <div class="card-footer">
+                            <span>📅 ETA: ${item.eta || 'TBD'}</span>
+                            <span>🔄 Sync: ${item.last_updated || 'Recent'}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
             })
             .catch(error => {
-                document.getElementById('data-display').textContent = "Error loading data.json file.";
+                document.getElementById('loading-state').textContent = "⚠️ Error pulling data.json stream.";
                 console.error('Error:', error);
             });
     </script>
