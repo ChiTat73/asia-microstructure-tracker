@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            background-color: #ffffff;
-            color: #24292e;
+            background-color: #000000;
+            color: #f1f5f9;
             padding: 40px 24px;
             margin: 0;
             line-height: 1.5;
@@ -24,97 +24,105 @@
             margin-bottom: 40px;
             flex-wrap: wrap;
             gap: 16px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 24px;
         }
         h1 {
-            color: #0366d6;
+            color: #3b82f6;
             margin: 0 0 8px 0;
             font-size: 26px;
+            font-weight: 700;
         }
         .subtitle {
-            color: #586069;
+            color: #94a3b8;
             margin: 0;
             font-size: 14px;
         }
         .agent-status-panel {
-            background-color: #f6f8fa;
-            border: 1px solid #e1e4e8;
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
             padding: 12px 18px;
             border-radius: 6px;
             font-size: 13px;
-            color: #24292e;
+            color: #e2e8f0;
         }
         .agent-status-panel strong {
-            color: #0366d6;
+            color: #3b82f6;
         }
         .section-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #eaecef;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1e293b;
             display: flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.5px;
         }
-        .section-title.pipeline { color: #d97706; border-bottom-color: #fef3c7; }
-        .section-title.implemented { color: #059669; border-bottom-color: #d1fae5; }
+        .section-title.pipeline { color: #f59e0b; border-bottom-color: #451a03; }
+        .section-title.implemented { color: #10b981; border-bottom-color: #064e3b; }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 40px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            background-color: #000000;
         }
         th {
-            border: 1px solid #e1e4e8;
+            border: 1px solid #1e293b;
             text-align: left;
             padding: 12px 16px;
-            font-size: 14px;
-            background-color: #f6f8fa;
+            font-size: 13px;
+            background-color: #0f172a;
             font-weight: 600;
-            color: #24292e;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         td {
-            border: 1px solid #e1e4e8;
+            border: 1px solid #1e293b;
             text-align: left;
             padding: 14px 16px;
             font-size: 14px;
+            color: #e2e8f0;
         }
         .clickable-row {
             cursor: pointer;
             transition: background-color 0.15s ease;
         }
         .clickable-row:hover {
-            background-color: #f1f8ff !important;
+            background-color: #0f172a !important;
         }
         .clickable-row:nth-child(4n+1) {
-            background-color: #ffffff;
+            background-color: #000000;
         }
         .clickable-row:nth-child(4n+3) {
-            background-color: #f9f9f9;
+            background-color: #05070a;
         }
         .drilldown-row {
-            background-color: #fafbfc !important;
+            background-color: #020617 !important;
             display: none;
         }
         .drilldown-row.active {
             display: table-row;
         }
         .drilldown-panel {
-            padding: 18px 24px;
-            color: #444d56;
+            padding: 20px 24px;
+            color: #cbd5e1;
             font-size: 13.5px;
-            border-left: 4px solid #0366d6;
+            border-left: 4px solid #3b82f6;
+            background-color: #090d16;
         }
         .drilldown-grid {
             display: grid;
             grid-template-columns: 140px 1fr;
-            gap: 12px 16px;
+            gap: 14px 16px;
         }
         .field-label {
             font-weight: 600;
-            color: #586069;
+            color: #64748b;
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.5px;
@@ -122,38 +130,45 @@
             padding-top: 2px;
         }
         .field-value {
-            color: #24292e;
+            color: #e2e8f0;
             line-height: 1.6;
         }
         .td-mkt {
             font-weight: 700;
-            color: #0366d6;
+            color: #3b82f6;
             width: 10%;
         }
+        .td-country {
+            color: #94a3b8;
+            width: 12%;
+        }
         .td-initiative {
-            width: 50%;
+            width: 43%;
+            color: #ffffff;
         }
         .td-eta {
             font-weight: 500;
             width: 15%;
+            color: #cbd5e1;
         }
         .td-category {
-            width: 20%;
+            width: 15%;
+            color: #94a3b8;
         }
         .td-toggle {
             width: 5%;
             text-align: center;
-            color: #a3aab1;
+            color: #475569;
             font-weight: bold;
             font-size: 16px;
         }
         .status-msg {
             text-align: center;
             font-weight: 500;
-            color: #6a737d;
+            color: #64748b;
             padding: 30px;
-            background-color: #f6f8fa;
-            border: 1px dashed #e1e4e8;
+            background-color: #0f172a;
+            border: 1px dashed #1e293b;
             border-radius: 6px;
         }
         .severity-badge {
@@ -164,10 +179,10 @@
             border-radius: 4px;
             text-transform: uppercase;
         }
-        .severity-badge.critical { background-color: #fee2e2; color: #991b1b; }
-        .severity-badge.high { background-color: #ffedd5; color: #9a3412; }
-        .severity-badge.medium { background-color: #fef9c3; color: #854d0e; }
-        .severity-badge.low { background-color: #d1fae5; color: #065f46; }
+        .severity-badge.critical { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
+        .severity-badge.high { background-color: #7c2d12; color: #ffedd5; border: 1px solid #ea580c; }
+        .severity-badge.medium { background-color: #713f12; color: #fef9c3; border: 1px solid #ca8a04; }
+        .severity-badge.low { background-color: #064e3b; color: #d1fae5; border: 1px solid #16a34a; }
     </style>
 </head>
 <body>
@@ -179,7 +194,7 @@
                 <p class="subtitle">Automated structural change logging repository.</p>
             </div>
             <div class="agent-status-panel">
-                🤖 Agent Status: <span style="color: #22c55e; font-weight: bold;">● ONLINE</span><br>
+                🤖 Agent Status: <span style="color: #10b981; font-weight: bold;">● ONLINE</span><br>
                 📅 Last Sync Check: <strong id="agent-timestamp">Fetching schedule...</strong>
             </div>
         </div>
@@ -190,6 +205,7 @@
                 <thead>
                     <tr>
                         <th>MKT</th>
+                        <th>Country</th>
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
@@ -207,6 +223,7 @@
                 <thead>
                     <tr>
                         <th>MKT</th>
+                        <th>Country</th>
                         <th>Structure Initiative / Regulatory Description</th>
                         <th>Effective Date / ETA</th>
                         <th>Market Segment</th>
@@ -231,6 +248,7 @@
 
                 data.forEach((item, index) => {
                     const ex = item.exchange || item.EXCHANGE || 'N/A';
+                    const country = item.country || item.COUNTRY || 'N/A';
                     const init = item.initiative || item.INITIATIVE || 'N/A';
                     const eta = item.eta || item.ETA || 'N/A';
                     const cat = item.category || item.CATEGORY || 'N/A';
@@ -249,6 +267,7 @@
                     const masterRowHtml = `
                         <tr class="clickable-row" onclick="toggleDrilldown('${uniqueId}', this)">
                             <td class="td-mkt">${ex}</td>
+                            <td class="td-country">${country}</td>
                             <td class="td-initiative">${init}</td>
                             <td class="td-eta">${eta}</td>
                             <td class="td-category">${cat}</td>
@@ -258,7 +277,7 @@
 
                     const drilldownRowHtml = `
                         <tr class="drilldown-row" id="${uniqueId}">
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="drilldown-panel">
                                     <div class="drilldown-grid">
                                         <div class="field-label">Risk Severity:</div>
@@ -304,7 +323,7 @@
             .catch(error => {
                 const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
                 document.getElementById('pipeline-loading').textContent = errMsg;
-                document.getElementById('pipeline-loading').style.color = '#dc2626';
+                document.getElementById('pipeline-loading').style.color = '#ef4444';
             });
 
         function toggleDrilldown(rowId, masterElement) {
@@ -318,7 +337,7 @@
             } else {
                 targetedPanel.classList.add('active');
                 arrowIndicator.textContent = '▴';
-                masterElement.style.backgroundColor = '#f1f8ff';
+                masterElement.style.backgroundColor = '#0f172a';
             }
         }
     </script>
