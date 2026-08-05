@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +27,6 @@
             padding: 15px;
         }
 
-        /* Top Command Line & Header Banner */
         .bbg-header {
             border: 1px solid var(--bbg-border);
             margin-bottom: 15px;
@@ -58,7 +56,6 @@
             font-size: 15px;
         }
 
-        /* Input Controls Area */
         .bbg-toolbar {
             display: flex;
             justify-content: space-between;
@@ -69,7 +66,6 @@
             margin-bottom: 12px;
         }
 
-        /* Bloomberg Style Segmented Buttons */
         .bbg-switch {
             display: flex;
             gap: 2px;
@@ -98,7 +94,6 @@
             border-color: var(--bbg-blue);
         }
 
-        /* Command Line Input Search Filter */
         .bbg-search {
             display: flex;
             align-items: center;
@@ -120,7 +115,6 @@
             border-color: var(--bbg-amber);
         }
 
-        /* Terminal Raw Data Grid Matrix Table */
         .bbg-table {
             width: 100%;
             border-collapse: collapse;
@@ -159,7 +153,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Data Matrix Field Highlighters */
         .td-exchange {
             color: var(--bbg-amber);
             font-weight: bold;
@@ -183,7 +176,6 @@
             width: 20%;
         }
 
-        /* System Messages Panel */
         .bbg-status-msg {
             text-align: center;
             padding: 40px;
@@ -192,7 +184,6 @@
             letter-spacing: 1px;
         }
 
-        /* Footer Status Tick Bar */
         .bbg-footer-ticker {
             margin-top: 15px;
             background-color: #1c1c1c;
@@ -207,7 +198,6 @@
 </head>
 <body>
 
-    <!-- Bloomberg Screen Banner Context Header -->
     <div class="bbg-header">
         <div class="bbg-command-line">
             <span>ASIA MICROSTRUCTURE LEDGER <span style="color:#fff;">&lt;GO&gt;</span></span>
@@ -220,7 +210,6 @@
         </div>
     </div>
 
-    <!-- Data Filter Command Actions Row -->
     <div class="bbg-toolbar">
         <div class="bbg-switch">
             <button class="bbg-btn active" onclick="filterTimeline('all', this)">1) ALL</button>
@@ -234,7 +223,6 @@
         </div>
     </div>
 
-    <!-- Main Output Matrix Grid Table -->
     <table class="bbg-table">
         <thead>
             <tr>
@@ -251,7 +239,6 @@
         </tbody>
     </table>
 
-    <!-- Footer System Diagnostics Segment -->
     <div class="bbg-footer-ticker">
         <span>BLOOMBERG PROFESSIONAL SERVICE</span>
         <span style="color:var(--bbg-amber);">PRESS ROW TO INSPECT EXPANDED IMPACT PROFILE</span>
@@ -262,7 +249,6 @@
         let fullDataset = [];
         let currentTimelineFilter = 'all';
 
-        // Keep system clock current to real terminal parameters
         function updateClock() {
             const now = new Date();
             document.getElementById('terminal-clock').textContent = now.toUTCString().replace('GMT', 'UTC');
@@ -270,7 +256,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Stream raw JSON array records straight to matrix rows
         fetch('data.json?v=' + new Date().getTime())
             .then(res => res.json())
             .then(data => {
@@ -289,17 +274,21 @@
             const searchQuery = document.getElementById('bbgFilter').value.toLowerCase();
             
             const filtered = fullDataset.filter(item => {
-                const etaText = (item.eta || '').toLowerCase();
-                const statusText = (item.timeline_status || '').toLowerCase();
+                // Read fields safely regardless of uppercase/lowercase JSON attributes
+                const etaText = (item.eta || item.ETA || '').toLowerCase();
+                const statusText = (item.timeline_status || item.TIMELINE_STATUS || item.Timeline_status || '').toLowerCase();
+                const exchangeText = (item.exchange || item.EXCHANGE || '').toLowerCase();
+                const categoryText = (item.category || item.CATEGORY || '').toLowerCase();
+                const initiativeText = (item.initiative || item.INITIATIVE || '').toLowerCase();
                 
                 const isImplemented = statusText.includes('historical') || etaText.includes('implemented');
                 
                 if (currentTimelineFilter === 'implemented' && !isImplemented) return false;
                 if (currentTimelineFilter === 'pipeline' && isImplemented) return false;
 
-                return (item.exchange || '').toLowerCase().includes(searchQuery) || 
-                       (item.category || '').toLowerCase().includes(searchQuery) ||
-                       (item.initiative || '').toLowerCase().includes(searchQuery);
+                return exchangeText.includes(searchQuery) || 
+                       categoryText.includes(searchQuery) ||
+                       initiativeText.includes(searchQuery);
             });
 
             renderTerminalGrid(filtered);
@@ -308,3 +297,13 @@
         function filterTimeline(type, btnElement) {
             currentTimelineFilter = type;
             document.querySelectorAll('.bbg-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            applyTerminalFilters();
+        }
+
+        function renderTerminalGrid(dataset) {
+            const tbody = document.getElementById('terminal-body');
+            tbody.innerHTML = '';
+
+            if (dataset.length === 0) {
+tbody.innerHTML = <tr><td colspan="4" class="bbg-status-msg" style="color:#555;">NO ENTRIES MATCHING REQUESTED MATRIX PARAMETERS</td></tr>;return;}dataset.forEach(item => {const tr = document.createElement('tr');// Read variables defensively to handle case differencesconst ex = item.exchange || item.EXCHANGE || 'N/A';const country = item.country || item.COUNTRY || 'GLOBAL';const init = item.initiative || item.INITIATIVE || 'UNTITLED RESTRUCTURING NOTICE';const eta = item.eta || item.ETA || 'PHASED';const cat = item.category || item.CATEGORY || 'GENERAL';const impact = item.impact || item.IMPACT || 'No microstructure parameters provided.';const severity = item.severity_level || item.SEVERITY_LEVEL || 'NORMAL';const timeline = item.timeline_status || item.TIMELINE_STATUS || 'N/A';tr.onclick = () => {alert(-- BLOOMBERG CHRONICLE SECURITY PROFILE --\n\n +EXCHANGE FIELD : ${ex} (${country})\n +INITIATIVE     : ${init}\n +TIMELINE ETA   : ${eta}\n +SEGMENT CLASS  : ${cat}\n +SEVERITY SCALE : ${severity}\n\n +[OPERATIONAL MARKET IMPACT REPORT]:\n +${impact});};tr.innerHTML = <td class="td-exchange">${ex}</td> <td class="td-initiative">${init}</td> <td class="td-eta">${eta}</td> <td class="td-category">${cat}</td>;tbody.appendChild(tr);});}document.getElementById('bbgFilter').addEventListener('input', applyTerminalFilters);
