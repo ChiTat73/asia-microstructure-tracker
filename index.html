@@ -70,7 +70,6 @@
             margin-bottom: 40px;
             background-color: #000000;
         }
-        /* Clickable and Sortable Interactive Headers */
         th.sortable {
             cursor: pointer;
             user-select: none;
@@ -97,8 +96,6 @@
             font-size: 10px;
             color: #475569;
         }
-        th.sort-asc .sort-icon { color: #3b82f6; content: "▲"; }
-        th.sort-desc .sort-icon { color: #3b82f6; content: "▼"; }
         
         td {
             border: 1px solid #1e293b;
@@ -169,39 +166,14 @@
             color: #3b82f6;
             font-size: 12px;
         }
-        .td-mkt {
-            font-weight: 700;
-            color: #3b82f6;
-            width: 10%;
-        }
-        .td-country {
-            color: #ffffff;
-            width: 15%;
-            font-weight: 500;
-        }
-        .td-classification {
-            width: 15%;
-        }
-        .td-initiative {
-            width: 33%;
-            color: #ffffff;
-        }
-        .td-eta {
-            font-weight: 500;
-            width: 12%;
-            color: #cbd5e1;
-        }
-        .td-category {
-            width: 10%;
-            color: #94a3b8;
-        }
-        .td-toggle {
-            width: 5%;
-            text-align: center;
-            color: #475569;
-            font-weight: bold;
-            font-size: 16px;
-        }
+        .td-mkt { font-weight: 700; color: #3b82f6; width: 10%; }
+        .td-country { color: #ffffff; width: 15%; font-weight: 500; }
+        .td-classification { width: 15%; }
+        .td-initiative { width: 33%; color: #ffffff; }
+        .td-eta { font-weight: 500; width: 12%; color: #cbd5e1; }
+        .td-category { width: 10%; color: #94a3b8; }
+        .td-toggle { width: 5%; text-align: center; color: #475569; font-weight: bold; font-size: 16px; }
+        
         .status-msg {
             text-align: center;
             font-weight: 500;
@@ -233,16 +205,8 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-        .class-badge.developed {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        .class-badge.emerging {
-            background-color: rgba(168, 85, 247, 0.1);
-            color: #c084fc;
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
+        .class-badge.developed { background-color: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .class-badge.emerging { background-color: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
     </style>
 </head>
 <body>
@@ -258,7 +222,7 @@
                 📅 Last Sync Check: <strong id="agent-timestamp">Fetching schedule...</strong>
             </div>
         </div>
-
+        <!-- Section 1: Upcoming Pipeline Changes -->
         <div class="section-title pipeline">⏳ UPCOMING CHANGES / PIPELINE (Click headers to sort)</div>
         <div id="pipeline-container">
             <table id="pipeline-table" style="display: none;">
@@ -278,6 +242,7 @@
             <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
         </div>
 
+        <!-- Section 2: Completed Implemented Changes -->
         <div class="section-title implemented">✅ COMPLETED / IMPLEMENTED HISTORICAL (Click headers to sort)</div>
         <div id="implemented-container">
             <table id="implemented-table" style="display: none;">
@@ -286,6 +251,17 @@
                         <th class="sortable" onclick="sortTable('implemented', 'exchange', this)">MKT<span class="sort-icon">▼▲</span></th>
                         <th class="sortable" onclick="sortTable('implemented', 'countryFull', this)">Country<span class="sort-icon">▼▲</span></th>
                         <th class="sortable" onclick="sortTable('implemented', 'isDeveloped', this)">Classification<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('implemented', 'initiative', this)">Structure Initiative / Regulatory Description<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('implemented', 'eta', this)">Effective Date / ETA<span class="sort-icon">▼▲</span></th>
+                        <th class="sortable" onclick="sortTable('implemented', 'category', this)">Market Segment<span class="sort-icon">▼▲</span></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="implemented-body"></tbody>
+            </table>
+            <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
+        </div>
+    </div>
     <script>
         const countryMap = {
             'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
@@ -299,7 +275,6 @@
         let pipelineData = [];
         let implementedData = [];
         
-        // Sorting Trackers
         let activeSortKeys = { pipeline: null, implemented: null };
         let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
 
@@ -316,13 +291,13 @@
             return listItems ? `<ul class="impact-list">${listItems}</ul>` : 'No metrics parsed.';
         }
 
+        // Fetch Data Engine
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
                 let globalTimestamp = "N/A";
 
                 data.forEach((item, index) => {
-                    // Normalize parameters natively into unified objects
                     const ex = item.exchange || item.EXCHANGE || 'N/A';
                     const countryCode = item.country || item.COUNTRY || '';
                     const init = item.initiative || item.INITIATIVE || 'N/A';
@@ -349,6 +324,7 @@
                         originalIndex: index
                     };
 
+                    // Robust classification algorithm logic matching python timeline states
                     const isImplemented = timelineStatus.includes('historical') || etaText.includes('implemented');
                     if (isImplemented) {
                         implementedData.push(normalizedItem);
@@ -363,15 +339,14 @@
                 renderTableSection('implemented');
             })
             .catch(error => {
-                const errMsg = `❌ Error establishing data feed synchronization: ${error.message}`;
-                document.getElementById('pipeline-loading').textContent = errMsg;
+                document.getElementById('pipeline-loading').textContent = `❌ Error establishing data feed synchronization: ${error.message}`;
+                document.getElementById('implemented-loading').textContent = `❌ Error establishing data feed synchronization: ${error.message}`;
             });
 
-        // Universal Sorting Algorithm Engine
+        // Universal Decoupled Sorting Framework Engine
         function sortTable(section, key, thElement) {
             const targetData = section === 'pipeline' ? pipelineData : implementedData;
             
-            // Toggle direction if clicking same header, otherwise default to ascending
             if (activeSortKeys[section] === key) {
                 activeSortDirs[section] = activeSortDirs[section] === 'asc' ? 'desc' : 'asc';
             } else {
@@ -379,10 +354,9 @@
                 activeSortDirs[section] = 'asc';
             }
 
-            // Visual UI configuration clean updates
             const thContainer = thElement.parentNode;
             thContainer.querySelectorAll('th').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
+                th.className = th.className.replace('sort-asc', '').replace('sort-desc', '').trim();
                 const icon = th.querySelector('.sort-icon');
                 if (icon) icon.textContent = '▼▲';
             });
@@ -395,7 +369,6 @@
                 thElement.querySelector('.sort-icon').textContent = '▼';
             }
 
-            // Alpha-numeric string comparison mechanics loop
             targetData.sort((a, b) => {
                 let valA = a[key];
                 let valB = b[key];
@@ -411,6 +384,7 @@
             renderTableSection(section);
         }
 
+        // Render Section Template Thread Loop
         function renderTableSection(section) {
             const dataList = section === 'pipeline' ? pipelineData : implementedData;
             const tbody = document.getElementById(`${section}-body`);
@@ -421,7 +395,7 @@
 
             if (dataList.length === 0) {
                 loadingMsg.style.display = 'block';
-                loadingMsg.textContent = `No active initiatives mapped inside this grid matrix.`;
+                loadingMsg.textContent = `No active initiatives mapped inside this matrix zone.`;
                 targetTable.style.display = 'none';
                 return;
             }
