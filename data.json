@@ -7,7 +7,7 @@
         "severity_level": "High",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Nov 5, 2024",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Extended the afternoon cash equity trading session by 30 minutes, shifting market close to 15:30 JST.\n\u2022 Microstructure/HFT Impact: Concentrated institutional block crossing and passive fund rebalancing models explicitly into the newly introduced Closing Auction Session (CAS).\n\u2022 Overall Liquidity Outlook: Successfully increased total daily turnover velocity and significantly mitigated intraday price discovery spikes across Nikkei 225 constituents."
     },
@@ -19,7 +19,7 @@
         "severity_level": "Critical",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Sept 23, 2024",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Eliminated historical physical market closures during severe typhoons or black rainstorm events, moving operations fully remote.\n\u2022 Microstructure/HFT Impact: Ensured localization clearing risk gates and structural delta-hedging algorithms remained continuous during global macro risk events.\n\u2022 Overall Liquidity Outlook: Maintained price discovery integrity, preventing international capital locks or costly overnight margin loop hazards."
     },
@@ -31,7 +31,7 @@
         "severity_level": "Critical",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented July 2026",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Decommissioned legacy OMnet API configurations, completely migrating cleared members to ITCH, OUCH, and FIX native market protocols.\n\u2022 Microstructure/HFT Impact: Standardized customized pre-trade risk validation gates at the exchange layer and completely eliminated redundant forced-order routing paths.\n\u2022 Overall Liquidity Outlook: Massively escalated underlying data throughput scaling, creating predictable sub-millisecond execution lanes for low-latency quantitative teams."
     },
@@ -43,7 +43,7 @@
         "severity_level": "Medium",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Late 2025",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Compressed the matching engine calculation cycles for continuous electronic trading intervals to support hyper-frequency order matching.\n\u2022 Microstructure/HFT Impact: Altered the mathematical decay modeling requirements for automated order sweep algorithms.\n\u2022 Overall Liquidity Outlook: Tightened localized bid-ask queues on major semiconductor components, increasing domestic quote frequency."
     },
@@ -55,7 +55,7 @@
         "severity_level": "High",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented May 2025",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Enforced strict reporting metrics on high-frequency trading (HFT) servers colocated inside the Shanghai data center matrix.\n\u2022 Microstructure/HFT Impact: Mandatory systemic pre-clearance on automated volume thresholds exceeding 300 orders per minute, adding routing friction to hyper-fast alpha generation.\n\u2022 Overall Liquidity Outlook: Dampens rapid intraday momentum-chasing loops, aiming to flatten systemic equity volatility across large-cap A-shares."
     },
@@ -67,7 +67,7 @@
         "severity_level": "High",
         "timeline_status": "Historical (Last 12 Months)",
         "eta": "Implemented Q2 2025",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Implemented modernized auto-throttling limits on rapid successive high-frequency order messages.\n\u2022 Microstructure/HFT Impact: Changes queue placement math and decay algorithms for low-latency market makers.\n\u2022 Overall Liquidity Outlook: Stabilizes order book depth profiles during extreme volatility events."
     },
@@ -79,7 +79,7 @@
         "severity_level": "Critical",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Release: 2026 / 2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Replaces the decades-old legacy CHESS settlement architecture with an institutional-grade, high-throughput database network.\n\u2022 Microstructure/HFT Impact: Normalizes real-time position reporting, significantly reducing systemic overnight margin collateral requirements for clearing brokers.\n\u2022 Overall Liquidity Outlook: Modernizes risk distribution frameworks, clearing structural technical debt for cross-border institutional capital allocators."
     },
@@ -91,7 +91,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Mid-2026",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Launches an integrated evening trading window to catch residual active daytime cash orders via alternative matching networks.\n\u2022 Microstructure/HFT Impact: Disperses high-volume execution patterns across global macro desks, reducing traditional market-close volatility bumps.\n\u2022 Overall Liquidity Outlook: Routes international capital pools executing during European market hours seamlessly back into Korean primary equity blocks."
     },
@@ -103,7 +103,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Rolling Phases Through 2026",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Transitions standard market clearing structures from T+1 settlement cycles down to immediate, real-time transaction processing rules.\n\u2022 Microstructure/HFT Impact: Demands near-instant currency optimization and trade reconciliation flows, changing working capital buffer strategies.\n\u2022 Overall Liquidity Outlook: Substantially scales retail and institutional equity turnover rates by completely eradicating settlement capital lockups."
     },
@@ -115,7 +115,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Phase 1 Launch: Target 2026",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Harmonizes messy stock board lots down into 8 predefined tiers, enforcing structural price ceilings and floors.\n\u2022 Microstructure/HFT Impact: Optimizes queue configurations, streamlining queue positional math calculations for order book market depth profiles.\n\u2022 Overall Liquidity Outlook: Significantly lowers retail entry barriers on premium priced equities, bolstering underlying volume velocity."
     },
@@ -127,7 +127,7 @@
         "severity_level": "Medium",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Launch: Early 2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Upgrading matching engine configurations to streamline variable board lot sizes across growth enterprise stock listings.\n\u2022 Microstructure/HFT Impact: Recalibrates queue tracking geometry and routing engine memory maps for domestic quantitative broker networks.\n\u2022 Overall Liquidity Outlook: Optimizes quote depth thickness and tightens bid-ask queues for retail-dominated retail tech components."
     },
@@ -139,7 +139,7 @@
         "severity_level": "Critical",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Feasibility Phase: End-2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Evaluating a structural tech pivot from Mainland China's historic, rigid T+1 cash/stock settlement system down to instantaneous continuous clearing loops.\n\u2022 Microstructure/HFT Impact: Completely alters intraday risk-mitigation math, removing the forced requirement to carry cross-day inventory blocks overnight.\n\u2022 Overall Liquidity Outlook: Potentially unlocks a massive wave of capital velocity and turnover frequency for global institutional traders utilizing China Connect pipelines."
     },
@@ -151,7 +151,7 @@
         "severity_level": "Medium",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Phase 1 Review: Mid-2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Assessing clearing framework requirements to transition from standard T+2 cycles.\n\u2022 Microstructure/HFT Impact: Shifts overnight liquidity buffer dynamics for regional clearing brokers.\n\u2022 Overall Liquidity Outlook: Aligns Malaysian velocity thresholds with accelerating international settlement cycles."
     },
@@ -163,7 +163,7 @@
         "severity_level": "High",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Rollout: Late 2026",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Upgrades centralized securities lending systems to permit broad-market automated short execution paths.\n\u2022 Microstructure/HFT Impact: Introduces dynamic locating checks at the exchange layer prior to order routing.\n\u2022 Overall Liquidity Outlook: Increases price discovery efficiency and boosts dynamic hedging options for regional market makers."
     },
@@ -175,7 +175,7 @@
         "severity_level": "Medium",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Phased Launch: 2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Establishes a functional framework for short positioning via structured offshore depository receipt mechanisms.\n\u2022 Microstructure/HFT Impact: Introduces borrow inventory parameters to local risk dashboards.\n\u2022 Overall Liquidity Outlook: Enhances dynamic hedging tools, aiming to elevate foreign institutional asset allocation into Manila."
     },
@@ -187,7 +187,7 @@
         "severity_level": "Medium",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Rollout: Early 2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Modernizes gateway messaging connections to accept default low-latency industry exchange protocols natively.\n\u2022 Microstructure/HFT Impact: Simplifies routing path maintenance requirements for Australian cross-border desks.\n\u2022 Overall Liquidity Outlook: Mitigates interface connectivity friction, providing stable price transmission nodes."
     },
@@ -199,7 +199,7 @@
         "severity_level": "Critical",
         "timeline_status": "Upcoming Pipeline",
         "eta": "Target Launch: Mid-2027",
-        "last_updated": "Aug 05, 2026 18:15 HKT",
+        "last_updated": "Aug 06, 2026 09:30 HKT",
         "source_url": "https://google.com",
         "impact": "\u2022 Technical Structural Change: Completely swaps out the legacy core system infrastructure to enable intra-day buy/sell settlement capabilities.\n\u2022 Microstructure/HFT Impact: Drastically cuts trade matching latency delays and expands multi-asset allocation capabilities.\n\u2022 Overall Liquidity Outlook: Prepares the Vietnamese market system to transition from frontier status to official emerging market ranking indexes."
     }
