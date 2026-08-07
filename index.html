@@ -3,295 +3,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APAC stock exchange Microstructure changes</title>
-
+    <title>APAC Stock Exchange Change Microstructure</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background-color: #000000; color: #f1f5f9; padding: 40px 24px; margin: 0; line-height: 1.5; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 24px; }
-        
-        .header-right-group { display: flex; gap: 12px; align-items: stretch; }
-        
-        .hub-btn { background-color: #000000; color: #38bdf8; border: 1px solid #1e293b; padding: 0 16px; border-radius: 6px; font-family: monospace; font-size: 11px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.2s ease; }
-        .hub-btn:hover { border-color: #38bdf8; background-color: #090d16; }
+        :root {
+            --bg-color: #05070d;
+            --card-bg: #0b0e17;
+            --border-color: #1a2234;
+            --table-header-bg: #0f1523;
+            --table-row-hover: #131b2e;
+            --text-main: #e2e8f0;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --badge-dev-bg: #1e1b4b;
+            --badge-dev-text: #a5b4fc;
+            --badge-emg-bg: #31124b;
+            --badge-emg-text: #f0abfc;
+            --new-tag-bg: #065f46;
+            --new-tag-text: #6ee7b7;
+        }
 
-        h1 { color: #3b82f6; margin: 0 0 8px 0; font-size: 26px; font-weight: 700; }
-        .subtitle { color: #94a3b8; margin: 0; font-size: 14px; }
-        .agent-status-panel { background-color: #0f172a; border: 1px solid #1e293b; padding: 12px 18px; border-radius: 6px; font-size: 13px; color: #e2e8f0; }
-        
-        .controls-bar { display: flex; justify-content: space-between; align-items: center; background-color: #0f172a; border: 1px solid #1e293b; padding: 12px 16px; border-radius: 6px; margin-bottom: 30px; gap: 16px; flex-wrap: wrap; }
-        .search-wrapper { position: relative; flex-grow: 1; max-width: 400px; }
-        .search-wrapper input { width: 100%; background-color: #000000; border: 1px solid #1e293b; color: #ffffff; padding: 8px 12px 8px 34px; border-radius: 4px; font-size: 13px; outline: none; box-sizing: border-box; }
-        .search-wrapper::before { content: "🔍"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.5; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 24px;
+        }
 
-        .section-title { font-size: 15px; font-weight: 600; margin-top: 40px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; display: flex; align-items: center; justify-content: space-between; letter-spacing: 0.5px; }
-        .section-title.pipeline { color: #f59e0b; border-bottom-color: #451a03; }
-        .section-title.implemented { color: #10b981; border-bottom-color: #064e3b; }
-        .row-counter { font-size: 11px; background-color: #1e293b; color: #94a3b8; padding: 2px 8px; border-radius: 10px; }
+        /* Header Layout */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; background-color: #000000; table-layout: fixed; }
-        th.sortable { cursor: pointer; user-select: none; transition: background-color 0.15s; }
-        th.sortable:hover { background-color: #1e293b; color: #ffffff; }
-        th { border: 1px solid #1e293b; text-align: left; padding: 12px 16px; font-size: 12px; background-color: #0f172a; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .sort-icon { display: inline-block; margin-left: 6px; font-size: 10px; color: #475569; }
-        
-        td { border: 1px solid #1e293b; text-align: left; padding: 14px 16px; font-size: 13.5px; color: #e2e8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .clickable-row { cursor: pointer; transition: background-color 0.15s ease; }
-        .clickable-row:hover { background-color: #0f172a !important; }
-        .clickable-row:hover td { color: #ffffff !important; }
-        .clickable-row:nth-child(4n+1) { background-color: #000000; }
-        .clickable-row:nth-child(4n+3) { background-color: #05070a; }
-        
-        .clickable-row.is-new-row { border-left: 3px solid #00f0ff; animation: pulseGlow 2s infinite ease-in-out; }
-        @keyframes pulseGlow { 0% { background-color: rgba(0, 240, 255, 0.02); } 50% { background-color: rgba(0, 240, 255, 0.07); } 100% { background-color: rgba(0, 240, 255, 0.02); } }
-        .new-entry-badge { background-color: #00f0ff; color: #000000; font-size: 10px; font-weight: 900; padding: 1px 5px; border-radius: 3px; margin-left: 8px; display: inline-block; vertical-align: middle; box-shadow: 0 0 8px rgba(0, 240, 255, 0.6); }
+        .title-area h1 {
+            margin: 0 0 6px 0;
+            font-size: 1.6rem;
+            color: #60a5fa;
+            letter-spacing: -0.02em;
+        }
 
-        .drilldown-row { background-color: #020617 !important; display: none; }
-        .drilldown-row.active { display: table-row; }
-        .drilldown-panel { padding: 20px 24px; color: #cbd5e1; font-size: 13.5px; border-left: 4px solid #3b82f6; background-color: #090d16; }
-        .drilldown-grid { display: grid; grid-template-columns: 140px 1fr; gap: 14px 16px; }
-        .field-label { font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; align-self: start; padding-top: 2px; }
-        .field-value { color: #e2e8f0; line-height: 1.6; white-space: normal !important; }
-        
-        .source-link-btn { display: inline-flex; align-items: center; gap: 6px; background-color: #1e293b; color: #3b82f6; border: 1px solid #334155; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; text-decoration: none; margin-top: 5px; transition: all 0.1s ease; cursor: pointer; }
-        .source-link-btn:hover { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-        
-        .impact-list { margin: 0; padding-left: 0; list-style-type: none; }
-        .impact-list li { margin-bottom: 8px; position: relative; padding-left: 20px; }
-        .impact-list li::before { content: "➔"; position: absolute; left: 0; color: #3b82f6; font-size: 12px; }
-        
-        .td-mkt { font-weight: 700; color: #3b82f6; width: 8%; }
-        .td-country { color: #ffffff; width: 14%; font-weight: 500; }
-        .td-classification { width: 14%; }
-        .td-initiative { width: 34%; color: #ffffff; text-overflow: ellipsis; }
-        .td-eta { font-weight: 500; width: 18%; color: #cbd5e1; }
-        .td-category { width: 10%; color: #94a3b8; }
-        .td-toggle { width: 2%; text-align: center; color: #475569; font-weight: bold; font-size: 14px; }
-        
-        .countdown-ticker { font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-left: 6px; display: inline-block; }
-        .countdown-ticker.upcoming { background-color: #451a03; color: #f59e0b; border: 1px solid #78350f; }
-        .countdown-ticker.passed { background-color: #064e3b; color: #10b981; border: 1px solid #065f46; }
+        .title-area p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
 
-        .status-msg { text-align: center; font-weight: 500; color: #64748b; padding: 30px; background-color: #0f172a; border: 1px dashed #1e293b; border-radius: 6px; }
-        .severity-badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; text-transform: uppercase; }
-        .severity-badge.critical { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #b91c1c; }
-        .severity-badge.high { background-color: #7c2d12; color: #ffedd5; border: 1px solid #ea580c; }
-        .severity-badge.medium { background-color: #713f12; color: #fef9c3; border: 1px solid #ca8a04; }
-        .severity-badge.low { background-color: #064e3b; color: #d1fae5; border: 1px solid #16a34a; }
-        
-        .class-badge { display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .class-badge.developed { background-color: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .class-badge.emerging { background-color: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .status-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .status-line {
+            margin-bottom: 4px;
+        }
+
+        .status-online {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* Search Filter Bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 14px 10px 38px;
+            color: var(--text-main);
+            font-size: 0.875rem;
+            box-sizing: border-box;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Section Banner */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 24px;
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pipeline-title { color: #f59e0b; }
+        .historical-title { color: var(--accent-green); }
+
+        .entry-count-badge {
+            background: #1e293b;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Tables */
+        .table-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: var(--table-header-bg);
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        th:hover { color: var(--text-main); }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: var(--table-row-hover); }
+
+        /* Custom Column Elements */
+        .mkt-code {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        .badge-dev {
+            background: var(--badge-dev-bg);
+            color: var(--badge-dev-text);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .badge-emg {
+            background: var(--badge-emg-bg);
+            color: var(--badge-emg-text);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .tag-new {
+            background: var(--new-tag-bg);
+            color: var(--new-tag-text);
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-left: 6px;
+        }
+
+        .eta-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .eta-countdown {
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .arrow-btn {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .details-row {
+            background-color: #070a12;
+            display: none;
+        }
+
+        .details-content {
+            padding: 12px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="header-area">
-            <div>
-                <h1>APAC stock exchange change Microstructure</h1>
-                <p class="subtitle">Automated structural change logging repository.</p>
-            </div>
-            
-            <div class="header-right-group">
-                <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="hub-btn">
-                    ⚡ Markets microstructure ↗
-                </a>
-                <div class="agent-status-panel">
-                    🤖 Agent Status: <span style="color: #10b981; font-weight: bold;">● ONLINE</span><br>
-                    📅 Last Sync Check: <strong id="agent-timestamp">Fetching schedule...</strong>
-                </div>
-            </div>
-        </div>
 
-        <div class="controls-bar">
-            <div class="search-wrapper">
-                <input type="text" id="masterSearch" oninput="applyFilters()" placeholder="Filter ledger by market, country, segment or keyword..." autocomplete="off">
-            </div>
-            <div style="font-size: 12px; color: #64748b;">
-                💡 <span style="color: #00f0ff; font-weight: bold;">Neon blue rows</span> signify new data entries added since your last session.
-            </div>
+    <header class="header-container">
+        <div class="title-area">
+            <h1>APAC stock exchange change Microstructure</h1>
+            <p>Automated structural change logging repository.</p>
         </div>
+        <div class="status-box">
+            <div class="status-line">⚡ Agent Status: <span class="status-online">• ONLINE</span></div>
+            <div class="status-line" id="last-sync-display">💻 Last Sync Check: Loading...</div>
+        </div>
+    </header>
 
-        <div class="section-title pipeline">
-            <span>⏳ UPCOMING CHANGES / PIPELINE (Click headers to sort)</span>
-            <span class="row-counter" id="pipeline-count">0 Records</span>
-        </div>
-        <div id="pipeline-container">
-            <table id="pipeline-table" style="display: none;">
-                <thead>
-                    <tr>
-                        <th class="sortable td-mkt" onclick="sortTable('pipeline', 'exchange', this)">MKT<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-country" onclick="sortTable('pipeline', 'countryFull', this)">Country<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-classification" onclick="sortTable('pipeline', 'isDeveloped', this)">Classification<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-initiative" onclick="sortTable('pipeline', 'initiative', this)">Structure Initiative / Regulatory Description<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-eta" onclick="sortTable('pipeline', 'eta', this)">Effective Date / ETA<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-category" onclick="sortTable('pipeline', 'category', this)">Market Segment<span class="sort-icon">▼▲</span></th>
-                        <th class="td-toggle"></th>
-                    </tr>
-                </thead>
-                <tbody id="pipeline-body"></tbody>
-            </table>
-            <div id="pipeline-loading" class="status-msg">Scanning pipeline entries...</div>
-        </div>
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="filter-input" class="search-input" placeholder="Filter ledger by market, country, segment or keyword..." onkeyup="filterTables()">
+    </div>
 
-        <div class="section-title implemented">
+    <!-- UPCOMING CHANGES / PIPELINE SECTION -->
+    <div class="section-header">
+        <div class="section-title pipeline-title">
+            <span>⌛ UPCOMING CHANGES / PIPELINE (Click headers to sort)</span>
+        </div>
+        <span class="entry-count-badge" id="pipeline-count">0 Entries</span>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="pipeline-table">
+            <thead>
+                <tr>
+                    <th>MKT ▼▲</th>
+                    <th>COUNTRY ▼▲</th>
+                    <th>CLASSIFICATION ▼▲</th>
+                    <th>STRUCTURE INITIATIVE / REGULATORY DESCRIPTION ▼▲</th>
+                    <th>EFFECTIVE DATE / ETA ▼▲</th>
+                    <th>MARKET SEGMENT ▼▲</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="pipeline-body">
+                <!-- Dynamic Pipeline Rows Rendered Here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- COMPLETED / IMPLEMENTED HISTORICAL SECTION -->
+    <div class="section-header">
+        <div class="section-title historical-title">
             <span>✅ COMPLETED / IMPLEMENTED HISTORICAL (Click headers to sort)</span>
-            <span class="row-counter" id="implemented-count">0 Records</span>
         </div>
-        <div id="implemented-container">
-            <table id="implemented-table" style="display: none;">
-                <thead>
-                    <tr>
-                        <th class="sortable td-mkt" onclick="sortTable('implemented', 'exchange', this)">MKT<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-country" onclick="sortTable('implemented', 'countryFull', this)">Country<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-classification" onclick="sortTable('implemented', 'isDeveloped', this)">Classification<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-initiative" onclick="sortTable('implemented', 'initiative', this)">Structure Initiative / Regulatory Description<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-eta" onclick="sortTable('implemented', 'eta', this)">Effective Date / ETA<span class="sort-icon">▼▲</span></th>
-                        <th class="sortable td-category" onclick="sortTable('implemented', 'category', this)">Market Segment<span class="sort-icon">▼▲</span></th>
-                        <th class="td-toggle"></th>
-                    </tr>
-                </thead>
-                <tbody id="implemented-body"></tbody>
-            </table>
-            <div id="implemented-loading" class="status-msg">Scanning implemented entries...</div>
-        </div>
+        <span class="entry-count-badge" id="historical-count">0 Entries</span>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="historical-table">
+            <thead>
+                <tr>
+                    <th>MKT ▼▲</th>
+                    <th>COUNTRY ▼▲</th>
+                    <th>CLASSIFICATION ▼▲</th>
+                    <th>STRUCTURE INITIATIVE / REGULATORY DESCRIPTION ▼▲</th>
+                    <th>EFFECTIVE DATE / ETA ▼▲</th>
+                    <th>MARKET SEGMENT ▼▲</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="historical-body">
+                <!-- Dynamic Historical Rows Rendered Here -->
+            </tbody>
+        </table>
     </div>
 
     <script>
-        const countryMap = {
-            'jp': 'Japan', 'au': 'Australia', 'hk': 'Hong Kong', 'sg': 'Singapore',
-            'tw': 'Taiwan', 'kr': 'South Korea', 'nz': 'New Zealand', 'cn': 'Mainland China',
-            'in': 'India', 'my': 'Malaysia', 'th': 'Thailand', 'id': 'Indonesia',
-            'ph': 'Philippines', 'vn': 'Vietnam'
+        // Sample Microstructure Ledger Dataset matching your layout schema
+        const ledgerData = {
+            last_sync: "Aug 07, 2026 10:07 HKT",
+            pipeline: [
+                { mkt: "ASX", country: "Australia", class: "DEVELOPED MKT", title: "CHESS Core Clearing Replacement Program (Phase 1)...", eta: "Target Release: 2026 / 2027", segment: "Settlement M...", new: false, details: "Core clearing replacement architecture migration testing." },
+                { mkt: "NSE", country: "India", class: "EMERGING MKT", title: "Instantaneous T+0 Cross-Settlement Phase Extension...", eta: "Rolling Phases Through 2026", segment: "Settlement M...", new: false, details: "Real-time gross settlement option expansion across market participants." },
+                { mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", title: "Standardized Board Lot Optimization Framework", eta: "Phase 1 Launch: Target 2027", segment: "Trading Mech...", new: true, details: "Reduces odd-lot friction across securities listings." },
+                { mkt: "SZSE", country: "Mainland China", class: "EMERGING MKT", title: "ChiNext Multi-Tier Board Lot Alignment", eta: "Target Launch: Early 2027", segment: "Trading Mech...", new: true, details: "Aligns board sizes across growth enterprise tiers." },
+                { mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", title: "A-Share T+0 Intraday Settlement Pilot Assessment...", eta: "Feasibility Phase: End-2026", segment: "Settlement M...", new: false, details: "Intraday liquidity pilot for institutionally matched blocks." },
+                { mkt: "BURSA", country: "Malaysia", class: "EMERGING MKT", title: "T+1 Settlement Feasibility Assessment", eta: "Phase 1 Review: Mid-2027", segment: "Settlement M...", new: true, details: "Assessing operational readiness for global T+1 alignment." },
+                { mkt: "IDX", country: "Indonesia", class: "EMERGING MKT", title: "Intraday Short Selling Expansion Framework", eta: "Target Rollout: Late 2026", segment: "Trading Mech...", new: true, details: "Expands eligible pool for regulated short sales." },
+                { mkt: "PSE", country: "Philippines", class: "EMERGING MKT", title: "Short Selling Rollout & Securities Lending Facility Inte...", eta: "Target Phased Launch: 2027", segment: "Trading Mech...", new: false, details: "Integration with central lending facility." },
+                { mkt: "NZX", country: "New Zealand", class: "DEVELOPED MKT", title: "Core Trading System API Standardization Upgrade...", eta: "Target Rollout: Early 2027", segment: "Market Infrast...", new: false, details: "Upgrading core protocols to FIX 5.0 SP2 standard." },
+                { mkt: "VSE", country: "Vietnam", class: "EMERGING MKT", title: "KRX Trading Infrastructure Activation & T+0 Settlemen...", eta: "Target Launch: Mid-2027", segment: "Market Infrast...", new: false, details: "KRX core tech platform migration final phase." }
+            ],
+            historical: [
+                { mkt: "JPX", country: "Japan", class: "DEVELOPED MKT", title: "TSE Trading Session Extension & Closing Auction", eta: "Implemented Nov 5, 2024", segment: "Trading Hours", new: true, details: "30-minute extension implemented for trading sessions." },
+                { mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", title: "Severe Weather Trading (SWT) Framework", eta: "Implemented Sept 23, 2024", segment: "Market Infrast...", new: true, details: "Trading operations remain open during typhoon signals." },
+                { mkt: "SGX", country: "Singapore", class: "DEVELOPED MKT", title: "Next-Gen Iris-ST Core Trading Engine Migration", eta: "Implemented July 2026", segment: "Market Infrast...", new: true, details: "Ultra-low latency execution engine deployed." },
+                { mkt: "TWSE", country: "Taiwan", class: "DEVELOPED MKT", title: "Intraday Continuous Auction Interval Acceleration...", eta: "Implemented Late 2025", segment: "Trading Mech...", new: false, details: "Matching speed reduced to sub-millisecond cycles." },
+                { mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", title: "Program Trading Report & Real-time Colocation Overs...", eta: "Implemented May 2025", segment: "Market Infrast...", new: false, details: "Algorithmic trader reporting compliance system active." },
+                { mkt: "SET", country: "Thailand", class: "EMERGING MKT", title: "Algorithmic Order Throttle & Circuit Breaker Optimizat...", eta: "Implemented Q2 2025", segment: "Trading Mech...", new: false, details: "Dynamic price band throttling enabled." },
+                { mkt: "KRX", country: "South Korea", class: "DEVELOPED MKT", title: "Next-Gen ATS Linkage & Night Session Rollout", eta: "Target Mid-2026", segment: "Trading Hours", new: true, details: "Alternative trading system link deployed." }
+            ]
         };
 
-        const developedMarkets = ['jpx', 'asx', 'hkex', 'sgx', 'twse', 'krx', 'nzx'];
-        let rawPipelineDataset = []; let rawImplementedDataset = [];
-        let activeSortKeys = { pipeline: null, implemented: null };
-        let activeSortDirs = { pipeline: 'asc', implemented: 'asc' };
+        // ETA Countdown Calculator Function
+        function formatETAWithCountdown(etaString, isPipeline) {
+            if (!isPipeline) return `<div>${etaString}</div>`;
 
-        function calculateCountdown(etaText) {
-            if (!etaText) return { text: '', html: '' };
-            const clean = etaText.toLowerCase(); const now = new Date("2026-08-05"); let targetDate = null;
+            // Parse year out of string (e.g. 2026, 2027)
+            const yearMatch = etaString.match(/\b(20\d\d)\b/);
+            if (!yearMatch) return `<div>${etaString}</div>`;
 
-            if (clean.includes('nov 5, 2024')) targetDate = new Date("2024-11-05");
-            else if (clean.includes('sept 23, 2024')) targetDate = new Date("2024-09-23");
-            else if (clean.includes('q2 2025')) targetDate = new Date("2025-06-30");
-            else if (clean.includes('late 2025')) targetDate = new Date("2025-11-30");
-            else if (clean.includes('july 2026')) targetDate = new Date("2026-07-01");
-            else if (clean.includes('mid-2026')) targetDate = new Date("2026-06-30");
-            else if (clean.includes('target 2026')) targetDate = new Date("2026-12-31");
-            else if (clean.includes('early 2027')) targetDate = new Date("2027-03-31");
-            else if (clean.includes('mid-2027')) targetDate = new Date("2027-06-30");
-            else if (clean.includes('late 2026')) targetDate = new Date("2026-11-30");
-            else if (clean.includes('end-2027')) targetDate = new Date("2027-12-31");
-            else if (clean.includes('2026 / 2027')) targetDate = new Date("2027-01-01");
+            const targetYear = parseInt(yearMatch[1], 10);
+            
+            // Set conservative target date (Dec 31 of target year unless early/mid specified)
+            let month = 11; 
+            if (etaString.toLowerCase().includes("early")) month = 2; // March
+            else if (etaString.toLowerCase().includes("mid")) month = 5; // June
+            else if (etaString.toLowerCase().includes("sept")) month = 8;
 
-            if (!targetDate) return { text: '', html: '' };
-            const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
-            return diffDays < 0 ? { text: `[Passed]`, html: `<span class="countdown-ticker passed">✓ Implemented</span>` } : { text: `[${diffDays} Days To Go]`, html: `<span class="countdown-ticker upcoming">⏳ ${diffDays} Days To Go</span>` };
+            const targetDate = new Date(Date.UTC(targetYear, month, 30));
+            const now = new Date();
+            
+            const diffTime = targetDate - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            const countdownHTML = diffDays > 0 
+                ? `<span class="eta-countdown">⏳ ~${diffDays} days remaining</span>` 
+                : `<span class="eta-countdown" style="color: #10b981;">⚡ Pending Deployment</span>`;
+
+            return `
+                <div class="eta-container">
+                    <div>${etaString}</div>
+                    ${countdownHTML}
+                </div>
+            `;
         }
 
-        function formatImpact(impactText) {
-            if (!impactText) return 'No metrics logged.';
-            let listItems = '';
-            impactText.split('\n').forEach(line => {
-                let cleanLine = line.replace(/^[•\s\-]+/, '').trim();
-                if (cleanLine) listItems += `<li>${cleanLine}</li>`;
-            });
-            return listItems ? `<ul class="impact-list">${listItems}</ul>` : 'No metrics parsed.';
-        }
+        // Render Table Rows
+        function renderTable(tableBodyId, dataList, isPipeline) {
+            const body = document.getElementById(tableBodyId);
+            body.innerHTML = dataList.map((item, index) => {
+                const classBadge = item.class === "DEVELOPED MKT" ? "badge-dev" : "badge-emg";
+                const newTag = item.new ? `<span class="tag-new">NEW</span>` : "";
+                const rowId = `${tableBodyId}-row-${index}`;
 
-        let viewedInitiatives = JSON.parse(localStorage.getItem('microstructure_viewed_logs') || '[]');
-
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                let globalTimestamp = "N/A";
-                data.forEach((item) => {
-                    const ex = item.exchange || item.EXCHANGE || 'N/A'; const countryCode = item.country || item.COUNTRY || '';
-                    const init = item.initiative || item.INITIATIVE || 'N/A'; const eta = item.eta || item.ETA || 'N/A';
-                    const cat = item.category || item.CATEGORY || 'N/A'; const impactText = item.impact || item.IMPACT || '';
-                    const severity = (item.severity_level || item.SEVERITY_LEVEL || 'Normal');
-                    const timelineStatus = (item.timeline_status || item.TIMELINE_STATUS || '').toLowerCase();
-                    const directSourceUrl = item.source_url || item.SOURCE_URL || 'https://google.com';
-
-                    if(item.last_updated || item.LAST_UPDATED) globalTimestamp = item.last_updated || item.LAST_UPDATED;
-
-                    const initiativeSignature = `${ex}-${init}-${eta}`.replace(/\s+/g, '_');
-                    const countdownData = calculateCountdown(eta);
-
-                    const normalizedItem = {
-                        exchange: ex, countryFull: countryMap[countryCode.trim().toLowerCase()] || countryCode || 'Global',
-                        isDeveloped: developedMarkets.includes(ex.trim().toLowerCase()) ? 1 : 0, initiative: init,
-                        eta: eta, category: cat, severity: severity, formattedImpact: formatImpact(impactText),
-                        signature: initiativeSignature, isNew: !viewedInitiatives.includes(initiativeSignature),
-                        countdownHtml: countdownData.html, sourceUrl: directSourceUrl
-                    };
-
-                    const isImplemented = timelineStatus.includes('historical') || eta.toLowerCase().includes('implemented') || countdownData.text.includes('Passed');
-                    if (isImplemented) rawImplementedDataset.push(normalizedItem); else rawPipelineDataset.push(normalizedItem);
-                });
-                document.getElementById('agent-timestamp').textContent = globalTimestamp; applyFilters();
-            })
-            .catch(error => { document.getElementById('pipeline-loading').textContent = `❌ Sync Error: ${error.message}`; });
-
-        function applyFilters() {
-            const query = document.getElementById('masterSearch').value.toLowerCase().trim();
-            const filterArray = (arr) => arr.filter(item => item.exchange.toLowerCase().includes(query) || item.countryFull.toLowerCase().includes(query) || item.initiative.toLowerCase().includes(query) || item.category.toLowerCase().includes(query));
-            renderTableSection('pipeline', filterArray(rawPipelineDataset)); renderTableSection('implemented', filterArray(rawImplementedDataset));
-        }
-
-        function sortTable(section, key, thElement) {
-            const targetData = section === 'pipeline' ? rawPipelineDataset : rawImplementedDataset;
-            if (activeSortKeys[section] === key) activeSortDirs[section] = activeSortDirs[section] === 'asc' ? 'desc' : 'asc'; else { activeSortKeys[section] = key; activeSortDirs[section] = 'asc'; }
-            thElement.parentNode.querySelectorAll('th').forEach(th => { th.className = th.className.replace('sort-asc', '').replace('sort-desc', '').trim(); const icon = th.querySelector('.sort-icon'); if (icon) icon.textContent = '▼▲'; });
-            thElement.classList.add(activeSortDirs[section] === 'asc' ? 'sort-asc' : 'sort-desc'); thElement.querySelector('.sort-icon').textContent = activeSortDirs[section] === 'asc' ? '▲' : '▼';
-            targetData.sort((a, b) => { let valA = a[key]; let valB = b[key]; if (typeof valA === 'string') valA = valA.toLowerCase(); if (typeof valB === 'string') valB = valB.toLowerCase(); if (valA < valB) return activeSortDirs[section] === 'asc' ? -1 : 1; if (valA > valB) return activeSortDirs[section] === 'asc' ? 1 : -1; return 0; });
-            applyFilters();
-        }
-
-        function renderTableSection(section, dataset) {
-            const tbody = document.getElementById(`${section}-body`); const loadingMsg = document.getElementById(`${section}-loading`);
-            const targetTable = document.getElementById(`${section}-table`); const counterBadge = document.getElementById(`${section}-count`);
-            tbody.innerHTML = ''; counterBadge.textContent = `${dataset.length} Entries`;
-            if (dataset.length === 0) { loadingMsg.style.display = 'block'; loadingMsg.textContent = `No matches found.`; targetTable.style.display = 'none'; return; }
-            loadingMsg.style.display = 'none'; targetTable.style.display = 'table';
-
-            dataset.forEach(item => {
-                const uniqueId = `drill-${section}-${item.signature}`;
-                const classBadge = item.isDeveloped ? '<span class="class-badge developed">Developed Mkt</span>' : '<span class="class-badge emerging">Emerging Mkt</span>';
-                tbody.insertAdjacentHTML('beforeend', `
-                    <tr class="${item.isNew ? 'clickable-row is-new-row' : 'clickable-row'}" onclick="handleRowInteraction('${uniqueId}', '${item.signature}', this)">
-                        <td class="td-mkt">${item.exchange}</td><td class="td-country">${item.countryFull}</td><td class="td-classification">${classBadge}</td>
-                        <td class="td-initiative">${item.initiative}${item.isNew ? '<span class="new-entry-badge">NEW</span>' : ''}</td><td class="td-eta">${item.eta} ${item.countdownHtml}</td>
-                        <td class="td-category">${item.category}</td><td class="td-toggle" id="arrow-${uniqueId}">▼</td>
+                return `
+                    <tr onclick="toggleDetails('${rowId}')" style="cursor:pointer;">
+                        <td class="mkt-code">${item.mkt}</td>
+                        <td>${item.country}</td>
+                        <td><span class="${classBadge}">${item.class}</span></td>
+                        <td>
+                            <strong>${item.title}</strong>${newTag}
+                        </td>
+                        <td>${formatETAWithCountdown(item.eta, isPipeline)}</td>
+                        <td>${item.segment}</td>
+                        <td class="arrow-btn">▼</td>
                     </tr>
-                    <tr class="drilldown-row" id="${uniqueId}"><td colspan="7"><div class="drilldown-panel"><div class="drilldown-grid">
-                        <div class="field-label">Risk Severity:</div><div class="field-value"><span class="severity-badge ${item.severity.toLowerCase()}">${item.severity}</span></div>
-                        <div class="field-label">Detailed Impact:</div><div class="field-value">${item.formattedImpact}</div>
-                        <div class="field-label">Official Feeds:</div><div class="field-value">
-                            <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="source-link-btn" onclick="event.stopPropagation();">
-                                🔍 Locate Official Source Document
-                            </a>
-                        </div>
-                    </div></div></td></tr>
-                `);
-            });
+                    <tr id="${rowId}" class="details-row">
+                        <td colspan="7">
+                            <div class="details-content">
+                                <strong>Technical Breakdown / Notes:</strong> ${item.details}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        function handleRowInteraction(rowId, signature, masterElement) {
-            const targetedPanel = document.getElementById(rowId); const arrowIndicator = document.getElementById('arrow-' + rowId);
-            if (targetedPanel.classList.contains('active')) { targetedPanel.classList.remove('active'); arrowIndicator.textContent = '▼'; masterElement.style.backgroundColor = ''; } else {
-                targetedPanel.classList.add('active'); arrowIndicator.textContent = '▲'; masterElement.style.backgroundColor = '#0f172a';
-                if (!viewedInitiatives.includes(signature)) {
-                    viewedInitiatives.push(signature); localStorage.setItem('microstructure_viewed_logs', JSON.stringify(viewedInitiatives));
-                    masterElement.classList.remove('is-new-row'); const badge = masterElement.querySelector('.new-entry-badge'); if(badge) badge.remove();
-                    let itemMatch = rawPipelineDataset.find(x => x.signature === signature) || rawImplementedDataset.find(x => x.signature === signature); if(itemMatch) itemMatch.isNew = false;
-                }
+        // Toggle Details Row Expansion
+        function toggleDetails(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.style.display = row.style.display === "table-row" ? "none" : "table-row";
             }
         }
+
+        // Filter Functionality
+        function filterTables() {
+            const query = document.getElementById('filter-input').value.toLowerCase();
+            
+            ["pipeline-body", "historical-body"].forEach(bodyId => {
+                const rows = document.querySelectorAll(`#${bodyId} tr:not(.details-row)`);
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    const detailsRow = row.nextElementSibling;
+                    if (text.includes(query)) {
+                        row.style.display = "table-row";
+                    } else {
+                        row.style.display = "none";
+                        if (detailsRow && detailsRow.classList.contains('details-row')) {
+                            detailsRow.style.display = "none";
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize Data and Page Metrics
+        function initPage() {
+            document.getElementById('last-sync-display').innerText = `💻 Last Sync Check: ${ledgerData.last_sync}`;
+            
+            renderTable('pipeline-body', ledgerData.pipeline, true);
+            renderTable('historical-body', ledgerData.historical, false);
+
+            document.getElementById('pipeline-count').innerText = `${ledgerData.pipeline.length} Entries`;
+            document.getElementById('historical-count').innerText = `${ledgerData.historical.length} Entries`;
+        }
+
+        // Run initialization
+        initPage();
     </script>
 </body>
 </html>
