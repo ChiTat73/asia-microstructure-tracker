@@ -58,7 +58,7 @@
             gap: 16px;
         }
 
-        /* Action Link Button */
+        /* Microstructure Navigation Button */
         .btn-microstructure {
             background: #0f172a;
             color: #60a5fa;
@@ -257,18 +257,6 @@
             font-size: 0.8rem;
             text-align: center;
         }
-
-        .details-row {
-            background-color: #070a12;
-            display: none;
-        }
-
-        .details-content {
-            padding: 12px;
-            color: #94a3b8;
-            font-size: 0.8rem;
-            line-height: 1.5;
-        }
     </style>
 </head>
 <body>
@@ -279,7 +267,7 @@
             <p>Automated structural change logging repository.</p>
         </div>
         <div class="header-right">
-            <!-- Market Microstructure Action Link -->
+            <!-- Market Microstructure Action Button -->
             <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure" target="_blank">
                 ⚡ Markets microstructure ↗
             </a>
@@ -407,43 +395,32 @@
             `;
         }
 
-        // Render Table Rows
+        // Render Table Rows with Inline Technical Details
         function renderTable(tableBodyId, dataList, isPipeline) {
             const body = document.getElementById(tableBodyId);
-            body.innerHTML = dataList.map((item, index) => {
+            body.innerHTML = dataList.map((item) => {
                 const classBadge = item.class === "DEVELOPED MKT" ? "badge-dev" : "badge-emg";
                 const newTag = item.new ? `<span class="tag-new">NEW</span>` : "";
-                const rowId = `${tableBodyId}-row-${index}`;
 
                 return `
-                    <tr onclick="toggleDetails('${rowId}')" style="cursor:pointer;">
+                    <tr>
                         <td class="mkt-code">${item.mkt}</td>
                         <td>${item.country}</td>
                         <td><span class="${classBadge}">${item.class}</span></td>
                         <td>
-                            <strong>${item.title}</strong>${newTag}
+                            <div style="font-weight: 700; margin-bottom: 6px;">
+                                ${item.title}${newTag}
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                                <strong style="color: #94a3b8;">Technical Breakdown / Notes:</strong> ${item.details}
+                            </div>
                         </td>
                         <td>${formatETAWithCountdown(item.eta, isPipeline)}</td>
                         <td>${item.segment}</td>
                         <td class="arrow-btn">▼</td>
                     </tr>
-                    <tr id="${rowId}" class="details-row">
-                        <td colspan="7">
-                            <div class="details-content">
-                                <strong>Technical Breakdown / Notes:</strong> ${item.details}
-                            </div>
-                        </td>
-                    </tr>
                 `;
             }).join('');
-        }
-
-        // Toggle Details Row Expansion
-        function toggleDetails(rowId) {
-            const row = document.getElementById(rowId);
-            if (row) {
-                row.style.display = row.style.display === "table-row" ? "none" : "table-row";
-            }
         }
 
         // Filter Functionality
@@ -451,18 +428,10 @@
             const query = document.getElementById('filter-input').value.toLowerCase();
             
             ["pipeline-body", "historical-body"].forEach(bodyId => {
-                const rows = document.querySelectorAll(`#${bodyId} tr:not(.details-row)`);
+                const rows = document.querySelectorAll(`#${bodyId} tr`);
                 rows.forEach(row => {
                     const text = row.innerText.toLowerCase();
-                    const detailsRow = row.nextElementSibling;
-                    if (text.includes(query)) {
-                        row.style.display = "table-row";
-                    } else {
-                        row.style.display = "none";
-                        if (detailsRow && detailsRow.classList.contains('details-row')) {
-                            detailsRow.style.display = "none";
-                        }
-                    }
+                    row.style.display = text.includes(query) ? "table-row" : "none";
                 });
             });
         }
