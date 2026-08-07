@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APAC Stock Exchange Change Microstructure</title>
+    <title>APAC Stock Exchange Microstructure & Regulatory Ledger</title>
+
+    <!-- Vis.js Timeline CSS for Interactive Gantt Roadmap -->
+    <link href="https://unpkg.com/vis-timeline/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+
     <style>
         :root {
             --bg-color: #05070d;
@@ -58,7 +62,7 @@
             gap: 16px;
         }
 
-        /* Header Action Button */
+        /* Action Link Button */
         .btn-microstructure {
             background: #0f172a;
             color: #60a5fa;
@@ -91,20 +95,11 @@
             text-align: right;
         }
 
-        .status-line {
-            margin-bottom: 4px;
-        }
+        .status-line { margin-bottom: 4px; }
+        .status-line:last-child { margin-bottom: 0; }
+        .status-online { color: var(--accent-green); font-weight: 600; }
 
-        .status-line:last-child {
-            margin-bottom: 0;
-        }
-
-        .status-online {
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-
-        /* Search Filter Bar */
+        /* Search Filter Input */
         .search-container {
             position: relative;
             margin-bottom: 24px;
@@ -135,7 +130,7 @@
             font-size: 0.9rem;
         }
 
-        /* Section Banner */
+        /* Section Banner Headers */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -155,6 +150,7 @@
 
         .pipeline-title { color: #f59e0b; }
         .historical-title { color: var(--accent-green); }
+        .roadmap-title { color: #60a5fa; }
 
         .entry-count-badge {
             background: #1e293b;
@@ -165,7 +161,37 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Tables */
+        /* Gantt Chart Container */
+        #visualization {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 24px;
+        }
+
+        .vis-timeline {
+            border: none !important;
+            font-family: inherit !important;
+            background: transparent !important;
+        }
+
+        .vis-item {
+            border-radius: 4px !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            border-width: 1px !important;
+        }
+
+        .vis-item.high-impact { background-color: #7f1d1d !important; border-color: #fca5a5 !important; }
+        .vis-item.med-impact { background-color: #7c2d12 !important; border-color: #fdba74 !important; }
+        .vis-item.low-impact { background-color: #064e3b !important; border-color: #6ee7b7 !important; }
+
+        .vis-time-axis .vis-text { color: var(--text-muted) !important; }
+        .vis-grid.vis-minor, .vis-grid.vis-major { border-color: #1a2234 !important; }
+
+        /* Tables & Wrappers */
         .table-wrapper {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -207,127 +233,35 @@
             transition: background-color 0.15s ease;
         }
 
-        tr.clickable-row:hover { 
-            background-color: var(--table-row-hover); 
-        }
+        tr.clickable-row:hover { background-color: var(--table-row-hover); }
 
-        /* Badges & Tags */
-        .mkt-code {
-            color: #60a5fa;
-            font-weight: 700;
-        }
+        /* Badges & Category Labels */
+        .mkt-code { color: #60a5fa; font-weight: 700; }
+        .badge-dev { background: var(--badge-dev-bg); color: var(--badge-dev-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        .badge-emg { background: var(--badge-emg-bg); color: var(--badge-emg-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        .tag-new { background: var(--new-tag-bg); color: var(--new-tag-text); font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 3px; }
 
-        .badge-dev {
-            background: var(--badge-dev-bg);
-            color: var(--badge-dev-text);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+        .badge-impact-high { background: #450a0a; color: #fca5a5; border: 1px solid #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
+        .badge-impact-med { background: #451a03; color: #fdba74; border: 1px solid #9a3412; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
+        .badge-impact-low { background: #064e3b; color: #6ee7b7; border: 1px solid #065f46; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
 
-        .badge-emg {
-            background: var(--badge-emg-bg);
-            color: var(--badge-emg-text);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
+        .eta-container { display: flex; flex-direction: column; gap: 3px; }
+        .eta-countdown { color: var(--accent-blue); font-size: 0.75rem; font-weight: 600; }
 
-        .tag-new {
-            background: var(--new-tag-bg);
-            color: var(--new-tag-text);
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 1px 5px;
-            border-radius: 3px;
-        }
+        .arrow-btn { color: var(--text-muted); font-size: 0.8rem; text-align: center; }
 
-        /* Impact Badges */
-        .badge-impact-high {
-            background: #450a0a;
-            color: #fca5a5;
-            border: 1px solid #991b1b;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 800;
-        }
-
-        .badge-impact-med {
-            background: #451a03;
-            color: #fdba74;
-            border: 1px solid #9a3412;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 800;
-        }
-
-        .badge-impact-low {
-            background: #064e3b;
-            color: #6ee7b7;
-            border: 1px solid #065f46;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 800;
-        }
-
-        .eta-container {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .eta-countdown {
-            color: var(--accent-blue);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .arrow-btn {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-align: center;
-            user-select: none;
-        }
-
-        /* Expandable Accordion Panel */
-        .details-row {
-            display: none;
-            background-color: #070a12;
-        }
-
-        .details-row td {
-            padding: 14px 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .details-card {
-            background: #0d121f;
-            border: 1px solid #1e293b;
-            border-radius: 6px;
-            padding: 14px;
-            color: #cbd5e1;
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-
-        .details-card h4 {
-            margin: 0 0 6px 0;
-            color: #60a5fa;
-            font-size: 0.85rem;
-        }
+        .details-row { display: none; background-color: #070a12; }
+        .details-row td { padding: 14px 20px; border-bottom: 1px solid var(--border-color); }
+        .details-card { background: #0d121f; border: 1px solid #1e293b; border-radius: 6px; padding: 14px; color: #cbd5e1; font-size: 0.82rem; line-height: 1.5; }
+        .details-card h4 { margin: 0 0 6px 0; color: #60a5fa; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
     <header class="header-container">
         <div class="title-area">
-            <h1>APAC stock exchange change Microstructure</h1>
-            <p>Automated structural change logging repository.</p>
+            <h1>APAC Stock Exchange Change Microstructure</h1>
+            <p>Automated structural change logging repository covering all major APAC markets.</p>
         </div>
         <div class="header-right">
             <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure" target="_blank">
@@ -342,13 +276,21 @@
 
     <div class="search-container">
         <span class="search-icon">🔍</span>
-        <input type="text" id="filter-input" class="search-input" placeholder="Filter ledger by market, country, impact level or keyword..." onkeyup="filterTables()">
+        <input type="text" id="filter-input" class="search-input" placeholder="Filter ledger across all 14 APAC markets by exchange, country, impact or keyword..." onkeyup="filterTables()">
     </div>
+
+    <!-- VISUAL ROADMAP GANTT CHART SECTION -->
+    <div class="section-header">
+        <div class="section-title roadmap-title">
+            <span>📊 ALL-APAC REGULATORY & MICROSTRUCTURE ROADMAP (GANTT VIEW)</span>
+        </div>
+    </div>
+    <div id="visualization"></div>
 
     <!-- PIPELINE SECTION -->
     <div class="section-header">
         <div class="section-title pipeline-title">
-            <span>⌛ UPCOMING CHANGES / PIPELINE (Click headers to sort)</span>
+            <span>⌛ UPCOMING CHANGES / PIPELINE</span>
         </div>
         <span class="entry-count-badge" id="pipeline-count">0 Entries</span>
     </div>
@@ -366,16 +308,14 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="pipeline-body">
-                <!-- Pipeline Rows -->
-            </tbody>
+            <tbody id="pipeline-body"></tbody>
         </table>
     </div>
 
     <!-- HISTORICAL SECTION -->
     <div class="section-header">
         <div class="section-title historical-title">
-            <span>✅ COMPLETED / IMPLEMENTED HISTORICAL (Click headers to sort)</span>
+            <span>✅ COMPLETED / IMPLEMENTED HISTORICAL</span>
         </div>
         <span class="entry-count-badge" id="historical-count">0 Entries</span>
     </div>
@@ -393,139 +333,166 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="historical-body">
-                <!-- Historical Rows -->
-            </tbody>
+            <tbody id="historical-body"></tbody>
         </table>
     </div>
 
+    <!-- Vis.js Timeline JS Script -->
+    <script src="https://unpkg.com/vis-timeline/standalone/umd/vis-timeline-graph2d.min.js"></script>
+
     <script>
+        // Comprehensive Dataset Covering All Major APAC Stock Markets
         const ledgerData = {
             last_sync: "Aug 07, 2026 10:07 HKT",
             pipeline: [
                 { 
                     mkt: "ASX", country: "Australia", class: "DEVELOPED MKT", impact: "HIGH",
-                    title: "CHESS Core Clearing Replacement Program (Phase 1)...", 
-                    summary: "Core clearing replacement architecture migration testing.",
-                    eta: "Target Release: 2026 / 2027", segment: "Settlement M...", new: false, 
-                    fullDetails: "Comprehensive migration of legacy CHESS database infrastructure to a high-availability distributed network model. Includes API gateway updates for broker-dealer connectivity and standardized ISO 20022 messaging integrations." 
+                    title: "CHESS Replacement Program Migration (Phase 1)", 
+                    summary: "Clearing architecture upgrade to distributed messaging.",
+                    eta: "Target Release: Late 2026", startDate: "2026-11-01", segment: "Settlement M...", new: false, 
+                    fullDetails: "Migration of legacy CHESS database infrastructure to a high-availability distributed model with ISO 20022 messaging standards." 
                 },
                 { 
-                    mkt: "NSE", country: "India", class: "EMERGING MKT", impact: "HIGH",
-                    title: "Instantaneous T+0 Cross-Settlement Phase Extension...", 
-                    summary: "Real-time gross settlement option expansion across market participants.",
-                    eta: "Rolling Phases Through 2026", segment: "Settlement M...", new: false, 
-                    fullDetails: "Extends optional T+0 settlement cycles to top 500 equity listings. Enables direct clearing house interface routing for instantaneous institutional delivery-versus-payment (DVP)." 
+                    mkt: "NSE / BSE", country: "India", class: "EMERGING MKT", impact: "HIGH",
+                    title: "T+0 Instant Settlement Phase Expansion", 
+                    summary: "Extends optional instant gross clearance across top 500 listings.",
+                    eta: "Rolling Phases Through 2026", startDate: "2026-12-15", segment: "Settlement M...", new: false, 
+                    fullDetails: "Provides instantaneous delivery-versus-payment (DVP) settlement capabilities across expanded institutional participant groups." 
                 },
                 { 
                     mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", impact: "MEDIUM",
                     title: "Standardized Board Lot Optimization Framework", 
-                    summary: "Reduces odd-lot friction across securities listings.",
-                    eta: "Phase 1 Launch: Target 2027", segment: "Trading Mech...", new: true, 
-                    fullDetails: "Standardizes disparate board lot sizes down to automated multi-tier buckets. Improves liquidity and narrow bid-ask spreads while minimizing market fragmentations in secondary odd-lot matching." 
+                    summary: "Reduces odd-lot friction and standardizes order lot buckets.",
+                    eta: "Phase 1 Launch: Target 2027", startDate: "2027-03-31", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Harmonizes board lot sizes to reduce secondary odd-lot discount spreads and enhance retail-institutional order matching." 
                 },
                 { 
                     mkt: "SZSE", country: "Mainland China", class: "EMERGING MKT", impact: "MEDIUM",
-                    title: "ChiNext Multi-Tier Board Lot Alignment", 
-                    summary: "Aligns board sizes across growth enterprise tiers.",
-                    eta: "Target Launch: Early 2027", segment: "Trading Mech...", new: true, 
-                    fullDetails: "Harmonizes order sizing and price band tick rules for retail and institutional traders on ChiNext growth listings." 
+                    title: "ChiNext Growth Board Lot & Price Band Alignment", 
+                    summary: "Standardizes tick sizes across growth enterprise listings.",
+                    eta: "Target Launch: Early 2027", startDate: "2027-02-15", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Aligns price dynamic bands and minimum tick increments for institutional algorithmic execution on ChiNext." 
                 },
                 { 
                     mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", impact: "HIGH",
-                    title: "A-Share T+0 Intraday Settlement Pilot Assessment...", 
-                    summary: "Intraday liquidity pilot for institutionally matched blocks.",
-                    eta: "Feasibility Phase: End-2026", segment: "Settlement M...", new: false, 
-                    fullDetails: "Controlled sandbox testing of intraday churn and liquidity impact under capped volatility controls for qualified institutional investors." 
+                    title: "A-Share T+0 Intraday Settlement Sandbox Pilot", 
+                    summary: "Assesses intraday settlement churn for qualified institutional accounts.",
+                    eta: "Feasibility Phase: End-2026", startDate: "2026-12-31", segment: "Settlement M...", new: false, 
+                    fullDetails: "Controlled sandbox testing of intraday liquidity cycles under capped volatility and short-selling controls." 
                 },
                 { 
                     mkt: "BURSA", country: "Malaysia", class: "EMERGING MKT", impact: "HIGH",
-                    title: "T+1 Settlement Feasibility Assessment", 
-                    summary: "Assessing operational readiness for global T+1 alignment.",
-                    eta: "Phase 1 Review: Mid-2027", segment: "Settlement M...", new: true, 
-                    fullDetails: "Feasibility evaluation and operational roadmap to shorten standard clearance timelines from T+2 to T+1, aligning with US and APAC peer standards." 
+                    title: "T+1 Settlement Cycle Readiness Framework", 
+                    summary: "Operational roadmap for shortening settlement cycles from T+2 to T+1.",
+                    eta: "Phase 1 Review: Mid-2027", startDate: "2027-06-30", segment: "Settlement M...", new: true, 
+                    fullDetails: "Aligns clearing participant facilities with US and regional T+1 settlement acceleration standardizations." 
                 },
                 { 
                     mkt: "IDX", country: "Indonesia", class: "EMERGING MKT", impact: "MEDIUM",
-                    title: "Intraday Short Selling Expansion Framework", 
-                    summary: "Expands eligible pool for regulated short sales.",
-                    eta: "Target Rollout: Late 2026", segment: "Trading Mech...", new: true, 
-                    fullDetails: "Modernizes securities borrowing and lending (SBL) mechanisms and automated uptick rule checks across IDX80 constituents." 
+                    title: "Regulated Short Selling Expansion & Dynamic Uptick Framework", 
+                    summary: "Expands short selling pool across IDX80 index constituents.",
+                    eta: "Target Rollout: Late 2026", startDate: "2026-10-15", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Modernizes securities borrowing and lending (SBL) protocols with automated pre-trade borrow validation." 
                 },
                 { 
                     mkt: "PSE", country: "Philippines", class: "EMERGING MKT", impact: "MEDIUM",
-                    title: "Short Selling Rollout & Securities Lending Facility Inte...", 
-                    summary: "Integration with central lending facility.",
-                    eta: "Target Phased Launch: 2027", segment: "Trading Mech...", new: false, 
-                    fullDetails: "Connects clearing participant systems with centralized securities lending pools for automated real-time borrow verification." 
+                    title: "Securities Lending & Short Selling Integration", 
+                    summary: "Central clearing facility linkage for verified stock borrows.",
+                    eta: "Target Phased Launch: 2027", startDate: "2027-04-01", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Integrates central clearing participant interfaces with automated lending pools for real-time borrow verification." 
                 },
                 { 
                     mkt: "NZX", country: "New Zealand", class: "DEVELOPED MKT", impact: "LOW",
-                    title: "Core Trading System API Standardization Upgrade...", 
-                    summary: "Upgrading core protocols to FIX 5.0 SP2 standard.",
-                    eta: "Target Rollout: Early 2027", segment: "Market Infrast...", new: false, 
-                    fullDetails: "Upgrades gateway architecture to ultra-low latency FIX 5.0 SP2 protocols, offering high-frequency algorithmic order entry options." 
+                    title: "Core Trading Gateway FIX 5.0 SP2 Standardization", 
+                    summary: "Upgrades matching engine connectivity protocols.",
+                    eta: "Target Rollout: Early 2027", startDate: "2027-01-20", segment: "Market Infrast...", new: false, 
+                    fullDetails: "Deploys ultra-low-latency FIX 5.0 SP2 gateway architecture to optimize algorithmic order flow management." 
                 },
                 { 
-                    mkt: "VSE", country: "Vietnam", class: "EMERGING MKT", impact: "HIGH",
-                    title: "KRX Trading Infrastructure Activation & T+0 Settlemen...", 
-                    summary: "KRX core tech platform migration final phase.",
-                    eta: "Target Launch: Mid-2027", segment: "Market Infrast...", new: false, 
-                    fullDetails: "Full integration of KRX platform to support short selling, pre-funded T+0 clearing, and central counterparty (CCP) clearing workflows." 
+                    mkt: "HOSE / VSE", country: "Vietnam", class: "EMERGING MKT", impact: "HIGH",
+                    title: "KRX Core IT Platform Cutover & Central Counterparty CCP Launch", 
+                    summary: "New core tech infrastructure activation supporting non-prefunding.",
+                    eta: "Target Launch: Mid-2027", startDate: "2027-05-15", segment: "Market Infrast...", new: false, 
+                    fullDetails: "Completes KRX tech platform migration enabling central counterparty clearing, intra-day trading, and reduced pre-funding hurdles." 
                 }
             ],
             historical: [
                 { 
-                    mkt: "JPX", country: "Japan", class: "DEVELOPED MKT", impact: "MEDIUM",
-                    title: "TSE Trading Session Extension & Closing Auction", 
-                    summary: "30-minute extension implemented for trading sessions.",
-                    eta: "Implemented Nov 5, 2024", segment: "Trading Hours", new: true, 
-                    fullDetails: "Extended daily cash equity trading session close to 15:30 JST along with introducing a standardized 5-minute closing auction session." 
+                    mkt: "JPX / TSE", country: "Japan", class: "DEVELOPED MKT", impact: "MEDIUM",
+                    title: "TSE Trading Session Extension & Closing Auction Implementation", 
+                    summary: "Extended cash equity trading close to 15:30 JST with a 5-minute closing auction.",
+                    eta: "Implemented Nov 5, 2024", startDate: "2024-11-05", segment: "Trading Hours", new: true, 
+                    fullDetails: "Extended the trading session by 30 minutes to boost end-of-day liquidity and standardizing closing price discovery." 
                 },
                 { 
                     mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", impact: "HIGH",
-                    title: "Severe Weather Trading (SWT) Framework", 
-                    summary: "Trading operations remain open during typhoon signals.",
-                    eta: "Implemented Sept 23, 2024", segment: "Market Infrast...", new: true, 
-                    fullDetails: "Enables continuous market operation during severe typhoons (Signal 8+) and extreme conditions via remote clearing and banking support." 
+                    title: "Severe Weather Trading (SWT) Continuous Operation Framework", 
+                    summary: "Markets remain fully open during severe typhoons and extreme weather.",
+                    eta: "Implemented Sept 23, 2024", startDate: "2024-09-23", segment: "Market Infrast...", new: true, 
+                    fullDetails: "Enables continuous electronic trading and clearing operational readiness during Signal 8+ typhoon conditions." 
                 },
                 { 
                     mkt: "SGX", country: "Singapore", class: "DEVELOPED MKT", impact: "HIGH",
-                    title: "Next-Gen Iris-ST Core Trading Engine Migration", 
-                    summary: "Ultra-low latency execution engine deployed.",
-                    eta: "Implemented July 2026", segment: "Market Infrast...", new: true, 
-                    fullDetails: "Full cutover to low-latency matching engine yielding sub-millisecond execution cycles for derivatives and equity markets." 
+                    title: "Iris-ST Next-Gen Low-Latency Matching Engine Migration", 
+                    summary: "Deployed sub-millisecond execution matching engine for equity & derivatives.",
+                    eta: "Implemented July 2026", startDate: "2026-07-01", segment: "Market Infrast...", new: true, 
+                    fullDetails: "Upgraded core matching architecture providing sub-millisecond execution cycles and modernized risk gateways." 
                 },
                 { 
                     mkt: "TWSE", country: "Taiwan", class: "DEVELOPED MKT", impact: "LOW",
-                    title: "Intraday Continuous Auction Interval Acceleration...", 
-                    summary: "Matching speed reduced to sub-millisecond cycles.",
-                    eta: "Implemented Late 2025", segment: "Trading Mech...", new: false, 
-                    fullDetails: "Reduced matching intervals and modernized order routing bandwidth for market makers." 
-                },
-                { 
-                    mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", impact: "MEDIUM",
-                    title: "Program Trading Report & Real-time Colocation Overs...", 
-                    summary: "Algorithmic trader reporting compliance system active.",
-                    eta: "Implemented May 2025", segment: "Market Infrast...", new: false, 
-                    fullDetails: "Mandated reporting structures for automated algorithmic and high-frequency trading accounts." 
-                },
-                { 
-                    mkt: "SET", country: "Thailand", class: "EMERGING MKT", impact: "LOW",
-                    title: "Algorithmic Order Throttle & Circuit Breaker Optimizat...", 
-                    summary: "Dynamic price band throttling enabled.",
-                    eta: "Implemented Q2 2025", segment: "Trading Mech...", new: false, 
-                    fullDetails: "Integrated dynamic multi-tiered volatility circuit breakers to manage algorithmic order spikes." 
+                    title: "Continuous Auction Micro-Interval Matching Acceleration", 
+                    summary: "Reduced matching intervals and modernized order routing bandwidth.",
+                    eta: "Implemented Late 2025", startDate: "2025-11-15", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Accelerates order execution throughput for retail and high-frequency institutional market makers." 
                 },
                 { 
                     mkt: "KRX", country: "South Korea", class: "DEVELOPED MKT", impact: "MEDIUM",
-                    title: "Next-Gen ATS Linkage & Night Session Rollout", 
-                    summary: "Alternative trading system link deployed.",
-                    eta: "Target Mid-2026", segment: "Trading Hours", new: true, 
-                    fullDetails: "Established off-hours multilateral trading facility connections to handle off-exchange trading liquidity." 
+                    title: "Next-Gen Alternative Trading System (ATS) Linkage", 
+                    summary: "Off-hours multilateral trading facility integration.",
+                    eta: "Implemented Mid-2026", startDate: "2026-06-15", segment: "Trading Hours", new: true, 
+                    fullDetails: "Integrated off-exchange trading venues to expand retail and institutional trading flexibility outside regular cash hours." 
+                },
+                { 
+                    mkt: "SET", country: "Thailand", class: "EMERGING MKT", impact: "LOW",
+                    title: "Dynamic Circuit Breaker & Auto-Throttling Rules", 
+                    summary: "Dynamic volatility price bands to control algorithmic spikes.",
+                    eta: "Implemented Q2 2025", startDate: "2025-05-10", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Introduced multi-tiered dynamic circuit breakers to manage short-duration order imbalances and algorithmic spikes." 
                 }
             ]
         };
+
+        // Render Interactive Gantt Roadmap Chart
+        function initGanttChart() {
+            const container = document.getElementById('visualization');
+            const items = new vis.DataSet();
+
+            let idCounter = 1;
+            [...ledgerData.pipeline, ...ledgerData.historical].forEach(item => {
+                let className = "low-impact";
+                if (item.impact === "HIGH") className = "high-impact";
+                if (item.impact === "MEDIUM") className = "med-impact";
+
+                items.add({
+                    id: idCounter++,
+                    content: `<b>[${item.mkt}]</b> ${item.title}`,
+                    start: item.startDate,
+                    className: className
+                });
+            });
+
+            const options = {
+                height: '260px',
+                stack: true,
+                style: 'box',
+                horizontalScroll: true,
+                zoomKey: 'ctrlKey',
+                start: '2026-06-01',
+                end: '2027-08-01'
+            };
+
+            new vis.Timeline(container, items, options);
+        }
 
         // ETA Countdown Calculator
         function formatETAWithCountdown(etaString, isPipeline) {
@@ -539,7 +506,6 @@
             let month = 11; 
             if (etaString.toLowerCase().includes("early")) month = 2;
             else if (etaString.toLowerCase().includes("mid")) month = 5;
-            else if (etaString.toLowerCase().includes("sept")) month = 8;
 
             const targetDate = new Date(Date.UTC(targetYear, month, 30));
             const now = new Date();
@@ -551,15 +517,10 @@
                 ? `<span class="eta-countdown">⏳ ~${diffDays} days remaining</span>` 
                 : `<span class="eta-countdown" style="color: #10b981;">⚡ Pending Deployment</span>`;
 
-            return `
-                <div class="eta-container">
-                    <div>${etaString}</div>
-                    ${countdownHTML}
-                </div>
-            `;
+            return `<div class="eta-container"><div>${etaString}</div>${countdownHTML}</div>`;
         }
 
-        // Render Table Rows with Badges & Accordion Details
+        // Render Table Rows
         function renderTable(tableBodyId, dataList, isPipeline) {
             const body = document.getElementById(tableBodyId);
             body.innerHTML = dataList.map((item, index) => {
@@ -567,13 +528,9 @@
                 const newTag = item.new ? `<span class="tag-new">NEW</span>` : "";
 
                 let impactBadge = "";
-                if (item.impact === "HIGH") {
-                    impactBadge = `<span class="badge-impact-high">HIGH IMPACT</span>`;
-                } else if (item.impact === "MEDIUM") {
-                    impactBadge = `<span class="badge-impact-med">MED IMPACT</span>`;
-                } else {
-                    impactBadge = `<span class="badge-impact-low">LOW IMPACT</span>`;
-                }
+                if (item.impact === "HIGH") impactBadge = `<span class="badge-impact-high">HIGH IMPACT</span>`;
+                else if (item.impact === "MEDIUM") impactBadge = `<span class="badge-impact-med">MED IMPACT</span>`;
+                else impactBadge = `<span class="badge-impact-low">LOW IMPACT</span>`;
 
                 const rowId = `${tableBodyId}-detail-${index}`;
                 const arrowId = `${tableBodyId}-arrow-${index}`;
@@ -588,7 +545,7 @@
                                 ${impactBadge} ${item.title}${newTag}
                             </div>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">
-                                <strong style="color: #94a3b8;">Technical Breakdown / Notes:</strong> ${item.summary}
+                                <strong style="color: #94a3b8;">Technical Breakdown:</strong> ${item.summary}
                             </div>
                         </td>
                         <td>${formatETAWithCountdown(item.eta, isPipeline)}</td>
@@ -598,7 +555,7 @@
                     <tr id="${rowId}" class="details-row">
                         <td colspan="7">
                             <div class="details-card">
-                                <h4>🔍 Extended Structural Details & Regulatory Notes (${item.mkt} - ${item.country}):</h4>
+                                <h4>🔍 Market Structure Impact Details (${item.mkt} - ${item.country}):</h4>
                                 <p style="margin: 0;">${item.fullDetails}</p>
                             </div>
                         </td>
@@ -607,11 +564,9 @@
             }).join('');
         }
 
-        // Toggle Details Row
         function toggleDetails(rowId, arrowId) {
             const detailRow = document.getElementById(rowId);
             const arrow = document.getElementById(arrowId);
-            
             if (detailRow.style.display === "table-row") {
                 detailRow.style.display = "none";
                 if (arrow) arrow.innerText = "▼";
@@ -621,16 +576,13 @@
             }
         }
 
-        // Search Filter
         function filterTables() {
             const query = document.getElementById('filter-input').value.toLowerCase();
-            
             ["pipeline-body", "historical-body"].forEach(bodyId => {
                 const mainRows = document.querySelectorAll(`#${bodyId} tr.clickable-row`);
                 mainRows.forEach(row => {
                     const text = row.innerText.toLowerCase();
                     const detailRow = row.nextElementSibling;
-                    
                     if (text.includes(query)) {
                         row.style.display = "table-row";
                     } else {
@@ -643,15 +595,14 @@
             });
         }
 
-        // Page Initialization
         function initPage() {
             document.getElementById('last-sync-display').innerText = `💻 Last Sync Check: ${ledgerData.last_sync}`;
-            
             renderTable('pipeline-body', ledgerData.pipeline, true);
             renderTable('historical-body', ledgerData.historical, false);
-
             document.getElementById('pipeline-count').innerText = `${ledgerData.pipeline.length} Entries`;
             document.getElementById('historical-count').innerText = `${ledgerData.historical.length} Entries`;
+            
+            initGanttChart();
         }
 
         initPage();
