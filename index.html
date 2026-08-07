@@ -58,7 +58,7 @@
             gap: 16px;
         }
 
-        /* Microstructure Navigation Button */
+        /* Header Action Button */
         .btn-microstructure {
             background: #0f172a;
             color: #60a5fa;
@@ -202,8 +202,14 @@
             vertical-align: top;
         }
 
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background-color: var(--table-row-hover); }
+        tr.clickable-row {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        tr.clickable-row:hover { 
+            background-color: var(--table-row-hover); 
+        }
 
         /* Custom Column Elements */
         .mkt-code {
@@ -253,9 +259,37 @@
 
         .arrow-btn {
             color: var(--text-muted);
-            cursor: pointer;
             font-size: 0.8rem;
             text-align: center;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        /* Expandable Drill-Down Details Row */
+        .details-row {
+            display: none;
+            background-color: #070a12;
+        }
+
+        .details-row td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .details-card {
+            background: #0d121f;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 14px;
+            color: #cbd5e1;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .details-card h4 {
+            margin: 0 0 6px 0;
+            color: #60a5fa;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -267,8 +301,8 @@
             <p>Automated structural change logging repository.</p>
         </div>
         <div class="header-right">
-            <!-- Market Microstructure Action Button -->
-            <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure">
+            <!-- Market Microstructure Header Button -->
+            <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure" target="_blank">
                 ⚡ Markets microstructure ↗
             </a>
             <div class="status-box">
@@ -341,25 +375,127 @@
         const ledgerData = {
             last_sync: "Aug 07, 2026 10:07 HKT",
             pipeline: [
-                { mkt: "ASX", country: "Australia", class: "DEVELOPED MKT", title: "CHESS Core Clearing Replacement Program (Phase 1)...", eta: "Target Release: 2026 / 2027", segment: "Settlement M...", new: false, details: "Core clearing replacement architecture migration testing." },
-                { mkt: "NSE", country: "India", class: "EMERGING MKT", title: "Instantaneous T+0 Cross-Settlement Phase Extension...", eta: "Rolling Phases Through 2026", segment: "Settlement M...", new: false, details: "Real-time gross settlement option expansion across market participants." },
-                { mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", title: "Standardized Board Lot Optimization Framework", eta: "Phase 1 Launch: Target 2027", segment: "Trading Mech...", new: true, details: "Reduces odd-lot friction across securities listings." },
-                { mkt: "SZSE", country: "Mainland China", class: "EMERGING MKT", title: "ChiNext Multi-Tier Board Lot Alignment", eta: "Target Launch: Early 2027", segment: "Trading Mech...", new: true, details: "Aligns board sizes across growth enterprise tiers." },
-                { mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", title: "A-Share T+0 Intraday Settlement Pilot Assessment...", eta: "Feasibility Phase: End-2026", segment: "Settlement M...", new: false, details: "Intraday liquidity pilot for institutionally matched blocks." },
-                { mkt: "BURSA", country: "Malaysia", class: "EMERGING MKT", title: "T+1 Settlement Feasibility Assessment", eta: "Phase 1 Review: Mid-2027", segment: "Settlement M...", new: true, details: "Assessing operational readiness for global T+1 alignment." },
-                { mkt: "IDX", country: "Indonesia", class: "EMERGING MKT", title: "Intraday Short Selling Expansion Framework", eta: "Target Rollout: Late 2026", segment: "Trading Mech...", new: true, details: "Expands eligible pool for regulated short sales." },
-                { mkt: "PSE", country: "Philippines", class: "EMERGING MKT", title: "Short Selling Rollout & Securities Lending Facility Inte...", eta: "Target Phased Launch: 2027", segment: "Trading Mech...", new: false, details: "Integration with central lending facility." },
-                { mkt: "NZX", country: "New Zealand", class: "DEVELOPED MKT", title: "Core Trading System API Standardization Upgrade...", eta: "Target Rollout: Early 2027", segment: "Market Infrast...", new: false, details: "Upgrading core protocols to FIX 5.0 SP2 standard." },
-                { mkt: "VSE", country: "Vietnam", class: "EMERGING MKT", title: "KRX Trading Infrastructure Activation & T+0 Settlemen...", eta: "Target Launch: Mid-2027", segment: "Market Infrast...", new: false, details: "KRX core tech platform migration final phase." }
+                { 
+                    mkt: "ASX", country: "Australia", class: "DEVELOPED MKT", 
+                    title: "CHESS Core Clearing Replacement Program (Phase 1)...", 
+                    summary: "Core clearing replacement architecture migration testing.",
+                    eta: "Target Release: 2026 / 2027", segment: "Settlement M...", new: false, 
+                    fullDetails: "Comprehensive migration of legacy CHESS database infrastructure to a high-availability distributed network model. Includes API gateway updates for broker-dealer connectivity and standardized ISO 20022 messaging integrations." 
+                },
+                { 
+                    mkt: "NSE", country: "India", class: "EMERGING MKT", 
+                    title: "Instantaneous T+0 Cross-Settlement Phase Extension...", 
+                    summary: "Real-time gross settlement option expansion across market participants.",
+                    eta: "Rolling Phases Through 2026", segment: "Settlement M...", new: false, 
+                    fullDetails: "Extends optional T+0 settlement cycles to top 500 equity listings. Enables direct clearing house interface routing for instantaneous institutional delivery-versus-payment (DVP)." 
+                },
+                { 
+                    mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", 
+                    title: "Standardized Board Lot Optimization Framework", 
+                    summary: "Reduces odd-lot friction across securities listings.",
+                    eta: "Phase 1 Launch: Target 2027", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Standardizes disparate board lot sizes down to automated multi-tier buckets. Improves liquidity and narrow bid-ask spreads while minimizing market fragmentations in secondary odd-lot matching." 
+                },
+                { 
+                    mkt: "SZSE", country: "Mainland China", class: "EMERGING MKT", 
+                    title: "ChiNext Multi-Tier Board Lot Alignment", 
+                    summary: "Aligns board sizes across growth enterprise tiers.",
+                    eta: "Target Launch: Early 2027", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Harmonizes order sizing and price band tick rules for retail and institutional traders on ChiNext growth listings." 
+                },
+                { 
+                    mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", 
+                    title: "A-Share T+0 Intraday Settlement Pilot Assessment...", 
+                    summary: "Intraday liquidity pilot for institutionally matched blocks.",
+                    eta: "Feasibility Phase: End-2026", segment: "Settlement M...", new: false, 
+                    fullDetails: "Controlled sandbox testing of intraday churn and liquidity impact under capped volatility controls for qualified institutional investors." 
+                },
+                { 
+                    mkt: "BURSA", country: "Malaysia", class: "EMERGING MKT", 
+                    title: "T+1 Settlement Feasibility Assessment", 
+                    summary: "Assessing operational readiness for global T+1 alignment.",
+                    eta: "Phase 1 Review: Mid-2027", segment: "Settlement M...", new: true, 
+                    fullDetails: "Feasibility evaluation and operational roadmap to shorten standard clearance timelines from T+2 to T+1, aligning with US and APAC peer standards." 
+                },
+                { 
+                    mkt: "IDX", country: "Indonesia", class: "EMERGING MKT", 
+                    title: "Intraday Short Selling Expansion Framework", 
+                    summary: "Expands eligible pool for regulated short sales.",
+                    eta: "Target Rollout: Late 2026", segment: "Trading Mech...", new: true, 
+                    fullDetails: "Modernizes securities borrowing and lending (SBL) mechanisms and automated uptick rule checks across IDX80 constituents." 
+                },
+                { 
+                    mkt: "PSE", country: "Philippines", class: "EMERGING MKT", 
+                    title: "Short Selling Rollout & Securities Lending Facility Inte...", 
+                    summary: "Integration with central lending facility.",
+                    eta: "Target Phased Launch: 2027", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Connects clearing participant systems with centralized securities lending pools for automated real-time borrow verification." 
+                },
+                { 
+                    mkt: "NZX", country: "New Zealand", class: "DEVELOPED MKT", 
+                    title: "Core Trading System API Standardization Upgrade...", 
+                    summary: "Upgrading core protocols to FIX 5.0 SP2 standard.",
+                    eta: "Target Rollout: Early 2027", segment: "Market Infrast...", new: false, 
+                    fullDetails: "Upgrades gateway architecture to ultra-low latency FIX 5.0 SP2 protocols, offering high-frequency algorithmic order entry options." 
+                },
+                { 
+                    mkt: "VSE", country: "Vietnam", class: "EMERGING MKT", 
+                    title: "KRX Trading Infrastructure Activation & T+0 Settlemen...", 
+                    summary: "KRX core tech platform migration final phase.",
+                    eta: "Target Launch: Mid-2027", segment: "Market Infrast...", new: false, 
+                    fullDetails: "Full integration of KRX platform to support short selling, pre-funded T+0 clearing, and central counterparty (CCP) clearing workflows." 
+                }
             ],
             historical: [
-                { mkt: "JPX", country: "Japan", class: "DEVELOPED MKT", title: "TSE Trading Session Extension & Closing Auction", eta: "Implemented Nov 5, 2024", segment: "Trading Hours", new: true, details: "30-minute extension implemented for trading sessions." },
-                { mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", title: "Severe Weather Trading (SWT) Framework", eta: "Implemented Sept 23, 2024", segment: "Market Infrast...", new: true, details: "Trading operations remain open during typhoon signals." },
-                { mkt: "SGX", country: "Singapore", class: "DEVELOPED MKT", title: "Next-Gen Iris-ST Core Trading Engine Migration", eta: "Implemented July 2026", segment: "Market Infrast...", new: true, details: "Ultra-low latency execution engine deployed." },
-                { mkt: "TWSE", country: "Taiwan", class: "DEVELOPED MKT", title: "Intraday Continuous Auction Interval Acceleration...", eta: "Implemented Late 2025", segment: "Trading Mech...", new: false, details: "Matching speed reduced to sub-millisecond cycles." },
-                { mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", title: "Program Trading Report & Real-time Colocation Overs...", eta: "Implemented May 2025", segment: "Market Infrast...", new: false, details: "Algorithmic trader reporting compliance system active." },
-                { mkt: "SET", country: "Thailand", class: "EMERGING MKT", title: "Algorithmic Order Throttle & Circuit Breaker Optimizat...", eta: "Implemented Q2 2025", segment: "Trading Mech...", new: false, details: "Dynamic price band throttling enabled." },
-                { mkt: "KRX", country: "South Korea", class: "DEVELOPED MKT", title: "Next-Gen ATS Linkage & Night Session Rollout", eta: "Target Mid-2026", segment: "Trading Hours", new: true, details: "Alternative trading system link deployed." }
+                { 
+                    mkt: "JPX", country: "Japan", class: "DEVELOPED MKT", 
+                    title: "TSE Trading Session Extension & Closing Auction", 
+                    summary: "30-minute extension implemented for trading sessions.",
+                    eta: "Implemented Nov 5, 2024", segment: "Trading Hours", new: true, 
+                    fullDetails: "Extended daily cash equity trading session close to 15:30 JST along with introducing a standardized 5-minute closing auction session." 
+                },
+                { 
+                    mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", 
+                    title: "Severe Weather Trading (SWT) Framework", 
+                    summary: "Trading operations remain open during typhoon signals.",
+                    eta: "Implemented Sept 23, 2024", segment: "Market Infrast...", new: true, 
+                    fullDetails: "Enables continuous market operation during severe typhoons (Signal 8+) and extreme conditions via remote clearing and banking support." 
+                },
+                { 
+                    mkt: "SGX", country: "Singapore", class: "DEVELOPED MKT", 
+                    title: "Next-Gen Iris-ST Core Trading Engine Migration", 
+                    summary: "Ultra-low latency execution engine deployed.",
+                    eta: "Implemented July 2026", segment: "Market Infrast...", new: true, 
+                    fullDetails: "Full cutover to low-latency matching engine yielding sub-millisecond execution cycles for derivatives and equity markets." 
+                },
+                { 
+                    mkt: "TWSE", country: "Taiwan", class: "DEVELOPED MKT", 
+                    title: "Intraday Continuous Auction Interval Acceleration...", 
+                    summary: "Matching speed reduced to sub-millisecond cycles.",
+                    eta: "Implemented Late 2025", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Reduced matching intervals and modernized order routing bandwidth for market makers." 
+                },
+                { 
+                    mkt: "SSE", country: "Mainland China", class: "EMERGING MKT", 
+                    title: "Program Trading Report & Real-time Colocation Overs...", 
+                    summary: "Algorithmic trader reporting compliance system active.",
+                    eta: "Implemented May 2025", segment: "Market Infrast...", new: false, 
+                    fullDetails: "Mandated reporting structures for automated algorithmic and high-frequency trading accounts." 
+                },
+                { 
+                    mkt: "SET", country: "Thailand", class: "EMERGING MKT", 
+                    title: "Algorithmic Order Throttle & Circuit Breaker Optimizat...", 
+                    summary: "Dynamic price band throttling enabled.",
+                    eta: "Implemented Q2 2025", segment: "Trading Mech...", new: false, 
+                    fullDetails: "Integrated dynamic multi-tiered volatility circuit breakers to manage algorithmic order spikes." 
+                },
+                { 
+                    mkt: "KRX", country: "South Korea", class: "DEVELOPED MKT", 
+                    title: "Next-Gen ATS Linkage & Night Session Rollout", 
+                    summary: "Alternative trading system link deployed.",
+                    eta: "Target Mid-2026", segment: "Trading Hours", new: true, 
+                    fullDetails: "Established off-hours multilateral trading facility connections to handle off-exchange trading liquidity." 
+                }
             ]
         };
 
@@ -395,32 +531,57 @@
             `;
         }
 
-        // Render Table Rows with Inline Technical Details
+        // Render Table Rows with Expandable Accordion
         function renderTable(tableBodyId, dataList, isPipeline) {
             const body = document.getElementById(tableBodyId);
-            body.innerHTML = dataList.map((item) => {
+            body.innerHTML = dataList.map((item, index) => {
                 const classBadge = item.class === "DEVELOPED MKT" ? "badge-dev" : "badge-emg";
                 const newTag = item.new ? `<span class="tag-new">NEW</span>` : "";
+                const rowId = `${tableBodyId}-detail-${index}`;
+                const arrowId = `${tableBodyId}-arrow-${index}`;
 
                 return `
-                    <tr>
+                    <tr class="clickable-row" onclick="toggleDetails('${rowId}', '${arrowId}')">
                         <td class="mkt-code">${item.mkt}</td>
                         <td>${item.country}</td>
                         <td><span class="${classBadge}">${item.class}</span></td>
                         <td>
-                            <div style="font-weight: 700; margin-bottom: 6px;">
+                            <div style="font-weight: 700; margin-bottom: 4px;">
                                 ${item.title}${newTag}
                             </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
-                                <strong style="color: #94a3b8;">Technical Breakdown / Notes:</strong> ${item.details}
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                <strong style="color: #94a3b8;">Technical Breakdown / Notes:</strong> ${item.summary}
                             </div>
                         </td>
                         <td>${formatETAWithCountdown(item.eta, isPipeline)}</td>
                         <td>${item.segment}</td>
-                        <td class="arrow-btn">▼</td>
+                        <td class="arrow-btn" id="${arrowId}">▼</td>
+                    </tr>
+                    <!-- EXPANDABLE DRILL-DOWN PANEL -->
+                    <tr id="${rowId}" class="details-row">
+                        <td colspan="7">
+                            <div class="details-card">
+                                <h4>🔍 Extended Structural Details & Regulatory Notes (${item.mkt} - ${item.country}):</h4>
+                                <p style="margin: 0;">${item.fullDetails}</p>
+                            </div>
+                        </td>
                     </tr>
                 `;
             }).join('');
+        }
+
+        // Toggle Expandable Drill-Down Details Row
+        function toggleDetails(rowId, arrowId) {
+            const detailRow = document.getElementById(rowId);
+            const arrow = document.getElementById(arrowId);
+            
+            if (detailRow.style.display === "table-row") {
+                detailRow.style.display = "none";
+                if (arrow) arrow.innerText = "▼";
+            } else {
+                detailRow.style.display = "table-row";
+                if (arrow) arrow.innerText = "▲";
+            }
         }
 
         // Filter Functionality
@@ -428,10 +589,19 @@
             const query = document.getElementById('filter-input').value.toLowerCase();
             
             ["pipeline-body", "historical-body"].forEach(bodyId => {
-                const rows = document.querySelectorAll(`#${bodyId} tr`);
-                rows.forEach(row => {
+                const mainRows = document.querySelectorAll(`#${bodyId} tr.clickable-row`);
+                mainRows.forEach(row => {
                     const text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(query) ? "table-row" : "none";
+                    const detailRow = row.nextElementSibling;
+                    
+                    if (text.includes(query)) {
+                        row.style.display = "table-row";
+                    } else {
+                        row.style.display = "none";
+                        if (detailRow && detailRow.classList.contains('details-row')) {
+                            detailRow.style.display = "none";
+                        }
+                    }
                 });
             });
         }
