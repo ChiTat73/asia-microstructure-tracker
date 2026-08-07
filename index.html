@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APAC Stock Exchange Microstructure & Regulatory Ledger</title>
 
-    <!-- Vis.js Timeline CSS for Interactive Gantt Roadmap -->
+    <!-- Vis.js Timeline CSS -->
     <link href="https://unpkg.com/vis-timeline/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -35,7 +35,6 @@
             padding: 24px;
         }
 
-        /* Header Layout */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -59,11 +58,10 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
-        /* Action Link Button */
-        .btn-microstructure {
+        .btn-action {
             background: #0f172a;
             color: #60a5fa;
             border: 1px solid #1e3a8a;
@@ -72,20 +70,20 @@
             font-size: 0.8rem;
             font-weight: 700;
             text-decoration: none;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: all 0.2s ease;
         }
 
-        .btn-microstructure:hover {
+        .btn-action:hover {
             background: #1e293b;
             border-color: #3b82f6;
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
             color: #ffffff;
         }
 
-        /* Status Widget */
         .status-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -99,7 +97,6 @@
         .status-line:last-child { margin-bottom: 0; }
         .status-online { color: var(--accent-green); font-weight: 600; }
 
-        /* Search Filter Input */
         .search-container {
             position: relative;
             margin-bottom: 24px;
@@ -130,7 +127,6 @@
             font-size: 0.9rem;
         }
 
-        /* Section Banner Headers */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -161,7 +157,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Gantt Chart Container */
         #visualization {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -191,7 +186,6 @@
         .vis-time-axis .vis-text { color: var(--text-muted) !important; }
         .vis-grid.vis-minor, .vis-grid.vis-major { border-color: #1a2234 !important; }
 
-        /* Tables & Wrappers */
         .table-wrapper {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -235,8 +229,15 @@
 
         tr.clickable-row:hover { background-color: var(--table-row-hover); }
 
-        /* Badges & Category Labels */
-        .mkt-code { color: #60a5fa; font-weight: 700; }
+        .mkt-code { 
+            color: #60a5fa; 
+            font-weight: 700; 
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        .mkt-code:hover { color: #93c5fd; }
+
         .badge-dev { background: var(--badge-dev-bg); color: var(--badge-dev-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
         .badge-emg { background: var(--badge-emg-bg); color: var(--badge-emg-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
         .tag-new { background: var(--new-tag-bg); color: var(--new-tag-text); font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 3px; }
@@ -254,6 +255,83 @@
         .details-row td { padding: 14px 20px; border-bottom: 1px solid var(--border-color); }
         .details-card { background: #0d121f; border: 1px solid #1e293b; border-radius: 6px; padding: 14px; color: #cbd5e1; font-size: 0.82rem; line-height: 1.5; }
         .details-card h4 { margin: 0 0 6px 0; color: #60a5fa; font-size: 0.85rem; }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(3, 5, 10, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-modal-btn:hover { color: #ffffff; }
+
+        .exchange-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .exchange-chip {
+            background: #10172a;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .exchange-chip.active, .exchange-chip:hover {
+            background: #1e3a8a;
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -261,10 +339,11 @@
     <header class="header-container">
         <div class="title-area">
             <h1>APAC Stock Exchange Change Microstructure</h1>
-            <p>Automated structural change logging repository covering all major APAC markets.</p>
+            <p>Automated structural change logging repository covering all 14 primary APAC markets.</p>
         </div>
         <div class="header-right">
-            <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure">
+            <button class="btn-action" onclick="openDrilldownModal()">🏛️ Drilldown by Exchange</button>
+            <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-action" target="_blank">
                 ⚡ Markets microstructure ↗
             </a>
             <div class="status-box">
@@ -337,24 +416,46 @@
         </table>
     </div>
 
-    <!-- Vis.js Timeline JS Script -->
+    <!-- EXCHANGE DRILLDOWN MODAL -->
+    <div id="drilldown-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-exchange-title">🏛️ Exchange Focus View</h3>
+                <button class="close-modal-btn" onclick="closeDrilldownModal()">✕</button>
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Select Venue to Drilldown:</div>
+            <div class="exchange-selector" id="exchange-chip-container"></div>
+
+            <div style="margin-top: 16px;">
+                <h4 style="color: #60a5fa; font-size: 0.85rem; margin-bottom: 8px;">VENUE GANTT TIMELINE</h4>
+                <div id="modal-visualization" style="background: #080c14; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 16px;"></div>
+            </div>
+
+            <div>
+                <h4 style="color: #f59e0b; font-size: 0.85rem; margin-bottom: 8px;">VENUE INITIATIVES & REGULATORY TIMELINE</h4>
+                <div id="modal-initiatives-list"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/vis-timeline/standalone/umd/vis-timeline-graph2d.min.js"></script>
 
     <script>
-        // Comprehensive Dataset Covering All Major APAC Stock Markets
+        // Full 14-Market APAC Microstructure Dataset
         const ledgerData = {
             last_sync: "Aug 07, 2026 10:07 HKT",
             pipeline: [
                 { 
                     mkt: "ASX", country: "Australia", class: "DEVELOPED MKT", impact: "HIGH",
-                    title: "CHESS Replacement Program Migration (Phase 1)", 
+                    title: "CHESS Replacement Migration (Phase 1)", 
                     summary: "Clearing architecture upgrade to distributed messaging.",
                     eta: "Target Release: Late 2026", startDate: "2026-11-01", segment: "Settlement M...", new: false, 
                     fullDetails: "Migration of legacy CHESS database infrastructure to a high-availability distributed model with ISO 20022 messaging standards." 
                 },
                 { 
                     mkt: "NSE / BSE", country: "India", class: "EMERGING MKT", impact: "HIGH",
-                    title: "T+0 Instant Settlement Phase Expansion", 
+                    title: "T+0 Instant Settlement Expansion", 
                     summary: "Extends optional instant gross clearance across top 500 listings.",
                     eta: "Rolling Phases Through 2026", startDate: "2026-12-15", segment: "Settlement M...", new: false, 
                     fullDetails: "Provides instantaneous delivery-versus-payment (DVP) settlement capabilities across expanded institutional participant groups." 
@@ -365,6 +466,20 @@
                     summary: "Reduces odd-lot friction and standardizes order lot buckets.",
                     eta: "Phase 1 Launch: Target 2027", startDate: "2027-03-31", segment: "Trading Mech...", new: true, 
                     fullDetails: "Harmonizes board lot sizes to reduce secondary odd-lot discount spreads and enhance retail-institutional order matching." 
+                },
+                { 
+                    mkt: "HKEX", country: "Hong Kong", class: "DEVELOPED MKT", impact: "HIGH",
+                    title: "Derivatives Market Holiday Trading Expansion", 
+                    summary: "Adds major regional holidays to derivatives execution schedule.",
+                    eta: "Target Launch: Late 2026", startDate: "2026-10-01", segment: "Derivatives", new: false, 
+                    fullDetails: "Enables international risk management capabilities for MSCI and Hang Seng futures during Hong Kong public holidays." 
+                },
+                { 
+                    mkt: "SGX", country: "Singapore", class: "DEVELOPED MKT", impact: "MEDIUM",
+                    title: "Cross-Border ETF Linkage Framework Expansion", 
+                    summary: "Automated order routing and cross-listing clearing pipelines.",
+                    eta: "Target Rollout: Early 2027", startDate: "2027-02-01", segment: "Market Infrast...", new: true, 
+                    fullDetails: "Expands dual-listing and connectivity protocols across regional ASEAN stock exchanges for index ETFs." 
                 },
                 { 
                     mkt: "SZSE", country: "Mainland China", class: "EMERGING MKT", impact: "MEDIUM",
@@ -400,13 +515,6 @@
                     summary: "Central clearing facility linkage for verified stock borrows.",
                     eta: "Target Phased Launch: 2027", startDate: "2027-04-01", segment: "Trading Mech...", new: false, 
                     fullDetails: "Integrates central clearing participant interfaces with automated lending pools for real-time borrow verification." 
-                },
-                { 
-                    mkt: "NZX", country: "New Zealand", class: "DEVELOPED MKT", impact: "LOW",
-                    title: "Core Trading Gateway FIX 5.0 SP2 Standardization", 
-                    summary: "Upgrades matching engine connectivity protocols.",
-                    eta: "Target Rollout: Early 2027", startDate: "2027-01-20", segment: "Market Infrast...", new: false, 
-                    fullDetails: "Deploys ultra-low-latency FIX 5.0 SP2 gateway architecture to optimize algorithmic order flow management." 
                 },
                 { 
                     mkt: "HOSE / VSE", country: "Vietnam", class: "EMERGING MKT", impact: "HIGH",
@@ -462,7 +570,8 @@
             ]
         };
 
-        // Render Interactive Gantt Roadmap Chart
+        let modalTimeline = null;
+
         function initGanttChart() {
             const container = document.getElementById('visualization');
             const items = new vis.DataSet();
@@ -494,7 +603,6 @@
             new vis.Timeline(container, items, options);
         }
 
-        // ETA Countdown Calculator
         function formatETAWithCountdown(etaString, isPipeline) {
             if (!isPipeline) return `<div>${etaString}</div>`;
 
@@ -502,7 +610,6 @@
             if (!yearMatch) return `<div>${etaString}</div>`;
 
             const targetYear = parseInt(yearMatch[1], 10);
-            
             let month = 11; 
             if (etaString.toLowerCase().includes("early")) month = 2;
             else if (etaString.toLowerCase().includes("mid")) month = 5;
@@ -520,7 +627,6 @@
             return `<div class="eta-container"><div>${etaString}</div>${countdownHTML}</div>`;
         }
 
-        // Render Table Rows
         function renderTable(tableBodyId, dataList, isPipeline) {
             const body = document.getElementById(tableBodyId);
             body.innerHTML = dataList.map((item, index) => {
@@ -536,11 +642,11 @@
                 const arrowId = `${tableBodyId}-arrow-${index}`;
 
                 return `
-                    <tr class="clickable-row" onclick="toggleDetails('${rowId}', '${arrowId}')">
-                        <td class="mkt-code">${item.mkt}</td>
-                        <td>${item.country}</td>
-                        <td><span class="${classBadge}">${item.class}</span></td>
-                        <td>
+                    <tr class="clickable-row">
+                        <td class="mkt-code" onclick="openDrilldownModal('${item.mkt}')">${item.mkt}</td>
+                        <td onclick="toggleDetails('${rowId}', '${arrowId}')">${item.country}</td>
+                        <td onclick="toggleDetails('${rowId}', '${arrowId}')"><span class="${classBadge}">${item.class}</span></td>
+                        <td onclick="toggleDetails('${rowId}', '${arrowId}')">
                             <div style="font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
                                 ${impactBadge} ${item.title}${newTag}
                             </div>
@@ -548,9 +654,9 @@
                                 <strong style="color: #94a3b8;">Technical Breakdown:</strong> ${item.summary}
                             </div>
                         </td>
-                        <td>${formatETAWithCountdown(item.eta, isPipeline)}</td>
-                        <td>${item.segment}</td>
-                        <td class="arrow-btn" id="${arrowId}">▼</td>
+                        <td onclick="toggleDetails('${rowId}', '${arrowId}')">${formatETAWithCountdown(item.eta, isPipeline)}</td>
+                        <td onclick="toggleDetails('${rowId}', '${arrowId}')">${item.segment}</td>
+                        <td class="arrow-btn" id="${arrowId}" onclick="toggleDetails('${rowId}', '${arrowId}')">▼</td>
                     </tr>
                     <tr id="${rowId}" class="details-row">
                         <td colspan="7">
@@ -574,6 +680,76 @@
                 detailRow.style.display = "table-row";
                 if (arrow) arrow.innerText = "▲";
             }
+        }
+
+        function openDrilldownModal(defaultMarket = "HKEX") {
+            const modal = document.getElementById('drilldown-modal');
+            modal.style.display = "flex";
+
+            const allItems = [...ledgerData.pipeline, ...ledgerData.historical];
+            const uniqueMarkets = [...new Set(allItems.map(i => i.mkt))];
+
+            const chipContainer = document.getElementById('exchange-chip-container');
+            chipContainer.innerHTML = uniqueMarkets.map(mkt => `
+                <div class="exchange-chip ${mkt === defaultMarket ? 'active' : ''}" onclick="selectExchangeDrilldown('${mkt}')">${mkt}</div>
+            `).join('');
+
+            selectExchangeDrilldown(defaultMarket);
+        }
+
+        function closeDrilldownModal() {
+            document.getElementById('drilldown-modal').style.display = "none";
+        }
+
+        function selectExchangeDrilldown(mktCode) {
+            document.querySelectorAll('.exchange-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.innerText === mktCode);
+            });
+
+            document.getElementById('modal-exchange-title').innerText = `🏛️ ${mktCode} Microstructure Drilldown View`;
+
+            const allItems = [...ledgerData.pipeline, ...ledgerData.historical];
+            const filteredItems = allItems.filter(i => i.mkt === mktCode);
+
+            const container = document.getElementById('modal-visualization');
+            container.innerHTML = "";
+            
+            const visItems = new vis.DataSet();
+            filteredItems.forEach((item, idx) => {
+                let className = "low-impact";
+                if (item.impact === "HIGH") className = "high-impact";
+                if (item.impact === "MEDIUM") className = "med-impact";
+
+                visItems.add({
+                    id: idx + 1,
+                    content: item.title,
+                    start: item.startDate,
+                    className: className
+                });
+            });
+
+            const options = {
+                height: '180px',
+                stack: true,
+                style: 'box',
+                start: '2024-01-01',
+                end: '2027-12-31'
+            };
+
+            if (modalTimeline) modalTimeline.destroy();
+            modalTimeline = new vis.Timeline(container, visItems, options);
+
+            const listContainer = document.getElementById('modal-initiatives-list');
+            listContainer.innerHTML = filteredItems.map(item => `
+                <div style="background: #0d121f; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-weight: 700; color: #60a5fa; font-size: 0.88rem;">${item.title}</span>
+                        <span class="badge-impact-${item.impact === 'HIGH' ? 'high' : item.impact === 'MEDIUM' ? 'med' : 'low'}">${item.impact} IMPACT</span>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;"><strong>ETA / Status:</strong> ${item.eta} | <strong>Segment:</strong> ${item.segment}</div>
+                    <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">${item.fullDetails}</div>
+                </div>
+            `).join('');
         }
 
         function filterTables() {
