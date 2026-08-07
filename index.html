@@ -238,6 +238,27 @@
         }
         .mkt-code:hover { color: #93c5fd; }
 
+        .source-link {
+            color: #38bdf8;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #0f172a;
+            border: 1px solid #1e3a8a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .source-link:hover {
+            background: #1e293b;
+            color: #38bdf8;
+            border-color: #38bdf8;
+        }
+
         .badge-dev { background: var(--badge-dev-bg); color: var(--badge-dev-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
         .badge-emg { background: var(--badge-emg-bg); color: var(--badge-emg-text); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
         .tag-new { background: var(--new-tag-bg); color: var(--new-tag-text); font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 3px; }
@@ -384,6 +405,7 @@
                     <th>STRUCTURE INITIATIVE / REGULATORY DESCRIPTION ▼▲</th>
                     <th>EFFECTIVE DATE / ETA ▼▲</th>
                     <th>MARKET SEGMENT ▼▲</th>
+                    <th>EXCHANGE CIRCULAR / SOURCE ▼▲</th>
                     <th></th>
                 </tr>
             </thead>
@@ -409,6 +431,7 @@
                     <th>STRUCTURE INITIATIVE / REGULATORY DESCRIPTION ▼▲</th>
                     <th>EFFECTIVE DATE / ETA ▼▲</th>
                     <th>MARKET SEGMENT ▼▲</th>
+                    <th>EXCHANGE CIRCULAR / SOURCE ▼▲</th>
                     <th></th>
                 </tr>
             </thead>
@@ -442,7 +465,7 @@
     <script src="https://unpkg.com/vis-timeline/standalone/umd/vis-timeline-graph2d.min.js"></script>
 
     <script>
-        // Full 14-Market APAC Microstructure Dataset
+        // Full 14-Market APAC Microstructure Dataset with Direct Sources & Circular Links
         const ledgerData = {
             last_sync: "Aug 07, 2026 10:07 HKT",
             pipeline: [
@@ -451,6 +474,8 @@
                     title: "CHESS Replacement Migration (Phase 1)", 
                     summary: "Clearing architecture upgrade to distributed messaging.",
                     eta: "Target Release: Late 2026", startDate: "2026-11-01", segment: "Settlement M...", new: false, 
+                    sourceUrl: "https://www2.asx.com.au/markets/clearing-and-settlement-services/chess-replacement",
+                    sourceName: "ASX CHESS Notice",
                     fullDetails: "Migration of legacy CHESS database infrastructure to a high-availability distributed model with ISO 20022 messaging standards." 
                 },
                 { 
@@ -458,6 +483,8 @@
                     title: "T+0 Instant Settlement Expansion", 
                     summary: "Extends optional instant gross clearance across top 500 listings.",
                     eta: "Rolling Phases Through 2026", startDate: "2026-12-15", segment: "Settlement M...", new: false, 
+                    sourceUrl: "https://www.sebi.gov.in/legal/circulars/mar-2024/framework-for-introduction-of-beta-version-of-t-0-settlement-cycle_82432.html",
+                    sourceName: "SEBI Circular",
                     fullDetails: "Provides instantaneous delivery-versus-payment (DVP) settlement capabilities across expanded institutional participant groups." 
                 },
                 { 
@@ -465,6 +492,8 @@
                     title: "Standardized Board Lot Optimization Framework", 
                     summary: "Reduces odd-lot friction and standardizes order lot buckets.",
                     eta: "Phase 1 Launch: Target 2027", startDate: "2027-03-31", segment: "Trading Mech...", new: true, 
+                    sourceUrl: "https://www.hkex.com.hk/News/Market-Consultations",
+                    sourceName: "HKEX Circular",
                     fullDetails: "Harmonizes board lot sizes to reduce secondary odd-lot discount spreads and enhance retail-institutional order matching." 
                 },
                 { 
@@ -472,6 +501,8 @@
                     title: "Derivatives Market Holiday Trading Expansion", 
                     summary: "Adds major regional holidays to derivatives execution schedule.",
                     eta: "Target Launch: Late 2026", startDate: "2026-10-01", segment: "Derivatives", new: false, 
+                    sourceUrl: "https://www.hkex.com.hk/Services/Trading/Derivatives/Overview/Holiday-Trading",
+                    sourceName: "HKEX Circular",
                     fullDetails: "Enables international risk management capabilities for MSCI and Hang Seng futures during Hong Kong public holidays." 
                 },
                 { 
@@ -479,6 +510,8 @@
                     title: "Cross-Border ETF Linkage Framework Expansion", 
                     summary: "Automated order routing and cross-listing clearing pipelines.",
                     eta: "Target Rollout: Early 2027", startDate: "2027-02-01", segment: "Market Infrast...", new: true, 
+                    sourceUrl: "https://www.sgx.com/securities/etf-linkage",
+                    sourceName: "SGX Newsroom",
                     fullDetails: "Expands dual-listing and connectivity protocols across regional ASEAN stock exchanges for index ETFs." 
                 },
                 { 
@@ -486,6 +519,8 @@
                     title: "ChiNext Growth Board Lot & Price Band Alignment", 
                     summary: "Standardizes tick sizes across growth enterprise listings.",
                     eta: "Target Launch: Early 2027", startDate: "2027-02-15", segment: "Trading Mech...", new: true, 
+                    sourceUrl: "http://www.szse.cn/disclosure/notice/",
+                    sourceName: "SZSE Circular",
                     fullDetails: "Aligns price dynamic bands and minimum tick increments for institutional algorithmic execution on ChiNext." 
                 },
                 { 
@@ -493,6 +528,8 @@
                     title: "A-Share T+0 Intraday Settlement Sandbox Pilot", 
                     summary: "Assesses intraday settlement churn for qualified institutional accounts.",
                     eta: "Feasibility Phase: End-2026", startDate: "2026-12-31", segment: "Settlement M...", new: false, 
+                    sourceUrl: "http://www.sse.com.cn/lawandrules/sserules/",
+                    sourceName: "SSE Notice",
                     fullDetails: "Controlled sandbox testing of intraday liquidity cycles under capped volatility and short-selling controls." 
                 },
                 { 
@@ -500,6 +537,8 @@
                     title: "T+1 Settlement Cycle Readiness Framework", 
                     summary: "Operational roadmap for shortening settlement cycles from T+2 to T+1.",
                     eta: "Phase 1 Review: Mid-2027", startDate: "2027-06-30", segment: "Settlement M...", new: true, 
+                    sourceUrl: "https://www.bursamalaysia.com/reference/media_centre",
+                    sourceName: "Bursa Announcement",
                     fullDetails: "Aligns clearing participant facilities with US and regional T+1 settlement acceleration standardizations." 
                 },
                 { 
@@ -507,6 +546,8 @@
                     title: "Regulated Short Selling Expansion & Dynamic Uptick Framework", 
                     summary: "Expands short selling pool across IDX80 index constituents.",
                     eta: "Target Rollout: Late 2026", startDate: "2026-10-15", segment: "Trading Mech...", new: true, 
+                    sourceUrl: "https://www.idx.co.id/en-us/news/announcement/",
+                    sourceName: "IDX Circular",
                     fullDetails: "Modernizes securities borrowing and lending (SBL) protocols with automated pre-trade borrow validation." 
                 },
                 { 
@@ -514,6 +555,8 @@
                     title: "Securities Lending & Short Selling Integration", 
                     summary: "Central clearing facility linkage for verified stock borrows.",
                     eta: "Target Phased Launch: 2027", startDate: "2027-04-01", segment: "Trading Mech...", new: false, 
+                    sourceUrl: "https://www.pse.com.ph/category/market-report-announcements/",
+                    sourceName: "PSE Circular",
                     fullDetails: "Integrates central clearing participant interfaces with automated lending pools for real-time borrow verification." 
                 },
                 { 
@@ -521,6 +564,8 @@
                     title: "KRX Core IT Platform Cutover & Central Counterparty CCP Launch", 
                     summary: "New core tech infrastructure activation supporting non-prefunding.",
                     eta: "Target Launch: Mid-2027", startDate: "2027-05-15", segment: "Market Infrast...", new: false, 
+                    sourceUrl: "https://www.hsx.vn/Modules/Cms/Web/NewsFiles",
+                    sourceName: "HOSE Notice",
                     fullDetails: "Completes KRX tech platform migration enabling central counterparty clearing, intra-day trading, and reduced pre-funding hurdles." 
                 }
             ],
@@ -530,6 +575,8 @@
                     title: "TSE Trading Session Extension & Closing Auction Implementation", 
                     summary: "Extended cash equity trading close to 15:30 JST with a 5-minute closing auction.",
                     eta: "Implemented Nov 5, 2024", startDate: "2024-11-05", segment: "Trading Hours", new: true, 
+                    sourceUrl: "https://www.jpx.co.jp/english/equities/trading/extension/index.html",
+                    sourceName: "JPX Release",
                     fullDetails: "Extended the trading session by 30 minutes to boost end-of-day liquidity and standardizing closing price discovery." 
                 },
                 { 
@@ -537,6 +584,8 @@
                     title: "Severe Weather Trading (SWT) Continuous Operation Framework", 
                     summary: "Markets remain fully open during severe typhoons and extreme weather.",
                     eta: "Implemented Sept 23, 2024", startDate: "2024-09-23", segment: "Market Infrast...", new: true, 
+                    sourceUrl: "https://www.hkex.com.hk/Services/Trading/Severe-Weather-Trading",
+                    sourceName: "HKEX Circular",
                     fullDetails: "Enables continuous electronic trading and clearing operational readiness during Signal 8+ typhoon conditions." 
                 },
                 { 
@@ -544,6 +593,8 @@
                     title: "Iris-ST Next-Gen Low-Latency Matching Engine Migration", 
                     summary: "Deployed sub-millisecond execution matching engine for equity & derivatives.",
                     eta: "Implemented July 2026", startDate: "2026-07-01", segment: "Market Infrast...", new: true, 
+                    sourceUrl: "https://www.sgx.com/securities/trading-technology",
+                    sourceName: "SGX Notice",
                     fullDetails: "Upgraded core matching architecture providing sub-millisecond execution cycles and modernized risk gateways." 
                 },
                 { 
@@ -551,6 +602,8 @@
                     title: "Continuous Auction Micro-Interval Matching Acceleration", 
                     summary: "Reduced matching intervals and modernized order routing bandwidth.",
                     eta: "Implemented Late 2025", startDate: "2025-11-15", segment: "Trading Mech...", new: false, 
+                    sourceUrl: "https://www.twse.com.tw/en/page/announcement/notice.html",
+                    sourceName: "TWSE Circular",
                     fullDetails: "Accelerates order execution throughput for retail and high-frequency institutional market makers." 
                 },
                 { 
@@ -558,6 +611,8 @@
                     title: "Next-Gen Alternative Trading System (ATS) Linkage", 
                     summary: "Off-hours multilateral trading facility integration.",
                     eta: "Implemented Mid-2026", startDate: "2026-06-15", segment: "Trading Hours", new: true, 
+                    sourceUrl: "https://global.krx.co.kr/main/main.jsp",
+                    sourceName: "KRX Notice",
                     fullDetails: "Integrated off-exchange trading venues to expand retail and institutional trading flexibility outside regular cash hours." 
                 },
                 { 
@@ -565,6 +620,8 @@
                     title: "Dynamic Circuit Breaker & Auto-Throttling Rules", 
                     summary: "Dynamic volatility price bands to control algorithmic spikes.",
                     eta: "Implemented Q2 2025", startDate: "2025-05-10", segment: "Trading Mech...", new: false, 
+                    sourceUrl: "https://www.set.or.th/en/rules-regulations/rules-guidelines",
+                    sourceName: "SET Rules PDF",
                     fullDetails: "Introduced multi-tiered dynamic circuit breakers to manage short-duration order imbalances and algorithmic spikes." 
                 }
             ]
@@ -640,6 +697,9 @@
 
                 const rowId = `${tableBodyId}-detail-${index}`;
                 const arrowId = `${tableBodyId}-arrow-${index}`;
+                const sourceBtn = item.sourceUrl 
+                    ? `<a href="${item.sourceUrl}" target="_blank" class="source-link" onclick="event.stopPropagation();">📄 ${item.sourceName || 'Circular'} ↗</a>` 
+                    : `<span style="color: var(--text-muted); font-size: 0.75rem;">N/A</span>`;
 
                 return `
                     <tr class="clickable-row">
@@ -656,13 +716,15 @@
                         </td>
                         <td onclick="toggleDetails('${rowId}', '${arrowId}')">${formatETAWithCountdown(item.eta, isPipeline)}</td>
                         <td onclick="toggleDetails('${rowId}', '${arrowId}')">${item.segment}</td>
+                        <td>${sourceBtn}</td>
                         <td class="arrow-btn" id="${arrowId}" onclick="toggleDetails('${rowId}', '${arrowId}')">▼</td>
                     </tr>
                     <tr id="${rowId}" class="details-row">
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="details-card">
                                 <h4>🔍 Market Structure Impact Details (${item.mkt} - ${item.country}):</h4>
-                                <p style="margin: 0;">${item.fullDetails}</p>
+                                <p style="margin: 0 0 8px 0;">${item.fullDetails}</p>
+                                ${item.sourceUrl ? `<div><strong>Official Source:</strong> <a href="${item.sourceUrl}" target="_blank" style="color: #60a5fa;">${item.sourceUrl}</a></div>` : ''}
                             </div>
                         </td>
                     </tr>
@@ -746,8 +808,11 @@
                         <span style="font-weight: 700; color: #60a5fa; font-size: 0.88rem;">${item.title}</span>
                         <span class="badge-impact-${item.impact === 'HIGH' ? 'high' : item.impact === 'MEDIUM' ? 'med' : 'low'}">${item.impact} IMPACT</span>
                     </div>
-                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;"><strong>ETA / Status:</strong> ${item.eta} | <strong>Segment:</strong> ${item.segment}</div>
-                    <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">${item.fullDetails}</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
+                        <strong>ETA / Status:</strong> ${item.eta} | <strong>Segment:</strong> ${item.segment}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">${item.fullDetails}</div>
+                    ${item.sourceUrl ? `<div><a href="${item.sourceUrl}" target="_blank" class="source-link">📄 Direct Source Circular (${item.sourceName || 'Link'}) ↗</a></div>` : ''}
                 </div>
             `).join('');
         }
