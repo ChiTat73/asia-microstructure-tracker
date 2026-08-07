@@ -35,7 +35,7 @@
         .header-container {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 20px;
         }
 
@@ -52,6 +52,36 @@
             font-size: 0.875rem;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Action Link Button */
+        .btn-microstructure {
+            background: #0f172a;
+            color: #60a5fa;
+            border: 1px solid #1e3a8a;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-microstructure:hover {
+            background: #1e293b;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            color: #ffffff;
+        }
+
+        /* Status Widget */
         .status-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -63,6 +93,10 @@
 
         .status-line {
             margin-bottom: 4px;
+        }
+
+        .status-line:last-child {
+            margin-bottom: 0;
         }
 
         .status-online {
@@ -244,9 +278,15 @@
             <h1>APAC stock exchange change Microstructure</h1>
             <p>Automated structural change logging repository.</p>
         </div>
-        <div class="status-box">
-            <div class="status-line">⚡ Agent Status: <span class="status-online">• ONLINE</span></div>
-            <div class="status-line" id="last-sync-display">💻 Last Sync Check: Loading...</div>
+        <div class="header-right">
+            <!-- Market Microstructure Action Link -->
+            <a href="https://chitat73.github.io/microstructure-agent/frontend/index.html" class="btn-microstructure" target="_blank">
+                ⚡ Markets microstructure ↗
+            </a>
+            <div class="status-box">
+                <div class="status-line">⚡ Agent Status: <span class="status-online">• ONLINE</span></div>
+                <div class="status-line" id="last-sync-display">💻 Last Sync Check: Loading...</div>
+            </div>
         </div>
     </header>
 
@@ -310,7 +350,6 @@
     </div>
 
     <script>
-        // Sample Microstructure Ledger Dataset matching your layout schema
         const ledgerData = {
             last_sync: "Aug 07, 2026 10:07 HKT",
             pipeline: [
@@ -340,16 +379,14 @@
         function formatETAWithCountdown(etaString, isPipeline) {
             if (!isPipeline) return `<div>${etaString}</div>`;
 
-            // Parse year out of string (e.g. 2026, 2027)
             const yearMatch = etaString.match(/\b(20\d\d)\b/);
             if (!yearMatch) return `<div>${etaString}</div>`;
 
             const targetYear = parseInt(yearMatch[1], 10);
             
-            // Set conservative target date (Dec 31 of target year unless early/mid specified)
             let month = 11; 
-            if (etaString.toLowerCase().includes("early")) month = 2; // March
-            else if (etaString.toLowerCase().includes("mid")) month = 5; // June
+            if (etaString.toLowerCase().includes("early")) month = 2;
+            else if (etaString.toLowerCase().includes("mid")) month = 5;
             else if (etaString.toLowerCase().includes("sept")) month = 8;
 
             const targetDate = new Date(Date.UTC(targetYear, month, 30));
@@ -441,7 +478,6 @@
             document.getElementById('historical-count').innerText = `${ledgerData.historical.length} Entries`;
         }
 
-        // Run initialization
         initPage();
     </script>
 </body>
